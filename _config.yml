@@ -27,7 +27,7 @@ author:
 
 # Fallback image and color
 image:               /assets/img/left.JPG
-color:               '#4f86aa'
+color:               #'#4f86aa'
 
 # The font used for headings. Expects a string that is a valid CSS font-family value.
 font_heading:        "'Merriweather-Light','Lato','-apple-system','Verdana','PingFang SC','Helvetica Neue','Arial','Hiragino Sans GB','Microsoft YaHei','WenQuanYi Micro Hei','sans-serif'"
@@ -51,7 +51,7 @@ disqus: True
 disqus_shortname:    xxxx
 
 # This text will appear in the footer of every page. Markdown enabled.
-copyright:           '&copy; 2020.12. by 따라쟁이'
+copyright:           '&copy; 2021.01 구구영'
 
 # Format of the permalinks
 permalink:           
