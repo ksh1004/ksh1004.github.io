@@ -1,7 +1,7 @@
 ---
 layout: tag-blog
-title: NLP
-slug: nlp
+title: Computer Engineering
+slug: CE
 category: class
 menu: false
 order: 1

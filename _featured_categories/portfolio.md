@@ -14,11 +14,11 @@ font-weight:bold">
 </span>
 </center>
 
+<center>Inha University</center>
+
 <center>MAJOR : Computer Engineering</center>
 
 <center>SUBMAJOR : Department of Political Science and International Relations</center>
-
-<center>Inha University</center>
 
 <center>Republic of Korea</center>
 
@@ -42,7 +42,14 @@ font-weight:bold">
 ---
 
 * Computer Engineering
+    + Data Science
     + AI
+    + Machine Learning
+    + Deep Learning
+
+* Financial Engineering
+
+* Political Engineering
 
 
 ## Project
@@ -52,8 +59,7 @@ font-weight:bold">
 
 인하대학교 - 000
 
-인하대학교 - 000
-
+* **Financial Engineering**
 
 ## Awards
 ---
@@ -63,11 +69,11 @@ font-weight:bold">
 
 ## Skills and Certification
 ---
--Language : Python, C/C++
+-Language : Python, C++, R, Java
 
 -Project : 
 
--License : 
+-License : ADSP
 
 
 

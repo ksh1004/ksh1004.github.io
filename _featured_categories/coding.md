@@ -1,10 +1,10 @@
 ---
 layout: list
-title: Trip
-slug: trip
+title: Coding
+slug: coding
 menu: true
 submenu: true
-order: 7
+order: 6
 description: >
-  여행 포스팅
+  코딩
 ---

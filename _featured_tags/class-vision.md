@@ -1,7 +1,7 @@
 ---
 layout: tag-blog
-title: VISION
-slug: vision
+title: Political Science
+slug: PS
 category: class
 menu: false
 order: 2

@@ -1,8 +1,8 @@
 ---
 layout: tag-blog
-title: Seoul
-slug: seoul
-category: trip
+title: 백준
+slug: 백준
+category: coding
 menu: false
 order: 1
 ---
