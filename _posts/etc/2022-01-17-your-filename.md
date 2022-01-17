@@ -1,5 +1,10 @@
 ---
 published: true
+layout: post
+subtitle: 테스트
+categories: etc
+tags: etc
+comments: true
 ---
 ## A New Post
 
