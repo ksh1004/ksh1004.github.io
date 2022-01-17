@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 layout: post
 subtitle: 'python,데이터 사이언티스트'
 categories: etc
