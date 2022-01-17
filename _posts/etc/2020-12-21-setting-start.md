@@ -5,7 +5,7 @@ subtitle: 'python,데이터 사이언티스트, 인공지능 개발자를 위함
 categories: etc
 tags: etc
 comments: true
-published: true
+published: false
 ---
 ## 개요
 > 구글 드라이브 폴더 설치, 아나콘다 설치, 비주얼 스튜디오 코드 설치, Visual Studio code와 Anaconda 터미널 연동
