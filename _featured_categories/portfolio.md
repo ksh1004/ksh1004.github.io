@@ -24,7 +24,7 @@ font-weight:bold">
 
 ## Personal Data
 ---
-> 2000.10.04 충청남도 아산시 
+> 충청남도 아산시 
 
 > 연락처: ksh1004@inha.edu
 

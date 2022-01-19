@@ -1,8 +1,8 @@
 ---
 layout: tag-blog
-title: 백준
-slug: 백준
+title: 백준(C++)
+slug: 백준(C++)
 category: coding
 menu: false
-order: 1
+order: 2
 ---
