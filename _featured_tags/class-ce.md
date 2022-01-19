@@ -1,7 +1,7 @@
 ---
 layout: tag-blog
 title: Computer Engineering
-slug: CE
+slug: ce
 category: class
 menu: false
 order: 1
