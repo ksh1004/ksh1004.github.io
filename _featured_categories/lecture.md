@@ -1,10 +1,10 @@
 ---
 layout: list
-title: Coding
-slug: coding
+title: Lecture
+slug: lecture
 menu: true
 submenu: true
-order: 7
+order: 6
 description: >
-  코딩
+  강의 기록
 ---

@@ -28,7 +28,9 @@ font-weight:bold">
 
 > 연락처: ksh1004@inha.edu
 
-> Github : <a href="https://github.com/ksh1004">https://github.com/ksh1004</a>
+> Tistory : <a href="https://990diary.tistory.com/">https://990diary.tistory.com/</a>
+
+> Github : 
 
 
 ## Education
