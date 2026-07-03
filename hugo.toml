@@ -1,0 +1,80 @@
+baseURL = "https://ksh1004.github.io/"
+languageCode = "ko-KR"
+title = "Kim SoonHa | AI & Data Engineer"
+theme = "PaperMod"
+paginate = 5
+
+[params]
+  env = "production"
+  title = "Kim SoonHa"
+  description = "AI/Data 엔지니어링, 금융 분석, OSINT 관련 기록"
+  keywords = ["AI", "Data Engineering", "Python", "Finance", "OSINT"]
+  author = "Kim SoonHa"
+  # 프로필 사진 경로 (나중에 assets/images/profile.jpg 에 넣으면 됨)
+  # images = ["images/profile.jpg"]
+
+  # 다크모드 기본값 (auto = 시스템 설정 따름)
+  defaultTheme = "auto"
+  disableThemeToggle = false
+
+  # 게시글 메타 정보
+  ShowReadingTime = true
+  ShowShareButtons = false
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowWordCount = true
+  ShowRssButtonInSectionTermList = true
+  UseHugoToc = true
+  disableScrollToTop = false
+  comments = false
+
+  # 홈 화면 — 프로필 모드 (포트폴리오처럼 보이게)
+  [params.homeInfoParams]
+    Title = "안녕하세요, 김순하입니다"
+    Content = """
+AI/Data 엔지니어 지망생으로 금융 분석, OSINT, 머신러닝 프로젝트를 기록합니다.
+"""
+
+  # 소셜 링크
+  [[params.socialIcons]]
+    name = "github"
+    url = "https://github.com/ksh1004"
+
+  [[params.socialIcons]]
+    name = "velog"
+    url = "https://velog.io/@ksh1004"
+
+# 메뉴
+[[menu.main]]
+  identifier = "posts"
+  name = "Posts"
+  url = "/posts/"
+  weight = 10
+
+[[menu.main]]
+  identifier = "categories"
+  name = "Categories"
+  url = "/categories/"
+  weight = 20
+
+[[menu.main]]
+  identifier = "tags"
+  name = "Tags"
+  url = "/tags/"
+  weight = 30
+
+[[menu.main]]
+  identifier = "about"
+  name = "About"
+  url = "/about/"
+  weight = 40
+
+# 마크다운 설정
+[markup.goldmark.renderer]
+  unsafe = true
+
+[markup.highlight]
+  style = "dracula"
+  lineNos = true
+  tabWidth = 4
