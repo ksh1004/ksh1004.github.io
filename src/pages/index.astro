@@ -7,42 +7,22 @@ const posts = (await getCollection('posts'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 6);
 
-const specs = [
-  { val: '4+', label: 'Projects' },
-  { val: 'AI', label: 'Focus Area' },
-  { val: 'KR', label: 'Based In' },
-  { val: '\'26', label: 'Active' },
-];
-
 const projects = [
-  { num: '01', name: 'IntelligenceView', desc: '한반도 OSINT 4D 모니터링 대시보드. 공개출처정보 자동 수집 및 실시간 시각화.', stack: 'Python · CesiumJS · SQLite', url: 'https://github.com/ksh1004' },
-  { num: '02', name: 'System Trading', desc: '한국·미국 주식 자동매매 시스템. 백테스팅 → 텔레그램 시그널 → 자동 체결.', stack: 'Python · Backtrader', url: 'https://github.com/ksh1004' },
-  { num: '03', name: 'Military Vehicle AI', desc: '군용 차량 이미지 분류 딥러닝 모델. CNN 기반 다중 클래스 분류.', stack: 'PyTorch · CNN', url: 'https://github.com/ksh1004' },
-  { num: '04', name: 'News Credibility', desc: '뉴스 기사 정치 편향 분석 및 시각화 대시보드.', stack: 'NLP · Streamlit', url: 'https://github.com/ksh1004' },
+  { num: '01', name: 'IntelligenceView', desc: '한반도 공개출처정보 자동 수집 및 4D 시각화 대시보드.', stack: 'Python · CesiumJS · SQLite', url: 'https://github.com/ksh1004' },
+  { num: '02', name: 'System Trading', desc: '한국·미국 주식 자동매매 시스템. 백테스팅부터 자동 체결까지.', stack: 'Python · Backtrader', url: 'https://github.com/ksh1004' },
+  { num: '03', name: 'Military Vehicle AI', desc: '군용 차량 이미지 분류 모델. CNN 기반 다중 클래스.', stack: 'PyTorch · CNN', url: 'https://github.com/ksh1004' },
+  { num: '04', name: 'News Bias Analyzer', desc: '뉴스 기사 정치 편향 분석 및 시각화.', stack: 'NLP · Streamlit', url: 'https://github.com/ksh1004' },
 ];
 ---
 
-<BaseLayout title="KSH1004 — AI & Data Engineer">
+<BaseLayout title="KSH1004 — 김순하">
 
-  <!-- ═══ HERO PHOTO BAND ═══ -->
-  <!-- BMW M 스타일: 검정 캔버스 + UPPERCASE 대형 헤드라인 -->
-  <section style="background:#000;padding:96px 40px;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;max-width:100%;">
-    <!-- 배경: 미세 그리드 (사진 대신 코드 에스테틱) -->
-    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:80px 80px;pointer-events:none;"></div>
-
-    <!-- 좌상단 레이블 -->
-    <div id="hero-coord" style="position:absolute;top:40px;left:40px;font-size:12px;font-weight:400;letter-spacing:0.5px;color:#7e7e7e;">
-      37°33'N · 127°00'E &nbsp;/&nbsp; Seoul, KR &nbsp;/&nbsp; AI Engineer
-    </div>
-
-    <!-- 우상단 -->
-    <div style="position:absolute;top:40px;right:40px;font-size:12px;font-weight:400;letter-spacing:0.5px;color:#7e7e7e;">
-      Est. 2026
-    </div>
+  <!-- ═══ HERO ═══ -->
+  <section style="background:#000;padding:120px 40px 96px;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;">
 
     <!-- 메인 헤드라인 -->
     <div id="hero-hl" style="position:relative;z-index:1;">
-      <h1 style="font-size:clamp(4rem,12vw,10rem);font-weight:700;line-height:1;text-transform:uppercase;letter-spacing:0;color:#fff;margin-bottom:0;">
+      <h1 style="font-size:clamp(4rem,12vw,10rem);font-weight:700;line-height:1;text-transform:uppercase;letter-spacing:-0.02em;color:#fff;margin-bottom:0;">
         KIM<br/>SOONHA.
       </h1>
     </div>
@@ -50,60 +30,52 @@ const projects = [
     <!-- M 스트라이프 구분선 -->
     <div class="m-stripe gsap-line" style="margin:40px 0 32px;"><span></span><span></span><span></span></div>
 
-    <!-- 서브헤드 + 스크롤 힌트 -->
-    <div id="hero-sub" style="display:flex;align-items:flex-end;justify-content:space-between;gap:40px;position:relative;z-index:1;">
-      <p style="font-size:16px;font-weight:300;color:#bbbbbb;max-width:480px;line-height:1.5;">
-        AI/Data 엔지니어 지망생. 머신러닝, 금융 데이터, 한반도 OSINT 모니터링 시스템을 개발합니다.
+    <!-- 서브헤드 + CTA -->
+    <div id="hero-sub" style="display:flex;align-items:flex-end;justify-content:space-between;gap:40px;position:relative;z-index:1;flex-wrap:wrap;">
+      <p style="font-size:17px;font-weight:300;color:#bbbbbb;max-width:440px;line-height:1.65;">
+        개발, 금융 데이터, 정보분석에 관심 있는 학생입니다.<br/>
+        공부한 것을 기록하고 만든 것을 공유합니다.
       </p>
       <div style="display:flex;gap:16px;flex-shrink:0;">
-        <a href="/posts" class="btn" data-cursor-hover>View Posts</a>
-        <a href="/about" class="btn" style="border-color:#3c3c3c;color:#7e7e7e;" onmouseover="this.style.background='#1a1a1a';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='#7e7e7e'" data-cursor-hover>About</a>
+        <a href="/posts" class="btn" data-cursor-hover>글 보기</a>
+        <a href="/about" class="btn"
+           style="border-color:#3c3c3c;color:#7e7e7e;"
+           onmouseover="this.style.borderColor='#fff';this.style.color='#fff'"
+           onmouseout="this.style.borderColor='#3c3c3c';this.style.color='#7e7e7e'"
+           data-cursor-hover>소개</a>
       </div>
     </div>
 
     <!-- 스크롤 인디케이터 -->
     <div id="scroll-ind" style="position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;">
-      <span style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#3c3c3c;">Scroll</span>
+      <span style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#3c3c3c;">Scroll</span>
       <div style="width:1px;height:40px;background:linear-gradient(to bottom,#3c3c3c,transparent);"></div>
     </div>
   </section>
 
-  <!-- ═══ SPEC CELLS ═══ -->
-  <!-- BMW M의 spec-cell 컴포넌트 스타일 -->
-  <section style="background:#0d0d0d;border-top:1px solid #3c3c3c;border-bottom:1px solid #3c3c3c;">
-    <div style="max-width:1440px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);">
-      {specs.map((s, i) => (
-        <div class="spec-cell" style={`border-radius:0;border:none;border-right:${i<3?'1px solid #3c3c3c':'none'};`}>
-          <div class="val">{s.val}</div>
-          <div class="spec-label">{s.label}</div>
-        </div>
-      ))}
-    </div>
-  </section>
-
   <!-- ═══ RECENT POSTS ═══ -->
-  <section style="background:#000;padding:96px 40px;">
+  <section style="background:#000;padding:96px 40px;border-top:1px solid #3c3c3c;">
     <div style="max-width:1440px;margin:0 auto;">
 
-      <!-- 섹션 헤더 -->
-      <div class="gsap-reveal" style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:40px;">
+      <div class="gsap-reveal" style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:40px;flex-wrap:wrap;gap:16px;">
         <div>
           <div class="label-upper" style="margin-bottom:12px;">Latest</div>
-          <h2 style="font-size:56px;font-weight:700;text-transform:uppercase;color:#fff;line-height:1.05;">Posts</h2>
+          <h2 style="font-size:clamp(2rem,5vw,3.5rem);font-weight:700;text-transform:uppercase;color:#fff;line-height:1.05;">Posts</h2>
         </div>
-        <a href="/posts" style="font-size:14px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7e7e7e;text-decoration:none;transition:color 0.15s;"
-           onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#7e7e7e'" data-cursor-hover>
-          View All →
+        <a href="/posts"
+           style="font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7e7e7e;text-decoration:none;transition:color 0.15s;"
+           onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#7e7e7e'"
+           data-cursor-hover>
+          전체 보기 →
         </a>
       </div>
 
       <hr class="hairline gsap-line" style="margin-bottom:0;" />
 
-      <!-- 포스트 목록 — magazine-article-card 스타일 -->
       <div class="gsap-stagger">
         {posts.length === 0 ? (
-          <div style="padding:64px 0;font-size:14px;font-weight:300;color:#7e7e7e;">
-            // 아직 작성된 글이 없습니다.
+          <div style="padding:64px 0;font-size:14px;font-weight:300;color:#3c3c3c;">
+            아직 작성된 글이 없습니다.
           </div>
         ) : posts.map((post, i) => (
           <a href={`/posts/${post.id}`}
@@ -116,7 +88,7 @@ const projects = [
                 {String(i+1).padStart(2,'0')}
               </span>
               <div>
-                <div class="pt" style="font-size:20px;font-weight:700;text-transform:uppercase;color:#e6e6e6;transition:color 0.15s;line-height:1.3;">
+                <div class="pt" style="font-size:19px;font-weight:700;text-transform:uppercase;color:#e6e6e6;transition:color 0.15s;line-height:1.3;">
                   {post.data.title}
                 </div>
                 {post.data.description && (
@@ -124,9 +96,16 @@ const projects = [
                 )}
               </div>
             </div>
-            <span style="font-size:12px;font-weight:400;letter-spacing:0.5px;color:#7e7e7e;white-space:nowrap;flex-shrink:0;">
-              {post.data.date.toLocaleDateString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'})}
-            </span>
+            <div style="display:flex;align-items:center;gap:16px;flex-shrink:0;">
+              {post.data.category && (
+                <span style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#3c3c3c;border:1px solid #3c3c3c;padding:4px 10px;">
+                  {post.data.category}
+                </span>
+              )}
+              <span style="font-size:12px;font-weight:400;letter-spacing:0.5px;color:#7e7e7e;white-space:nowrap;">
+                {post.data.date.toLocaleDateString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'})}
+              </span>
+            </div>
           </a>
         ))}
       </div>
@@ -134,13 +113,12 @@ const projects = [
   </section>
 
   <!-- ═══ PROJECTS ═══ -->
-  <!-- BMW M model-card 그리드 스타일 -->
   <section style="background:#0d0d0d;padding:96px 40px;border-top:1px solid #3c3c3c;">
     <div style="max-width:1440px;margin:0 auto;">
 
       <div class="gsap-reveal" style="margin-bottom:40px;">
         <div class="label-upper" style="margin-bottom:12px;">Selected</div>
-        <h2 style="font-size:56px;font-weight:700;text-transform:uppercase;color:#fff;line-height:1.05;">Projects</h2>
+        <h2 style="font-size:clamp(2rem,5vw,3.5rem);font-weight:700;text-transform:uppercase;color:#fff;line-height:1.05;">Projects</h2>
       </div>
 
       <hr class="hairline gsap-line" style="margin-bottom:40px;" />
@@ -152,11 +130,11 @@ const projects = [
              style="background:#0d0d0d;text-decoration:none;display:flex;flex-direction:column;gap:12px;"
              data-cursor-hover
              onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#0d0d0d'">
-            <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7e7e7e;">{proj.num}</div>
-            <div style="font-size:24px;font-weight:700;text-transform:uppercase;color:#fff;line-height:1.3;">{proj.name}</div>
-            <div style="font-size:14px;font-weight:300;color:#7e7e7e;line-height:1.5;flex:1;">{proj.desc}</div>
+            <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#3c3c3c;">{proj.num}</div>
+            <div style="font-size:22px;font-weight:700;text-transform:uppercase;color:#fff;line-height:1.3;">{proj.name}</div>
+            <div style="font-size:14px;font-weight:300;color:#7e7e7e;line-height:1.6;flex:1;">{proj.desc}</div>
             <div class="m-stripe" style="height:2px;margin-top:8px;"><span></span><span></span><span></span></div>
-            <div style="font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#3c3c3c;">{proj.stack}</div>
+            <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#3c3c3c;">{proj.stack}</div>
           </a>
         ))}
       </div>
@@ -164,14 +142,13 @@ const projects = [
   </section>
 
   <!-- ═══ CTA BAND ═══ -->
-  <!-- BMW M cta-band-photo 스타일 (사진 대신 텍스트 중심) -->
   <section style="background:#000;padding:96px 40px;border-top:1px solid #3c3c3c;text-align:center;">
     <div style="max-width:1440px;margin:0 auto;" class="gsap-reveal">
       <div class="label-upper" style="margin-bottom:24px;text-align:center;">Contact</div>
-      <h2 style="font-size:40px;font-weight:700;text-transform:uppercase;color:#fff;margin-bottom:40px;line-height:1.1;">
+      <h2 style="font-size:clamp(2rem,5vw,3.5rem);font-weight:700;text-transform:uppercase;color:#fff;margin-bottom:40px;line-height:1.1;">
         Let's Work Together.
       </h2>
-      <a href="mailto:soonha990@naver.com" class="btn" data-cursor-hover>Get In Touch</a>
+      <a href="mailto:soonha990@naver.com" class="btn" data-cursor-hover>연락하기</a>
     </div>
   </section>
 
@@ -180,14 +157,11 @@ const projects = [
 <script>
 import gsap from 'gsap';
 
-// 히어로 진입 애니메이션
 gsap.timeline({ defaults: { ease: 'power4.out' } })
-  .from('#hero-coord', { opacity: 0, y: -8, duration: 0.6 })
-  .from('#hero-hl h1', { y: 60, opacity: 0, duration: 1.0 }, '-=0.3')
+  .from('#hero-hl h1', { y: 60, opacity: 0, duration: 1.0 })
   .from('#hero-sub', { opacity: 0, y: 20, duration: 0.7 }, '-=0.5')
   .from('#scroll-ind', { opacity: 0, duration: 0.5 }, '-=0.3');
 
-// 스크롤 인디케이터 루프
 gsap.to('#scroll-ind > div', {
   scaleY: 0, transformOrigin: 'top',
   duration: 1.0, ease: 'power2.in',

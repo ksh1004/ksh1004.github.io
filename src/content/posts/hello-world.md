@@ -3,6 +3,7 @@ title: "블로그 시작합니다"
 date: 2026-07-03
 description: "AI/Data 엔지니어를 목표로 공부 기록을 시작합니다."
 tags: ["일상", "블로그"]
+category: "일상"
 ---
 
 ## 시작하며

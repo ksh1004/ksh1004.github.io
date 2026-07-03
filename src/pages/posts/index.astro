@@ -5,60 +5,127 @@ import { getCollection } from 'astro:content';
 const posts = (await getCollection('posts'))
   .filter(p => !p.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const FIXED_CATEGORIES = ['개발', '금융', 'AI·ML', '프로젝트', '일상'];
+const usedCategories = [...new Set(posts.map(p => p.data.category ?? '개발'))];
+const categories = FIXED_CATEGORIES.filter(c => usedCategories.includes(c));
 ---
 
 <BaseLayout title="Posts — KSH1004">
-  <section style="max-width:1440px;margin:0 auto;padding:64px 40px 96px;">
 
-    <div class="gsap-reveal" style="margin-bottom:48px;">
-      <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7e7e7e;margin-bottom:12px;">
-        Archive · {posts.length} Posts
-      </div>
-      <h1 style="font-size:clamp(3rem,8vw,6rem);font-weight:700;text-transform:uppercase;color:#fff;line-height:1;">
-        All Posts
-      </h1>
-    </div>
+  <!-- 헤더 -->
+  <section style="background:#000;padding:72px 40px 0;border-bottom:1px solid #3c3c3c;">
+    <div style="max-width:1440px;margin:0 auto;">
 
-    <div class="m-stripe gsap-line" style="margin-bottom:0;"><span></span><span></span><span></span></div>
-
-    <div class="gsap-stagger">
-      {posts.length === 0 ? (
-        <div style="padding:64px 0;font-size:14px;font-weight:300;color:#7e7e7e;">
-          // 아직 작성된 글이 없습니다.
+      <div class="gsap-reveal" style="margin-bottom:40px;">
+        <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7e7e7e;margin-bottom:12px;">
+          Archive · {posts.length}편
         </div>
-      ) : posts.map((post, i) => (
-        <a href={`/posts/${post.id}`}
-           style="display:flex;align-items:baseline;justify-content:space-between;gap:40px;padding:28px 0;border-bottom:1px solid #3c3c3c;text-decoration:none;"
-           data-cursor-hover
-           onmouseover="this.querySelector('.pt').style.color='#fff'"
-           onmouseout="this.querySelector('.pt').style.color='#e6e6e6'">
-          <div style="display:flex;align-items:baseline;gap:24px;min-width:0;">
-            <span style="font-size:12px;font-weight:400;color:#3c3c3c;width:24px;flex-shrink:0;letter-spacing:0.5px;">
-              {String(i+1).padStart(2,'0')}
-            </span>
-            <div>
-              <div class="pt" style="font-size:20px;font-weight:700;text-transform:uppercase;color:#e6e6e6;transition:color 0.15s;line-height:1.3;">
-                {post.data.title}
-              </div>
-              {post.data.description && (
-                <div style="font-size:14px;font-weight:300;color:#7e7e7e;margin-top:4px;">{post.data.description}</div>
-              )}
-              {post.data.tags && post.data.tags.length > 0 && (
-                <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
-                  {post.data.tags.map((tag: string) => (
-                    <span style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#3c3c3c;border:1px solid #3c3c3c;padding:3px 8px;">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-          <span style="font-size:12px;font-weight:400;letter-spacing:0.5px;color:#7e7e7e;white-space:nowrap;flex-shrink:0;">
-            {post.data.date.toLocaleDateString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'})}
-          </span>
-        </a>
-      ))}
+        <h1 style="font-size:clamp(2.5rem,7vw,5rem);font-weight:700;text-transform:uppercase;color:#fff;line-height:1;">
+          Posts
+        </h1>
+      </div>
+
+      <!-- 카테고리 탭 -->
+      <div style="display:flex;gap:0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;" class="gsap-reveal">
+        <button
+          class="cat-tab active"
+          data-cat="all"
+          style="font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#fff;padding:16px 24px;border:none;border-bottom:2px solid #1c69d4;background:none;cursor:none;white-space:nowrap;transition:color 0.15s,border-color 0.15s;">
+          전체
+        </button>
+        {categories.map(cat => (
+          <button
+            class="cat-tab"
+            data-cat={cat}
+            style="font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7e7e7e;padding:16px 24px;border:none;border-bottom:2px solid transparent;background:none;cursor:none;white-space:nowrap;transition:color 0.15s,border-color 0.15s;">
+            {cat}
+          </button>
+        ))}
+      </div>
     </div>
   </section>
+
+  <!-- 포스트 목록 -->
+  <section style="background:#000;padding:0 40px 96px;">
+    <div style="max-width:1440px;margin:0 auto;">
+
+      <div id="post-list">
+        {posts.length === 0 ? (
+          <div style="padding:80px 0;font-size:14px;font-weight:300;color:#3c3c3c;">
+            아직 작성된 글이 없습니다.
+          </div>
+        ) : posts.map((post, i) => (
+          <a
+            href={`/posts/${post.id}`}
+            class="post-item"
+            data-category={post.data.category ?? '개발'}
+            style="display:flex;align-items:baseline;justify-content:space-between;gap:40px;padding:28px 0;border-bottom:1px solid #3c3c3c;text-decoration:none;"
+            data-cursor-hover
+            onmouseover="this.querySelector('.pt').style.color='#fff'"
+            onmouseout="this.querySelector('.pt').style.color='#e6e6e6'">
+            <div style="display:flex;align-items:baseline;gap:24px;min-width:0;">
+              <span style="font-size:12px;font-weight:400;color:#3c3c3c;width:24px;flex-shrink:0;letter-spacing:0.5px;">
+                {String(i+1).padStart(2,'0')}
+              </span>
+              <div>
+                <div class="pt" style="font-size:19px;font-weight:700;text-transform:uppercase;color:#e6e6e6;transition:color 0.15s;line-height:1.3;">
+                  {post.data.title}
+                </div>
+                {post.data.description && (
+                  <div style="font-size:14px;font-weight:300;color:#7e7e7e;margin-top:4px;">{post.data.description}</div>
+                )}
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:16px;flex-shrink:0;">
+              <span style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#3c3c3c;border:1px solid #3c3c3c;padding:4px 10px;white-space:nowrap;">
+                {post.data.category ?? '개발'}
+              </span>
+              <span style="font-size:12px;font-weight:400;letter-spacing:0.5px;color:#7e7e7e;white-space:nowrap;">
+                {post.data.date.toLocaleDateString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'})}
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <!-- 카운터 -->
+      <div id="post-count" style="padding:24px 0;font-size:12px;font-weight:400;letter-spacing:0.5px;color:#3c3c3c;"></div>
+    </div>
+  </section>
+
 </BaseLayout>
+
+<script>
+const tabs = document.querySelectorAll<HTMLButtonElement>('.cat-tab');
+const items = document.querySelectorAll<HTMLElement>('.post-item');
+const counter = document.getElementById('post-count');
+
+function setActive(btn: HTMLButtonElement) {
+  tabs.forEach(t => {
+    t.style.color = '#7e7e7e';
+    t.style.borderBottomColor = 'transparent';
+  });
+  btn.style.color = '#fff';
+  btn.style.borderBottomColor = '#1c69d4';
+}
+
+function filterPosts(cat: string) {
+  let visible = 0;
+  items.forEach(item => {
+    const show = cat === 'all' || item.dataset.category === cat;
+    item.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+  if (counter) {
+    counter.textContent = cat === 'all' ? '' : `${visible}편`;
+  }
+}
+
+tabs.forEach(btn => {
+  btn.addEventListener('click', () => {
+    setActive(btn);
+    filterPosts(btn.dataset.cat ?? 'all');
+  });
+});
+</script>
