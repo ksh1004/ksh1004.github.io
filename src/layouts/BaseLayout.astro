@@ -32,8 +32,18 @@ const { title, description = 'AI/Data 엔지니어 김순하의 기술 블로그
     <div class="m-stripe" style="height:3px;"><span></span><span></span><span></span></div>
     <div style="max-width:1440px;margin:0 auto;padding:0 40px;height:61px;display:flex;align-items:center;justify-content:space-between;">
       <!-- 로고 -->
-      <a href="/" style="font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#fff;text-decoration:none;" data-cursor-hover>
-        KSH<span style="color:#0066b1;">1</span><span style="color:#1c69d4;">0</span><span style="color:#e22718;">04</span>
+      <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;" data-cursor-hover>
+        <!-- M 트리컬러 수직 바 -->
+        <div style="display:flex;flex-direction:column;width:3px;height:30px;gap:0;flex-shrink:0;">
+          <span style="flex:1;background:#0066b1;"></span>
+          <span style="flex:1;background:#1c69d4;"></span>
+          <span style="flex:1;background:#e22718;"></span>
+        </div>
+        <!-- 텍스트 스택 -->
+        <div style="display:flex;flex-direction:column;gap:2px;">
+          <span style="font-size:14px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#fff;line-height:1;">KSH</span>
+          <span style="font-size:9px;font-weight:400;letter-spacing:3px;text-transform:uppercase;color:#7e7e7e;line-height:1;">1004</span>
+        </div>
       </a>
       <!-- 네비 링크 -->
       <div style="display:flex;align-items:center;gap:40px;">

@@ -7,6 +7,10 @@ const posts = (await getCollection('posts'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
 const categories = ['개발', '프로젝트', '코딩테스트', '일상'];
+
+const SUB_CATEGORIES: Record<string, string[]> = {
+  '코딩테스트': ['C++', 'Python', 'Java'],
+};
 ---
 
 <BaseLayout title="Posts — KSH1004">
@@ -24,22 +28,23 @@ const categories = ['개발', '프로젝트', '코딩테스트', '일상'];
         </h1>
       </div>
 
-      <!-- 카테고리 탭 -->
+      <!-- 메인 카테고리 탭 -->
       <div style="display:flex;gap:0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;" class="gsap-reveal">
-        <button
-          class="cat-tab active"
-          data-cat="all"
+        <button class="cat-tab active" data-cat="all"
           style="font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#fff;padding:16px 24px;border:none;border-bottom:2px solid #1c69d4;background:none;cursor:none;white-space:nowrap;transition:color 0.15s,border-color 0.15s;">
           전체
         </button>
         {categories.map(cat => (
-          <button
-            class="cat-tab"
-            data-cat={cat}
+          <button class="cat-tab" data-cat={cat}
             style="font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7e7e7e;padding:16px 24px;border:none;border-bottom:2px solid transparent;background:none;cursor:none;white-space:nowrap;transition:color 0.15s,border-color 0.15s;">
             {cat}
           </button>
         ))}
+      </div>
+
+      <!-- 하위 카테고리 탭 (JS로 제어) -->
+      <div id="sub-tab-bar" style="display:none;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;background:#0d0d0d;margin:0 -40px;padding:0 40px;border-top:1px solid #1a1a1a;">
+        <div id="sub-tabs" style="display:flex;gap:0;"></div>
       </div>
     </div>
   </section>
@@ -58,6 +63,7 @@ const categories = ['개발', '프로젝트', '코딩테스트', '일상'];
             href={`/posts/${post.id}`}
             class="post-item"
             data-category={post.data.category ?? '개발'}
+            data-subcategory={post.data.subcategory ?? ''}
             style="display:flex;align-items:baseline;justify-content:space-between;gap:40px;padding:28px 0;border-bottom:1px solid #3c3c3c;text-decoration:none;"
             data-cursor-hover
             onmouseover="this.querySelector('.pt').style.color='#fff'"
@@ -75,8 +81,13 @@ const categories = ['개발', '프로젝트', '코딩테스트', '일상'];
                 )}
               </div>
             </div>
-            <div style="display:flex;align-items:center;gap:16px;flex-shrink:0;">
-              <span style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#3c3c3c;border:1px solid #3c3c3c;padding:4px 10px;white-space:nowrap;">
+            <div style="display:flex;align-items:center;gap:12px;flex-shrink:0;">
+              {post.data.subcategory && (
+                <span style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#1c69d4;border:1px solid #1c69d4;padding:3px 8px;white-space:nowrap;">
+                  {post.data.subcategory}
+                </span>
+              )}
+              <span style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#3c3c3c;border:1px solid #3c3c3c;padding:3px 8px;white-space:nowrap;">
                 {post.data.category ?? '개발'}
               </span>
               <span style="font-size:12px;font-weight:400;letter-spacing:0.5px;color:#7e7e7e;white-space:nowrap;">
@@ -87,20 +98,30 @@ const categories = ['개발', '프로젝트', '코딩테스트', '일상'];
         ))}
       </div>
 
-      <!-- 카운터 -->
-      <div id="post-count" style="padding:24px 0;font-size:12px;font-weight:400;letter-spacing:0.5px;color:#3c3c3c;"></div>
+      <div id="empty-msg" style="display:none;padding:64px 0;font-size:14px;font-weight:300;color:#3c3c3c;">
+        해당 카테고리의 글이 없습니다.
+      </div>
     </div>
   </section>
 
 </BaseLayout>
 
 <script>
-const tabs = document.querySelectorAll<HTMLButtonElement>('.cat-tab');
-const items = document.querySelectorAll<HTMLElement>('.post-item');
-const counter = document.getElementById('post-count');
+const SUB_CATEGORIES: Record<string, string[]> = {
+  '코딩테스트': ['C++', 'Python', 'Java'],
+};
 
-function setActive(btn: HTMLButtonElement) {
-  tabs.forEach(t => {
+const mainTabs = document.querySelectorAll<HTMLButtonElement>('.cat-tab');
+const items = document.querySelectorAll<HTMLElement>('.post-item');
+const subBar = document.getElementById('sub-tab-bar')!;
+const subTabsEl = document.getElementById('sub-tabs')!;
+const emptyMsg = document.getElementById('empty-msg')!;
+
+let currentCat = 'all';
+let currentSub = 'all';
+
+function setActiveMain(btn: HTMLButtonElement) {
+  mainTabs.forEach(t => {
     t.style.color = '#7e7e7e';
     t.style.borderBottomColor = 'transparent';
   });
@@ -108,22 +129,70 @@ function setActive(btn: HTMLButtonElement) {
   btn.style.borderBottomColor = '#1c69d4';
 }
 
-function filterPosts(cat: string) {
+function renderSubTabs(subs: string[]) {
+  subTabsEl.innerHTML = '';
+  if (subs.length === 0) {
+    subBar.style.display = 'none';
+    return;
+  }
+
+  subBar.style.display = 'block';
+
+  const allBtn = document.createElement('button');
+  allBtn.textContent = '전체';
+  allBtn.dataset.sub = 'all';
+  applySubStyle(allBtn, true);
+  allBtn.addEventListener('click', () => { setActiveSub(allBtn); filterPosts(currentCat, 'all'); });
+  subTabsEl.appendChild(allBtn);
+
+  subs.forEach(sub => {
+    const btn = document.createElement('button');
+    btn.textContent = sub;
+    btn.dataset.sub = sub;
+    applySubStyle(btn, false);
+    btn.addEventListener('click', () => { setActiveSub(btn); filterPosts(currentCat, sub); });
+    subTabsEl.appendChild(btn);
+  });
+}
+
+function applySubStyle(btn: HTMLButtonElement, active: boolean) {
+  btn.style.cssText = `
+    font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+    padding:12px 20px;border:none;border-bottom:2px solid ${active ? '#0066b1' : 'transparent'};
+    background:none;cursor:none;white-space:nowrap;
+    color:${active ? '#fff' : '#7e7e7e'};
+    transition:color 0.15s,border-color 0.15s;
+  `;
+}
+
+function setActiveSub(btn: HTMLButtonElement) {
+  currentSub = btn.dataset.sub ?? 'all';
+  subTabsEl.querySelectorAll<HTMLButtonElement>('button').forEach(t => {
+    applySubStyle(t, false);
+  });
+  applySubStyle(btn, true);
+}
+
+function filterPosts(cat: string, sub: string) {
+  currentSub = sub;
   let visible = 0;
   items.forEach(item => {
-    const show = cat === 'all' || item.dataset.category === cat;
+    const matchCat = cat === 'all' || item.dataset.category === cat;
+    const matchSub = sub === 'all' || item.dataset.subcategory === sub;
+    const show = matchCat && matchSub;
     item.style.display = show ? '' : 'none';
     if (show) visible++;
   });
-  if (counter) {
-    counter.textContent = cat === 'all' ? '' : `${visible}편`;
-  }
+  emptyMsg.style.display = visible === 0 ? 'block' : 'none';
 }
 
-tabs.forEach(btn => {
+mainTabs.forEach(btn => {
   btn.addEventListener('click', () => {
-    setActive(btn);
-    filterPosts(btn.dataset.cat ?? 'all');
+    const cat = btn.dataset.cat ?? 'all';
+    currentCat = cat;
+    setActiveMain(btn);
+    renderSubTabs(cat !== 'all' && SUB_CATEGORIES[cat] ? SUB_CATEGORIES[cat] : []);
+    filterPosts(cat, 'all');
   });
 });
 </script>
