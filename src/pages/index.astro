@@ -4,111 +4,181 @@ import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('posts'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 5);
+  .slice(0, 4);
+
+const projects = [
+  { num: '01', name: 'IntelligenceView', desc: '한반도 OSINT 4D 모니터링 대시보드. 공개출처정보 자동 수집 및 실시간 시각화.', tag: 'Python · CesiumJS · SQLite', url: 'https://github.com/ksh1004' },
+  { num: '02', name: 'System Trading', desc: '한국·미국 주식 자동매매 시스템. 백테스팅 → 텔레그램 시그널 → 자동 체결.', tag: 'Python · 퀀트', url: 'https://github.com/ksh1004' },
+  { num: '03', name: 'Military Vehicle AI', desc: '군용 차량 이미지 분류 딥러닝 모델.', tag: 'PyTorch · CNN', url: 'https://github.com/ksh1004' },
+  { num: '04', name: 'News Credibility', desc: '뉴스 기사 정치 편향 분석기.', tag: 'NLP · Streamlit', url: 'https://github.com/ksh1004' },
+];
 ---
 
-<BaseLayout title="ksh1004 | AI & Data Engineer">
-  <!-- 히어로 섹션 -->
-  <section class="mb-20">
-    <div class="text-[#666680] text-sm mb-4">
-      <span class="text-[#00ff88]">root@ksh1004</span>:<span class="text-[#4466ff]">~</span>$ whoami
+<BaseLayout title="KSH1004 — AI & Data Engineer">
+
+  <!-- ── HERO ── -->
+  <section id="hero" style="height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 2rem 4rem;max-width:1200px;margin:0 auto;position:relative;">
+    <!-- 좌상단 좌표 레이블 -->
+    <div id="hero-label" style="position:absolute;top:2.5rem;left:2rem;font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;letter-spacing:0.25em;text-transform:uppercase;color:#8a7888;">
+      37°33'N · 127°00'E &nbsp;/&nbsp; Seoul, KR
     </div>
-    <h1 class="text-5xl font-bold mb-4 leading-tight">
-      <span class="text-[#e0e0e0]">KIM </span>
-      <span class="neon-text">SOONHA</span>
-    </h1>
-    <p class="text-[#666680] text-lg mb-6 cursor">
-      AI / Data Engineer &nbsp;·&nbsp; OSINT &nbsp;·&nbsp; Finance
-    </p>
-    <p class="text-[#e0e0e0] max-w-xl leading-relaxed mb-8">
-      머신러닝, 금융 데이터 분석, 한반도 OSINT 모니터링 시스템을 개발합니다.
-      배운 것을 기록하고, 만든 것을 공유합니다.
-    </p>
-    <div class="flex gap-4 text-sm">
-      <a href="/posts" class="border border-[#00ff88] text-[#00ff88] px-4 py-2 hover:bg-[#00ff8811] transition-colors">
-        /posts →
-      </a>
-      <a href="https://velog.io/@ksh1004" target="_blank" rel="noopener"
-         class="border border-[#1a1a2e] text-[#666680] px-4 py-2 hover:border-[#ffc20e] hover:text-[#ffc20e] transition-colors">
-        velog ↗
-      </a>
-      <a href="https://github.com/ksh1004" target="_blank" rel="noopener"
-         class="border border-[#1a1a2e] text-[#666680] px-4 py-2 hover:border-[#ffc20e] hover:text-[#ffc20e] transition-colors">
-        github ↗
-      </a>
+
+    <!-- 우상단 날짜 -->
+    <div style="position:absolute;top:2.5rem;right:2rem;font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;letter-spacing:0.25em;text-transform:uppercase;color:#8a7888;">
+      Est. 2026
+    </div>
+
+    <!-- 메인 헤드라인 -->
+    <div id="hero-headline">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:clamp(5rem,14vw,13rem);font-weight:800;line-height:0.88;text-transform:uppercase;letter-spacing:-0.01em;color:#f0e6d0;">
+        KIM
+      </div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:clamp(5rem,14vw,13rem);font-weight:800;line-height:0.88;text-transform:uppercase;letter-spacing:-0.01em;color:#FFC20E;">
+        SOONHA
+      </div>
+    </div>
+
+    <!-- 구분선 -->
+    <div class="gsap-line" style="height:1px;background:#3d2f3d;margin:2rem 0;"></div>
+
+    <!-- 서브 정보 -->
+    <div id="hero-sub" style="display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:#8a7888;">
+        AI Engineer &nbsp;·&nbsp; Data Analyst &nbsp;·&nbsp; OSINT &nbsp;·&nbsp; Finance
+      </div>
+      <!-- 스크롤 유도 -->
+      <div id="scroll-hint" style="display:flex;flex-direction:column;align-items:center;gap:0.4rem;flex-shrink:0;">
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;letter-spacing:0.25em;text-transform:uppercase;color:#8a7888;">Scroll</span>
+        <div style="width:1px;height:48px;background:linear-gradient(to bottom,#FFC20E,transparent);"></div>
+      </div>
     </div>
   </section>
 
-  <!-- 구분선 -->
-  <div class="border-t border-[#1a1a2e] mb-12"></div>
+  <!-- ── 마키 띠 ── -->
+  <div class="marquee-wrap" style="padding:0.6rem 0;">
+    <div class="marquee-track">
+      {Array.from({length: 2}).map(() => (
+        <>
+          <span>AI Engineer</span><span class="accent">·</span>
+          <span>Data Analytics</span><span class="accent">·</span>
+          <span>OSINT</span><span class="accent">·</span>
+          <span>Machine Learning</span><span class="accent">·</span>
+          <span>System Trading</span><span class="accent">·</span>
+          <span>Python</span><span class="accent">·</span>
+          <span>PyTorch</span><span class="accent">·</span>
+          <span>Han-Ban Security</span><span class="accent">·</span>
+          <span>Finance Quant</span><span class="accent">·</span>
+          <span>Seoul, KR</span><span class="accent">·</span>
+        </>
+      ))}
+    </div>
+  </div>
 
-  <!-- 최근 글 -->
-  <section class="mb-20">
-    <div class="text-[#666680] text-sm mb-6">
-      <span class="text-[#00ff88]">root@ksh1004</span>:<span class="text-[#4466ff]">~</span>$ ls -lt ./posts
+  <!-- ── 섹션 01 — 최근 글 ── -->
+  <section style="max-width:1200px;margin:0 auto;padding:7rem 2rem;">
+    <div class="gsap-reveal" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3rem;">
+      <div>
+        <div class="section-label" style="margin-bottom:0.5rem;">Section 01</div>
+        <h2 style="font-family:'Barlow Condensed',sans-serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:700;text-transform:uppercase;color:#f0e6d0;line-height:1;">
+          Recent Posts
+        </h2>
+      </div>
+      <a href="/posts" style="font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:#8a7888;text-decoration:none;border-bottom:1px solid #3d2f3d;padding-bottom:2px;transition:color 0.2s,border-color 0.2s;"
+         onmouseover="this.style.color='#FFC20E';this.style.borderColor='#FFC20E'"
+         onmouseout="this.style.color='#8a7888';this.style.borderColor='#3d2f3d'"
+         data-cursor-hover>
+        View All →
+      </a>
     </div>
 
-    {posts.length === 0 ? (
-      <p class="text-[#666680]">// 아직 작성된 글이 없어요.</p>
-    ) : (
-      <div class="space-y-4">
-        {posts.map(post => (
-          <a href={`/posts/${post.id}`} class="neon-card block p-5 rounded-none group">
-            <div class="flex items-start justify-between gap-4">
-              <div>
-                <h2 class="text-[#e0e0e0] font-medium mb-1 group-hover:text-[#00ff88] transition-colors">
+    <hr class="gsap-line" style="border:none;border-top:1px solid #3d2f3d;margin-bottom:0;" />
+
+    <div class="gsap-stagger">
+      {posts.length === 0 ? (
+        <p style="padding:3rem 0;color:#8a7888;font-size:0.9rem;">// 아직 작성된 글이 없어요.</p>
+      ) : (
+        posts.map((post, i) => (
+          <a href={`/posts/${post.id}`}
+             style="display:flex;align-items:baseline;justify-content:space-between;gap:2rem;padding:1.6rem 0;border-bottom:1px solid #3d2f3d;text-decoration:none;group:true;"
+             data-cursor-hover
+             onmouseover="this.querySelector('.post-title').style.color='#FFC20E'"
+             onmouseout="this.querySelector('.post-title').style.color='#f0e6d0'">
+            <div style="display:flex;align-items:baseline;gap:1.5rem;min-width:0;">
+              <span style="font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;color:#3d2f3d;flex-shrink:0;">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <div style="min-width:0;">
+                <div class="post-title" style="font-family:'Barlow Condensed',sans-serif;font-size:1.25rem;font-weight:600;text-transform:uppercase;letter-spacing:0.03em;color:#f0e6d0;transition:color 0.2s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
                   {post.data.title}
-                </h2>
+                </div>
                 {post.data.description && (
-                  <p class="text-[#666680] text-sm">{post.data.description}</p>
-                )}
-                {post.data.tags && post.data.tags.length > 0 && (
-                  <div class="flex gap-2 mt-2">
-                    {post.data.tags.map((tag: string) => (
-                      <span class="text-xs text-[#00ff88] opacity-60">#{tag}</span>
-                    ))}
-                  </div>
+                  <div style="font-size:0.8rem;color:#8a7888;margin-top:0.2rem;">{post.data.description}</div>
                 )}
               </div>
-              <span class="text-[#666680] text-xs whitespace-nowrap">
-                {post.data.date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' })}
-              </span>
             </div>
+            <span style="font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;letter-spacing:0.1em;color:#8a7888;flex-shrink:0;">
+              {post.data.date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' })}
+            </span>
           </a>
-        ))}
-      </div>
-    )}
-
-    <div class="mt-6">
-      <a href="/posts" class="text-[#666680] text-sm hover:text-[#00ff88] transition-colors">
-        전체 글 보기 →
-      </a>
+        ))
+      )}
     </div>
   </section>
 
-  <!-- 프로젝트 섹션 -->
-  <section>
-    <div class="text-[#666680] text-sm mb-6">
-      <span class="text-[#00ff88]">root@ksh1004</span>:<span class="text-[#4466ff]">~</span>$ ls ./projects
+  <!-- ── 섹션 02 — 프로젝트 ── -->
+  <section style="max-width:1200px;margin:0 auto;padding:0 2rem 8rem;">
+    <div class="gsap-reveal" style="margin-bottom:3rem;">
+      <div class="section-label" style="margin-bottom:0.5rem;">Section 02</div>
+      <h2 style="font-family:'Barlow Condensed',sans-serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:700;text-transform:uppercase;color:#f0e6d0;line-height:1;">
+        Projects
+      </h2>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {[
-        { name: 'IntelligenceView', desc: '한반도 OSINT 4D 모니터링 대시보드', tag: 'Python / CesiumJS', url: 'https://github.com/ksh1004' },
-        { name: 'System Trading', desc: '한국·미국 주식 자동매매 시스템', tag: 'Python / 백테스팅', url: 'https://github.com/ksh1004' },
-        { name: 'Military Vehicle AI', desc: '군용 차량 이미지 분류 모델', tag: 'PyTorch / CNN', url: 'https://github.com/ksh1004' },
-        { name: 'News Credibility', desc: '뉴스 정치 편향 분석기', tag: 'NLP / Streamlit', url: 'https://github.com/ksh1004' },
-      ].map(proj => (
-        <a href={proj.url} target="_blank" rel="noopener" class="neon-card p-4 group block">
-          <div class="flex items-start justify-between mb-2">
-            <h3 class="text-[#e0e0e0] font-medium group-hover:text-[#00ff88] transition-colors">
-              {proj.name}
-            </h3>
-            <span class="text-[#666680] text-xs">↗</span>
+
+    <hr class="gsap-line" style="border:none;border-top:1px solid #3d2f3d;margin-bottom:2rem;" />
+
+    <div class="gsap-stagger" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1px;background:#3d2f3d;">
+      {projects.map(proj => (
+        <a href={proj.url} target="_blank" rel="noopener"
+           class="nrg-card"
+           style="text-decoration:none;display:block;"
+           data-cursor-hover>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;letter-spacing:0.2em;color:#FFC20E;margin-bottom:0.8rem;">
+            {proj.num}
           </div>
-          <p class="text-[#666680] text-sm mb-3">{proj.desc}</p>
-          <span class="text-xs text-[#ffc20e] opacity-70">{proj.tag}</span>
+          <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#f0e6d0;margin-bottom:0.6rem;">
+            {proj.name}
+          </h3>
+          <p style="font-size:0.82rem;color:#8a7888;line-height:1.6;margin-bottom:1.2rem;">
+            {proj.desc}
+          </p>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:#3d2f3d;">
+            {proj.tag}
+          </div>
         </a>
       ))}
     </div>
   </section>
+
 </BaseLayout>
+
+<script>
+  import gsap from 'gsap';
+
+  // 히어로 진입 애니메이션
+  const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
+
+  tl.from('#hero-label', { opacity: 0, y: -10, duration: 0.6 })
+    .from('#hero-headline > div', { y: 80, opacity: 0, duration: 1, stagger: 0.12 }, '-=0.3')
+    .from('#hero-sub', { opacity: 0, y: 20, duration: 0.8 }, '-=0.4')
+    .from('#scroll-hint', { opacity: 0, duration: 0.6 }, '-=0.2');
+
+  // 스크롤 힌트 바 반복 애니메이션
+  gsap.to('#scroll-hint div', {
+    scaleY: 0,
+    transformOrigin: 'top',
+    duration: 1.2,
+    ease: 'power2.in',
+    repeat: -1,
+    repeatDelay: 0.4,
+  });
+</script>

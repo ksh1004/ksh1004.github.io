@@ -6,43 +6,58 @@ const posts = (await getCollection('posts'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 
-<BaseLayout title="Posts | ksh1004">
-  <div class="mb-10">
-    <div class="text-[#666680] text-sm mb-4">
-      <span class="text-[#00ff88]">root@ksh1004</span>:<span class="text-[#4466ff]">~</span>$ ls -lt ./posts
-    </div>
-    <h1 class="text-3xl font-bold text-[#e0e0e0]">Posts</h1>
-    <p class="text-[#666680] text-sm mt-2">총 {posts.length}개의 글</p>
-  </div>
+<BaseLayout title="Posts — KSH1004">
+  <section style="max-width:1200px;margin:0 auto;padding:5rem 2rem 8rem;">
 
-  {posts.length === 0 ? (
-    <p class="text-[#666680]">// 아직 작성된 글이 없어요.</p>
-  ) : (
-    <div class="space-y-4">
-      {posts.map(post => (
-        <a href={`/posts/${post.id}`} class="neon-card block p-5 group">
-          <div class="flex items-start justify-between gap-4">
-            <div>
-              <h2 class="text-[#e0e0e0] font-medium mb-1 group-hover:text-[#00ff88] transition-colors">
-                {post.data.title}
-              </h2>
-              {post.data.description && (
-                <p class="text-[#666680] text-sm">{post.data.description}</p>
-              )}
-              {post.data.tags && post.data.tags.length > 0 && (
-                <div class="flex gap-2 mt-2">
-                  {post.data.tags.map((tag: string) => (
-                    <span class="text-xs text-[#00ff88] opacity-60">#{tag}</span>
-                  ))}
+    <div class="gsap-reveal" style="margin-bottom:4rem;">
+      <div class="section-label" style="margin-bottom:0.5rem;">Archive</div>
+      <h1 style="font-family:'Barlow Condensed',sans-serif;font-size:clamp(3rem,8vw,6rem);font-weight:800;text-transform:uppercase;color:#f0e6d0;line-height:1;">
+        All Posts
+      </h1>
+      <p style="font-size:0.8rem;color:#8a7888;margin-top:1rem;">총 {posts.length}개</p>
+    </div>
+
+    <hr class="gsap-line" style="border:none;border-top:1px solid #3d2f3d;margin-bottom:0;" />
+
+    <div class="gsap-stagger">
+      {posts.length === 0 ? (
+        <p style="padding:4rem 0;color:#8a7888;">// 아직 글이 없어요.</p>
+      ) : (
+        posts.map((post, i) => (
+          <a href={`/posts/${post.id}`}
+             style="display:flex;align-items:baseline;justify-content:space-between;gap:2rem;padding:1.8rem 0;border-bottom:1px solid #3d2f3d;text-decoration:none;"
+             data-cursor-hover
+             onmouseover="this.querySelector('.pt').style.color='#FFC20E'"
+             onmouseout="this.querySelector('.pt').style.color='#f0e6d0'">
+            <div style="display:flex;align-items:baseline;gap:1.5rem;min-width:0;">
+              <span style="font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;color:#3d2f3d;flex-shrink:0;width:1.5rem;">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <div>
+                <div class="pt" style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:600;text-transform:uppercase;letter-spacing:0.03em;color:#f0e6d0;transition:color 0.2s;">
+                  {post.data.title}
                 </div>
-              )}
+                {post.data.description && (
+                  <div style="font-size:0.78rem;color:#8a7888;margin-top:0.2rem;">{post.data.description}</div>
+                )}
+                {post.data.tags && post.data.tags.length > 0 && (
+                  <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+                    {post.data.tags.map((tag: string) => (
+                      <span style="font-family:'Barlow Condensed',sans-serif;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:#8a7888;border:1px solid #3d2f3d;padding:0.15rem 0.4rem;">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
-            <span class="text-[#666680] text-xs whitespace-nowrap">
+            <span style="font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;letter-spacing:0.08em;color:#8a7888;flex-shrink:0;">
               {post.data.date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' })}
             </span>
-          </div>
-        </a>
-      ))}
+          </a>
+        ))
+      )}
     </div>
-  )}
+
+  </section>
 </BaseLayout>

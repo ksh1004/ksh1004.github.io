@@ -9,41 +9,48 @@ interface Props {
 }
 
 const { title, date, tags = [], description } = Astro.props;
-const formattedDate = date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' });
+const formatted = date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' });
 ---
 
-<BaseLayout title={`${title} | ksh1004`} description={description}>
-  <article>
+<BaseLayout title={`${title} — KSH1004`} description={description}>
+  <article style="max-width:1200px;margin:0 auto;padding:4rem 2rem 8rem;">
+
+    <!-- 브레드크럼 -->
+    <div class="gsap-reveal" style="margin-bottom:3rem;">
+      <a href="/posts" style="font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:#8a7888;text-decoration:none;transition:color 0.2s;"
+         onmouseover="this.style.color='#FFC20E'"
+         onmouseout="this.style.color='#8a7888'"
+         data-cursor-hover>
+        ← Posts
+      </a>
+    </div>
+
     <!-- 글 헤더 -->
-    <header class="mb-10 pb-8 border-b border-[#1a1a2e]">
-      <div class="text-[#666680] text-sm mb-3">
-        <span class="text-[#00ff88]">~/posts</span> &gt; {title}
+    <header style="margin-bottom:4rem;">
+      <div class="gsap-reveal">
+        <div class="section-label" style="margin-bottom:1rem;">{formatted}</div>
+        <h1 style="font-family:'Barlow Condensed',sans-serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:800;text-transform:uppercase;letter-spacing:0.02em;color:#f0e6d0;line-height:1;margin-bottom:1.5rem;">
+          {title}
+        </h1>
       </div>
-      <h1 class="text-3xl font-bold text-[#e0e0e0] mb-4 leading-tight">{title}</h1>
-      <div class="flex items-center gap-4 text-sm text-[#666680]">
-        <span>{formattedDate}</span>
-        {tags.length > 0 && (
-          <div class="flex gap-2">
-            {tags.map(tag => (
-              <span class="border border-[#1a1a2e] px-2 py-0.5 text-xs text-[#00ff88] rounded">
-                #{tag}
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
+
+      {tags.length > 0 && (
+        <div class="gsap-reveal" style="display:flex;gap:0.6rem;flex-wrap:wrap;">
+          {tags.map(tag => (
+            <span style="font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:#8a7888;border:1px solid #3d2f3d;padding:0.25rem 0.6rem;">
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
+
+      <hr class="gsap-line" style="border:none;border-top:1px solid #3d2f3d;margin-top:2.5rem;" />
     </header>
 
-    <!-- 글 본문 -->
-    <div class="prose prose-invert leading-relaxed">
+    <!-- 본문 -->
+    <div class="prose gsap-reveal">
       <slot />
     </div>
 
-    <!-- 하단 네비게이션 -->
-    <div class="mt-12 pt-8 border-t border-[#1a1a2e]">
-      <a href="/posts" class="text-[#666680] hover:text-[#00ff88] transition-colors text-sm">
-        ← /posts 목록으로
-      </a>
-    </div>
   </article>
 </BaseLayout>

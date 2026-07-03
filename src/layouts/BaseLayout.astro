@@ -7,6 +7,13 @@ interface Props {
 }
 
 const { title, description = 'AI/Data 엔지니어 김순하의 기술 블로그' } = Astro.props;
+
+const navLinks = [
+  { href: '/posts', label: 'Posts' },
+  { href: '/about', label: 'About' },
+  { href: 'https://velog.io/@ksh1004', label: 'Velog', external: true },
+  { href: 'https://github.com/ksh1004', label: 'GitHub', external: true },
+];
 ---
 
 <!doctype html>
@@ -17,38 +24,145 @@ const { title, description = 'AI/Data 엔지니어 김순하의 기술 블로그
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
-    <!-- JetBrains Mono 폰트 -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   </head>
-  <body class="scanlines">
+
+  <body>
+    <!-- 노이즈 텍스처 오버레이 -->
+    <svg class="noise-overlay" xmlns="http://www.w3.org/2000/svg">
+      <filter id="noise-filter">
+        <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
+      </filter>
+      <rect width="100%" height="100%" filter="url(#noise-filter)" />
+    </svg>
+
+    <!-- 커스텀 커서 -->
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-ring" id="cursor-ring"></div>
+
     <!-- 네비게이션 -->
-    <nav class="border-b border-[#1a1a2e] bg-[#0a0a0f]/90 backdrop-blur-sm sticky top-0 z-50">
-      <div class="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
-        <a href="/" class="neon-text font-bold text-lg tracking-wider hover:opacity-80 transition-opacity">
-          ksh1004<span class="cursor"></span>
+    <nav style="position:sticky;top:0;z-index:100;border-bottom:1px solid #3d2f3d;background:rgba(38,29,38,0.9);backdrop-filter:blur(12px);">
+      <div style="max-width:1200px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px;">
+        <a href="/" style="font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#f0e6d0;text-decoration:none;" data-cursor-hover>
+          KSH<span style="color:#FFC20E">1004</span>
         </a>
-        <div class="flex gap-6 text-sm text-[#666680]">
-          <a href="/posts" class="hover:text-[#00ff88] transition-colors">/posts</a>
-          <a href="/about" class="hover:text-[#00ff88] transition-colors">/about</a>
-          <a href="https://velog.io/@ksh1004" target="_blank" rel="noopener" class="hover:text-[#ffc20e] transition-colors">/velog ↗</a>
-          <a href="https://github.com/ksh1004" target="_blank" rel="noopener" class="hover:text-[#ffc20e] transition-colors">/github ↗</a>
+        <div style="display:flex;align-items:center;gap:2rem;">
+          {navLinks.map(link => (
+            <a
+              href={link.href}
+              target={link.external ? '_blank' : undefined}
+              rel={link.external ? 'noopener' : undefined}
+              style="font-size:0.75rem;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:#8a7888;text-decoration:none;transition:color 0.2s;"
+              onmouseover="this.style.color='#FFC20E'"
+              onmouseout="this.style.color='#8a7888'"
+              data-cursor-hover
+            >
+              {link.label}{link.external ? ' ↗' : ''}
+            </a>
+          ))}
         </div>
       </div>
     </nav>
 
-    <!-- 메인 콘텐츠 -->
-    <main class="max-w-4xl mx-auto px-6 py-12">
+    <!-- 콘텐츠 -->
+    <div style="position:relative;z-index:1;">
       <slot />
-    </main>
+    </div>
 
     <!-- 푸터 -->
-    <footer class="border-t border-[#1a1a2e] mt-20">
-      <div class="max-w-4xl mx-auto px-6 py-8 text-center text-[#666680] text-sm">
-        <span class="neon-text">KIM SOONHA</span> &nbsp;·&nbsp; AI / Data / OSINT
-        &nbsp;·&nbsp; <a href="https://github.com/ksh1004" class="hover:text-[#ffc20e] transition-colors">GitHub</a>
+    <footer style="border-top:1px solid #3d2f3d;margin-top:8rem;">
+      <div style="max-width:1200px;margin:0 auto;padding:2.5rem 2rem;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:#8a7888;">
+          © 2026 Kim SoonHa
+        </span>
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:#3d2f3d;">
+          AI · Data · OSINT
+        </span>
       </div>
     </footer>
   </body>
 </html>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // ── 커스텀 커서 ──
+  const dot  = document.getElementById('cursor-dot')!;
+  const ring = document.getElementById('cursor-ring')!;
+
+  let mouseX = 0, mouseY = 0;
+
+  window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    gsap.to(dot, { x: mouseX, y: mouseY, duration: 0.05 });
+    gsap.to(ring, { x: mouseX, y: mouseY, duration: 0.35, ease: 'power2.out' });
+  });
+
+  // 호버 요소에서 링 확대
+  document.querySelectorAll('[data-cursor-hover], a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+    el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+  });
+
+  // 페이지 진입 시 커서 숨김 처리
+  document.addEventListener('mouseleave', () => {
+    gsap.to([dot, ring], { opacity: 0, duration: 0.2 });
+  });
+  document.addEventListener('mouseenter', () => {
+    gsap.to([dot, ring], { opacity: 1, duration: 0.2 });
+  });
+
+  // ── 스크롤 트리거 공통 애니메이션 ──
+  // .gsap-reveal 클래스 요소: 아래서 위로 페이드인
+  gsap.utils.toArray<HTMLElement>('.gsap-reveal').forEach(el => {
+    gsap.from(el, {
+      y: 50,
+      opacity: 0,
+      duration: 0.9,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 85%',
+        toggleActions: 'play none none none',
+      },
+    });
+  });
+
+  // .gsap-stagger 부모의 자식들을 순차 페이드인
+  gsap.utils.toArray<HTMLElement>('.gsap-stagger').forEach(parent => {
+    const children = parent.children;
+    gsap.from(children, {
+      y: 40,
+      opacity: 0,
+      duration: 0.7,
+      stagger: 0.1,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: parent,
+        start: 'top 80%',
+        toggleActions: 'play none none none',
+      },
+    });
+  });
+
+  // .gsap-line: 가로선 왼쪽→오른쪽 펼침
+  gsap.utils.toArray<HTMLElement>('.gsap-line').forEach(el => {
+    gsap.from(el, {
+      scaleX: 0,
+      transformOrigin: 'left',
+      duration: 1.2,
+      ease: 'power4.out',
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 90%',
+        toggleActions: 'play none none none',
+      },
+    });
+  });
+</script>
