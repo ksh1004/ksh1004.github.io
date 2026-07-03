@@ -3,182 +3,194 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('posts'))
+  .filter(p => !p.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 4);
+  .slice(0, 6);
+
+const specs = [
+  { val: '4+', label: 'Projects' },
+  { val: 'AI', label: 'Focus Area' },
+  { val: 'KR', label: 'Based In' },
+  { val: '\'26', label: 'Active' },
+];
 
 const projects = [
-  { num: '01', name: 'IntelligenceView', desc: '한반도 OSINT 4D 모니터링 대시보드. 공개출처정보 자동 수집 및 실시간 시각화.', tag: 'Python · CesiumJS · SQLite', url: 'https://github.com/ksh1004' },
-  { num: '02', name: 'System Trading', desc: '한국·미국 주식 자동매매 시스템. 백테스팅 → 텔레그램 시그널 → 자동 체결.', tag: 'Python · 퀀트', url: 'https://github.com/ksh1004' },
-  { num: '03', name: 'Military Vehicle AI', desc: '군용 차량 이미지 분류 딥러닝 모델.', tag: 'PyTorch · CNN', url: 'https://github.com/ksh1004' },
-  { num: '04', name: 'News Credibility', desc: '뉴스 기사 정치 편향 분석기.', tag: 'NLP · Streamlit', url: 'https://github.com/ksh1004' },
+  { num: '01', name: 'IntelligenceView', desc: '한반도 OSINT 4D 모니터링 대시보드. 공개출처정보 자동 수집 및 실시간 시각화.', stack: 'Python · CesiumJS · SQLite', url: 'https://github.com/ksh1004' },
+  { num: '02', name: 'System Trading', desc: '한국·미국 주식 자동매매 시스템. 백테스팅 → 텔레그램 시그널 → 자동 체결.', stack: 'Python · Backtrader', url: 'https://github.com/ksh1004' },
+  { num: '03', name: 'Military Vehicle AI', desc: '군용 차량 이미지 분류 딥러닝 모델. CNN 기반 다중 클래스 분류.', stack: 'PyTorch · CNN', url: 'https://github.com/ksh1004' },
+  { num: '04', name: 'News Credibility', desc: '뉴스 기사 정치 편향 분석 및 시각화 대시보드.', stack: 'NLP · Streamlit', url: 'https://github.com/ksh1004' },
 ];
 ---
 
 <BaseLayout title="KSH1004 — AI & Data Engineer">
 
-  <!-- ── HERO ── -->
-  <section id="hero" style="height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 2rem 4rem;max-width:1200px;margin:0 auto;position:relative;">
-    <!-- 좌상단 좌표 레이블 -->
-    <div id="hero-label" style="position:absolute;top:2.5rem;left:2rem;font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;letter-spacing:0.25em;text-transform:uppercase;color:#8a7888;">
-      37°33'N · 127°00'E &nbsp;/&nbsp; Seoul, KR
+  <!-- ═══ HERO PHOTO BAND ═══ -->
+  <!-- BMW M 스타일: 검정 캔버스 + UPPERCASE 대형 헤드라인 -->
+  <section style="background:#000;padding:96px 40px;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;max-width:100%;">
+    <!-- 배경: 미세 그리드 (사진 대신 코드 에스테틱) -->
+    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:80px 80px;pointer-events:none;"></div>
+
+    <!-- 좌상단 레이블 -->
+    <div id="hero-coord" style="position:absolute;top:40px;left:40px;font-size:12px;font-weight:400;letter-spacing:0.5px;color:#7e7e7e;">
+      37°33'N · 127°00'E &nbsp;/&nbsp; Seoul, KR &nbsp;/&nbsp; AI Engineer
     </div>
 
-    <!-- 우상단 날짜 -->
-    <div style="position:absolute;top:2.5rem;right:2rem;font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;letter-spacing:0.25em;text-transform:uppercase;color:#8a7888;">
+    <!-- 우상단 -->
+    <div style="position:absolute;top:40px;right:40px;font-size:12px;font-weight:400;letter-spacing:0.5px;color:#7e7e7e;">
       Est. 2026
     </div>
 
     <!-- 메인 헤드라인 -->
-    <div id="hero-headline">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:clamp(5rem,14vw,13rem);font-weight:800;line-height:0.88;text-transform:uppercase;letter-spacing:-0.01em;color:#f0e6d0;">
-        KIM
-      </div>
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:clamp(5rem,14vw,13rem);font-weight:800;line-height:0.88;text-transform:uppercase;letter-spacing:-0.01em;color:#FFC20E;">
-        SOONHA
+    <div id="hero-hl" style="position:relative;z-index:1;">
+      <h1 style="font-size:clamp(4rem,12vw,10rem);font-weight:700;line-height:1;text-transform:uppercase;letter-spacing:0;color:#fff;margin-bottom:0;">
+        KIM<br/>SOONHA.
+      </h1>
+    </div>
+
+    <!-- M 스트라이프 구분선 -->
+    <div class="m-stripe gsap-line" style="margin:40px 0 32px;"><span></span><span></span><span></span></div>
+
+    <!-- 서브헤드 + 스크롤 힌트 -->
+    <div id="hero-sub" style="display:flex;align-items:flex-end;justify-content:space-between;gap:40px;position:relative;z-index:1;">
+      <p style="font-size:16px;font-weight:300;color:#bbbbbb;max-width:480px;line-height:1.5;">
+        AI/Data 엔지니어 지망생. 머신러닝, 금융 데이터, 한반도 OSINT 모니터링 시스템을 개발합니다.
+      </p>
+      <div style="display:flex;gap:16px;flex-shrink:0;">
+        <a href="/posts" class="btn" data-cursor-hover>View Posts</a>
+        <a href="/about" class="btn" style="border-color:#3c3c3c;color:#7e7e7e;" onmouseover="this.style.background='#1a1a1a';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='#7e7e7e'" data-cursor-hover>About</a>
       </div>
     </div>
 
-    <!-- 구분선 -->
-    <div class="gsap-line" style="height:1px;background:#3d2f3d;margin:2rem 0;"></div>
-
-    <!-- 서브 정보 -->
-    <div id="hero-sub" style="display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:#8a7888;">
-        AI Engineer &nbsp;·&nbsp; Data Analyst &nbsp;·&nbsp; OSINT &nbsp;·&nbsp; Finance
-      </div>
-      <!-- 스크롤 유도 -->
-      <div id="scroll-hint" style="display:flex;flex-direction:column;align-items:center;gap:0.4rem;flex-shrink:0;">
-        <span style="font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;letter-spacing:0.25em;text-transform:uppercase;color:#8a7888;">Scroll</span>
-        <div style="width:1px;height:48px;background:linear-gradient(to bottom,#FFC20E,transparent);"></div>
-      </div>
+    <!-- 스크롤 인디케이터 -->
+    <div id="scroll-ind" style="position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;">
+      <span style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#3c3c3c;">Scroll</span>
+      <div style="width:1px;height:40px;background:linear-gradient(to bottom,#3c3c3c,transparent);"></div>
     </div>
   </section>
 
-  <!-- ── 마키 띠 ── -->
-  <div class="marquee-wrap" style="padding:0.6rem 0;">
-    <div class="marquee-track">
-      {Array.from({length: 2}).map(() => (
-        <>
-          <span>AI Engineer</span><span class="accent">·</span>
-          <span>Data Analytics</span><span class="accent">·</span>
-          <span>OSINT</span><span class="accent">·</span>
-          <span>Machine Learning</span><span class="accent">·</span>
-          <span>System Trading</span><span class="accent">·</span>
-          <span>Python</span><span class="accent">·</span>
-          <span>PyTorch</span><span class="accent">·</span>
-          <span>Han-Ban Security</span><span class="accent">·</span>
-          <span>Finance Quant</span><span class="accent">·</span>
-          <span>Seoul, KR</span><span class="accent">·</span>
-        </>
+  <!-- ═══ SPEC CELLS ═══ -->
+  <!-- BMW M의 spec-cell 컴포넌트 스타일 -->
+  <section style="background:#0d0d0d;border-top:1px solid #3c3c3c;border-bottom:1px solid #3c3c3c;">
+    <div style="max-width:1440px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);">
+      {specs.map((s, i) => (
+        <div class="spec-cell" style={`border-radius:0;border:none;border-right:${i<3?'1px solid #3c3c3c':'none'};`}>
+          <div class="val">{s.val}</div>
+          <div class="spec-label">{s.label}</div>
+        </div>
       ))}
     </div>
-  </div>
+  </section>
 
-  <!-- ── 섹션 01 — 최근 글 ── -->
-  <section style="max-width:1200px;margin:0 auto;padding:7rem 2rem;">
-    <div class="gsap-reveal" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3rem;">
-      <div>
-        <div class="section-label" style="margin-bottom:0.5rem;">Section 01</div>
-        <h2 style="font-family:'Barlow Condensed',sans-serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:700;text-transform:uppercase;color:#f0e6d0;line-height:1;">
-          Recent Posts
-        </h2>
+  <!-- ═══ RECENT POSTS ═══ -->
+  <section style="background:#000;padding:96px 40px;">
+    <div style="max-width:1440px;margin:0 auto;">
+
+      <!-- 섹션 헤더 -->
+      <div class="gsap-reveal" style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:40px;">
+        <div>
+          <div class="label-upper" style="margin-bottom:12px;">Latest</div>
+          <h2 style="font-size:56px;font-weight:700;text-transform:uppercase;color:#fff;line-height:1.05;">Posts</h2>
+        </div>
+        <a href="/posts" style="font-size:14px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7e7e7e;text-decoration:none;transition:color 0.15s;"
+           onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#7e7e7e'" data-cursor-hover>
+          View All →
+        </a>
       </div>
-      <a href="/posts" style="font-family:'Barlow Condensed',sans-serif;font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:#8a7888;text-decoration:none;border-bottom:1px solid #3d2f3d;padding-bottom:2px;transition:color 0.2s,border-color 0.2s;"
-         onmouseover="this.style.color='#FFC20E';this.style.borderColor='#FFC20E'"
-         onmouseout="this.style.color='#8a7888';this.style.borderColor='#3d2f3d'"
-         data-cursor-hover>
-        View All →
-      </a>
-    </div>
 
-    <hr class="gsap-line" style="border:none;border-top:1px solid #3d2f3d;margin-bottom:0;" />
+      <hr class="hairline gsap-line" style="margin-bottom:0;" />
 
-    <div class="gsap-stagger">
-      {posts.length === 0 ? (
-        <p style="padding:3rem 0;color:#8a7888;font-size:0.9rem;">// 아직 작성된 글이 없어요.</p>
-      ) : (
-        posts.map((post, i) => (
+      <!-- 포스트 목록 — magazine-article-card 스타일 -->
+      <div class="gsap-stagger">
+        {posts.length === 0 ? (
+          <div style="padding:64px 0;font-size:14px;font-weight:300;color:#7e7e7e;">
+            // 아직 작성된 글이 없습니다.
+          </div>
+        ) : posts.map((post, i) => (
           <a href={`/posts/${post.id}`}
-             style="display:flex;align-items:baseline;justify-content:space-between;gap:2rem;padding:1.6rem 0;border-bottom:1px solid #3d2f3d;text-decoration:none;group:true;"
+             style="display:flex;align-items:baseline;justify-content:space-between;gap:40px;padding:24px 0;border-bottom:1px solid #3c3c3c;text-decoration:none;"
              data-cursor-hover
-             onmouseover="this.querySelector('.post-title').style.color='#FFC20E'"
-             onmouseout="this.querySelector('.post-title').style.color='#f0e6d0'">
-            <div style="display:flex;align-items:baseline;gap:1.5rem;min-width:0;">
-              <span style="font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;color:#3d2f3d;flex-shrink:0;">
-                {String(i + 1).padStart(2, '0')}
+             onmouseover="this.querySelector('.pt').style.color='#fff'"
+             onmouseout="this.querySelector('.pt').style.color='#e6e6e6'">
+            <div style="display:flex;align-items:baseline;gap:24px;min-width:0;">
+              <span style="font-size:12px;font-weight:400;letter-spacing:0.5px;color:#3c3c3c;width:24px;flex-shrink:0;">
+                {String(i+1).padStart(2,'0')}
               </span>
-              <div style="min-width:0;">
-                <div class="post-title" style="font-family:'Barlow Condensed',sans-serif;font-size:1.25rem;font-weight:600;text-transform:uppercase;letter-spacing:0.03em;color:#f0e6d0;transition:color 0.2s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+              <div>
+                <div class="pt" style="font-size:20px;font-weight:700;text-transform:uppercase;color:#e6e6e6;transition:color 0.15s;line-height:1.3;">
                   {post.data.title}
                 </div>
                 {post.data.description && (
-                  <div style="font-size:0.8rem;color:#8a7888;margin-top:0.2rem;">{post.data.description}</div>
+                  <div style="font-size:14px;font-weight:300;color:#7e7e7e;margin-top:4px;">{post.data.description}</div>
                 )}
               </div>
             </div>
-            <span style="font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;letter-spacing:0.1em;color:#8a7888;flex-shrink:0;">
-              {post.data.date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' })}
+            <span style="font-size:12px;font-weight:400;letter-spacing:0.5px;color:#7e7e7e;white-space:nowrap;flex-shrink:0;">
+              {post.data.date.toLocaleDateString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'})}
             </span>
           </a>
-        ))
-      )}
+        ))}
+      </div>
     </div>
   </section>
 
-  <!-- ── 섹션 02 — 프로젝트 ── -->
-  <section style="max-width:1200px;margin:0 auto;padding:0 2rem 8rem;">
-    <div class="gsap-reveal" style="margin-bottom:3rem;">
-      <div class="section-label" style="margin-bottom:0.5rem;">Section 02</div>
-      <h2 style="font-family:'Barlow Condensed',sans-serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:700;text-transform:uppercase;color:#f0e6d0;line-height:1;">
-        Projects
-      </h2>
+  <!-- ═══ PROJECTS ═══ -->
+  <!-- BMW M model-card 그리드 스타일 -->
+  <section style="background:#0d0d0d;padding:96px 40px;border-top:1px solid #3c3c3c;">
+    <div style="max-width:1440px;margin:0 auto;">
+
+      <div class="gsap-reveal" style="margin-bottom:40px;">
+        <div class="label-upper" style="margin-bottom:12px;">Selected</div>
+        <h2 style="font-size:56px;font-weight:700;text-transform:uppercase;color:#fff;line-height:1.05;">Projects</h2>
+      </div>
+
+      <hr class="hairline gsap-line" style="margin-bottom:40px;" />
+
+      <div class="gsap-stagger" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1px;background:#3c3c3c;">
+        {projects.map(proj => (
+          <a href={proj.url} target="_blank" rel="noopener"
+             class="m-card"
+             style="background:#0d0d0d;text-decoration:none;display:flex;flex-direction:column;gap:12px;"
+             data-cursor-hover
+             onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#0d0d0d'">
+            <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7e7e7e;">{proj.num}</div>
+            <div style="font-size:24px;font-weight:700;text-transform:uppercase;color:#fff;line-height:1.3;">{proj.name}</div>
+            <div style="font-size:14px;font-weight:300;color:#7e7e7e;line-height:1.5;flex:1;">{proj.desc}</div>
+            <div class="m-stripe" style="height:2px;margin-top:8px;"><span></span><span></span><span></span></div>
+            <div style="font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#3c3c3c;">{proj.stack}</div>
+          </a>
+        ))}
+      </div>
     </div>
+  </section>
 
-    <hr class="gsap-line" style="border:none;border-top:1px solid #3d2f3d;margin-bottom:2rem;" />
-
-    <div class="gsap-stagger" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1px;background:#3d2f3d;">
-      {projects.map(proj => (
-        <a href={proj.url} target="_blank" rel="noopener"
-           class="nrg-card"
-           style="text-decoration:none;display:block;"
-           data-cursor-hover>
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;letter-spacing:0.2em;color:#FFC20E;margin-bottom:0.8rem;">
-            {proj.num}
-          </div>
-          <h3 style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#f0e6d0;margin-bottom:0.6rem;">
-            {proj.name}
-          </h3>
-          <p style="font-size:0.82rem;color:#8a7888;line-height:1.6;margin-bottom:1.2rem;">
-            {proj.desc}
-          </p>
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:#3d2f3d;">
-            {proj.tag}
-          </div>
-        </a>
-      ))}
+  <!-- ═══ CTA BAND ═══ -->
+  <!-- BMW M cta-band-photo 스타일 (사진 대신 텍스트 중심) -->
+  <section style="background:#000;padding:96px 40px;border-top:1px solid #3c3c3c;text-align:center;">
+    <div style="max-width:1440px;margin:0 auto;" class="gsap-reveal">
+      <div class="label-upper" style="margin-bottom:24px;text-align:center;">Contact</div>
+      <h2 style="font-size:40px;font-weight:700;text-transform:uppercase;color:#fff;margin-bottom:40px;line-height:1.1;">
+        Let's Work Together.
+      </h2>
+      <a href="mailto:soonha990@naver.com" class="btn" data-cursor-hover>Get In Touch</a>
     </div>
   </section>
 
 </BaseLayout>
 
 <script>
-  import gsap from 'gsap';
+import gsap from 'gsap';
 
-  // 히어로 진입 애니메이션
-  const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
+// 히어로 진입 애니메이션
+gsap.timeline({ defaults: { ease: 'power4.out' } })
+  .from('#hero-coord', { opacity: 0, y: -8, duration: 0.6 })
+  .from('#hero-hl h1', { y: 60, opacity: 0, duration: 1.0 }, '-=0.3')
+  .from('#hero-sub', { opacity: 0, y: 20, duration: 0.7 }, '-=0.5')
+  .from('#scroll-ind', { opacity: 0, duration: 0.5 }, '-=0.3');
 
-  tl.from('#hero-label', { opacity: 0, y: -10, duration: 0.6 })
-    .from('#hero-headline > div', { y: 80, opacity: 0, duration: 1, stagger: 0.12 }, '-=0.3')
-    .from('#hero-sub', { opacity: 0, y: 20, duration: 0.8 }, '-=0.4')
-    .from('#scroll-hint', { opacity: 0, duration: 0.6 }, '-=0.2');
-
-  // 스크롤 힌트 바 반복 애니메이션
-  gsap.to('#scroll-hint div', {
-    scaleY: 0,
-    transformOrigin: 'top',
-    duration: 1.2,
-    ease: 'power2.in',
-    repeat: -1,
-    repeatDelay: 0.4,
-  });
+// 스크롤 인디케이터 루프
+gsap.to('#scroll-ind > div', {
+  scaleY: 0, transformOrigin: 'top',
+  duration: 1.0, ease: 'power2.in',
+  repeat: -1, repeatDelay: 0.6,
+});
 </script>

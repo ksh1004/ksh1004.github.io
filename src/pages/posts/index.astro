@@ -3,61 +3,62 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('posts'))
+  .filter(p => !p.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 
 <BaseLayout title="Posts — KSH1004">
-  <section style="max-width:1200px;margin:0 auto;padding:5rem 2rem 8rem;">
+  <section style="max-width:1440px;margin:0 auto;padding:64px 40px 96px;">
 
-    <div class="gsap-reveal" style="margin-bottom:4rem;">
-      <div class="section-label" style="margin-bottom:0.5rem;">Archive</div>
-      <h1 style="font-family:'Barlow Condensed',sans-serif;font-size:clamp(3rem,8vw,6rem);font-weight:800;text-transform:uppercase;color:#f0e6d0;line-height:1;">
+    <div class="gsap-reveal" style="margin-bottom:48px;">
+      <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7e7e7e;margin-bottom:12px;">
+        Archive · {posts.length} Posts
+      </div>
+      <h1 style="font-size:clamp(3rem,8vw,6rem);font-weight:700;text-transform:uppercase;color:#fff;line-height:1;">
         All Posts
       </h1>
-      <p style="font-size:0.8rem;color:#8a7888;margin-top:1rem;">총 {posts.length}개</p>
     </div>
 
-    <hr class="gsap-line" style="border:none;border-top:1px solid #3d2f3d;margin-bottom:0;" />
+    <div class="m-stripe gsap-line" style="margin-bottom:0;"><span></span><span></span><span></span></div>
 
     <div class="gsap-stagger">
       {posts.length === 0 ? (
-        <p style="padding:4rem 0;color:#8a7888;">// 아직 글이 없어요.</p>
-      ) : (
-        posts.map((post, i) => (
-          <a href={`/posts/${post.id}`}
-             style="display:flex;align-items:baseline;justify-content:space-between;gap:2rem;padding:1.8rem 0;border-bottom:1px solid #3d2f3d;text-decoration:none;"
-             data-cursor-hover
-             onmouseover="this.querySelector('.pt').style.color='#FFC20E'"
-             onmouseout="this.querySelector('.pt').style.color='#f0e6d0'">
-            <div style="display:flex;align-items:baseline;gap:1.5rem;min-width:0;">
-              <span style="font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;color:#3d2f3d;flex-shrink:0;width:1.5rem;">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <div>
-                <div class="pt" style="font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:600;text-transform:uppercase;letter-spacing:0.03em;color:#f0e6d0;transition:color 0.2s;">
-                  {post.data.title}
-                </div>
-                {post.data.description && (
-                  <div style="font-size:0.78rem;color:#8a7888;margin-top:0.2rem;">{post.data.description}</div>
-                )}
-                {post.data.tags && post.data.tags.length > 0 && (
-                  <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
-                    {post.data.tags.map((tag: string) => (
-                      <span style="font-family:'Barlow Condensed',sans-serif;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:#8a7888;border:1px solid #3d2f3d;padding:0.15rem 0.4rem;">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-            <span style="font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;letter-spacing:0.08em;color:#8a7888;flex-shrink:0;">
-              {post.data.date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' })}
+        <div style="padding:64px 0;font-size:14px;font-weight:300;color:#7e7e7e;">
+          // 아직 작성된 글이 없습니다.
+        </div>
+      ) : posts.map((post, i) => (
+        <a href={`/posts/${post.id}`}
+           style="display:flex;align-items:baseline;justify-content:space-between;gap:40px;padding:28px 0;border-bottom:1px solid #3c3c3c;text-decoration:none;"
+           data-cursor-hover
+           onmouseover="this.querySelector('.pt').style.color='#fff'"
+           onmouseout="this.querySelector('.pt').style.color='#e6e6e6'">
+          <div style="display:flex;align-items:baseline;gap:24px;min-width:0;">
+            <span style="font-size:12px;font-weight:400;color:#3c3c3c;width:24px;flex-shrink:0;letter-spacing:0.5px;">
+              {String(i+1).padStart(2,'0')}
             </span>
-          </a>
-        ))
-      )}
+            <div>
+              <div class="pt" style="font-size:20px;font-weight:700;text-transform:uppercase;color:#e6e6e6;transition:color 0.15s;line-height:1.3;">
+                {post.data.title}
+              </div>
+              {post.data.description && (
+                <div style="font-size:14px;font-weight:300;color:#7e7e7e;margin-top:4px;">{post.data.description}</div>
+              )}
+              {post.data.tags && post.data.tags.length > 0 && (
+                <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+                  {post.data.tags.map((tag: string) => (
+                    <span style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#3c3c3c;border:1px solid #3c3c3c;padding:3px 8px;">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+          <span style="font-size:12px;font-weight:400;letter-spacing:0.5px;color:#7e7e7e;white-space:nowrap;flex-shrink:0;">
+            {post.data.date.toLocaleDateString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'})}
+          </span>
+        </a>
+      ))}
     </div>
-
   </section>
 </BaseLayout>
