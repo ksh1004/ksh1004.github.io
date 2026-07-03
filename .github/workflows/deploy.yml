@@ -1,4 +1,4 @@
-name: Deploy Hugo Blog
+name: Deploy Astro Blog
 
 on:
   push:
@@ -20,27 +20,29 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          submodules: recursive  # PaperMod 테마를 submodule로 가져옴
-          fetch-depth: 0         # 모든 커밋 히스토리 (마지막 수정일 표시용)
 
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          hugo-version: "latest"
-          extended: true        # SCSS 처리를 위해 extended 버전 필요
+          node-version: "22"
+          cache: "npm"
 
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
 
+      - name: Install dependencies
+        run: npm ci
+
       - name: Build
-        run: hugo --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
+        run: npm run build
+        env:
+          SITE: ${{ steps.pages.outputs.base_url }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./public
+          path: ./dist
 
   deploy:
     environment:

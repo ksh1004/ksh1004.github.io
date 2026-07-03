@@ -1,0 +1,77 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="About | ksh1004">
+  <div class="mb-10">
+    <div class="text-[#666680] text-sm mb-4">
+      <span class="text-[#00ff88]">root@ksh1004</span>:<span class="text-[#4466ff]">~</span>$ cat ./about.md
+    </div>
+    <h1 class="text-3xl font-bold text-[#e0e0e0]">About</h1>
+  </div>
+
+  <div class="prose leading-relaxed space-y-8">
+    <section>
+      <h2 class="text-xl font-bold text-[#00ff88] mb-3">김순하 (Kim SoonHa)</h2>
+      <p class="text-[#666680]">
+        AI/Data 엔지니어를 목표로 하는 대학생입니다.
+        머신러닝, 금융 분석, OSINT, 국방 데이터 분야에 관심이 있습니다.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-bold text-[#00ff88] mb-4">관심 분야</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {[
+          { icon: '⬡', label: 'AI / ML', desc: '머신러닝, 딥러닝, NLP' },
+          { icon: '⬡', label: '금융 분석', desc: '시스템 트레이딩, 퀀트' },
+          { icon: '⬡', label: 'OSINT', desc: '공개출처정보 수집·분석' },
+          { icon: '⬡', label: '국방·안보', desc: '한반도 데이터 분석' },
+        ].map(item => (
+          <div class="neon-card p-4">
+            <div class="text-[#ffc20e] text-sm mb-1">{item.icon} {item.label}</div>
+            <div class="text-[#666680] text-sm">{item.desc}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-bold text-[#00ff88] mb-4">기술 스택</h2>
+      <div class="flex flex-wrap gap-2">
+        {['Python', 'PyTorch', 'Pandas', 'SQL', 'Streamlit', 'FastAPI', 'Docker', 'Git'].map(tech => (
+          <span class="border border-[#1a1a2e] text-[#e0e0e0] text-xs px-3 py-1 hover:border-[#00ff88] hover:text-[#00ff88] transition-colors cursor-default">
+            {tech}
+          </span>
+        ))}
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-xl font-bold text-[#00ff88] mb-4">연락처</h2>
+      <div class="space-y-2 text-sm text-[#666680]">
+        <div>
+          <span class="text-[#ffc20e]">github</span>
+          &nbsp;→&nbsp;
+          <a href="https://github.com/ksh1004" target="_blank" rel="noopener" class="hover:text-[#00ff88] transition-colors">
+            github.com/ksh1004
+          </a>
+        </div>
+        <div>
+          <span class="text-[#ffc20e]">velog</span>
+          &nbsp;→&nbsp;
+          <a href="https://velog.io/@ksh1004" target="_blank" rel="noopener" class="hover:text-[#00ff88] transition-colors">
+            velog.io/@ksh1004
+          </a>
+        </div>
+        <div>
+          <span class="text-[#ffc20e]">email</span>
+          &nbsp;→&nbsp;
+          <a href="mailto:soonha990@naver.com" class="hover:text-[#00ff88] transition-colors">
+            soonha990@naver.com
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

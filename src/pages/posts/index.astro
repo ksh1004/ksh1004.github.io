@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('posts'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<BaseLayout title="Posts | ksh1004">
+  <div class="mb-10">
+    <div class="text-[#666680] text-sm mb-4">
+      <span class="text-[#00ff88]">root@ksh1004</span>:<span class="text-[#4466ff]">~</span>$ ls -lt ./posts
+    </div>
+    <h1 class="text-3xl font-bold text-[#e0e0e0]">Posts</h1>
+    <p class="text-[#666680] text-sm mt-2">총 {posts.length}개의 글</p>
+  </div>
+
+  {posts.length === 0 ? (
+    <p class="text-[#666680]">// 아직 작성된 글이 없어요.</p>
+  ) : (
+    <div class="space-y-4">
+      {posts.map(post => (
+        <a href={`/posts/${post.id}`} class="neon-card block p-5 group">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <h2 class="text-[#e0e0e0] font-medium mb-1 group-hover:text-[#00ff88] transition-colors">
+                {post.data.title}
+              </h2>
+              {post.data.description && (
+                <p class="text-[#666680] text-sm">{post.data.description}</p>
+              )}
+              {post.data.tags && post.data.tags.length > 0 && (
+                <div class="flex gap-2 mt-2">
+                  {post.data.tags.map((tag: string) => (
+                    <span class="text-xs text-[#00ff88] opacity-60">#{tag}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+            <span class="text-[#666680] text-xs whitespace-nowrap">
+              {post.data.date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' })}
+            </span>
+          </div>
+        </a>
+      ))}
+    </div>
+  )}
+</BaseLayout>
