@@ -6,9 +6,7 @@ const posts = (await getCollection('posts'))
   .filter(p => !p.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
-const FIXED_CATEGORIES = ['개발', '금융', 'AI·ML', '프로젝트', '일상'];
-const usedCategories = [...new Set(posts.map(p => p.data.category ?? '개발'))];
-const categories = FIXED_CATEGORIES.filter(c => usedCategories.includes(c));
+const categories = ['개발', '프로젝트', '코딩테스트', '일상'];
 ---
 
 <BaseLayout title="Posts — KSH1004">
