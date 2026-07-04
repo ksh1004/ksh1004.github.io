@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="404 — KSH1004" description="페이지를 찾을 수 없습니다.">
+  <section style="min-height:70svh;display:flex;align-items:center;justify-content:center;padding:96px 40px;">
+    <div style="text-align:center;">
+      <div class="label-upper" style="margin-bottom:20px;">Error · Not Found</div>
+      <h1 data-decrypt style="font-size:clamp(4rem,15vw,10rem);font-weight:700;color:var(--ink);line-height:1;letter-spacing:-0.02em;">404</h1>
+      <div class="intel-stripe" style="width:120px;margin:32px auto;"></div>
+      <p style="font-size:14px;font-weight:300;color:var(--body);line-height:1.85;letter-spacing:0.3px;margin-bottom:40px;">
+        요청하신 페이지가 존재하지 않거나 이동되었습니다.
+      </p>
+      <a href="/" class="btn" data-cursor-hover>Return Home</a>
+    </div>
+  </section>
+</BaseLayout>

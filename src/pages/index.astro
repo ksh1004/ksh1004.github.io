@@ -28,7 +28,7 @@ const projects = [
       </div>
 
       <div id="hero-hl">
-        <h1 style="font-size:clamp(3.5rem,9vw,9rem);font-weight:700;line-height:0.92;text-transform:uppercase;letter-spacing:-0.02em;color:var(--ink);">
+        <h1 data-decrypt style="font-size:clamp(3.5rem,9vw,9rem);font-weight:700;line-height:0.92;text-transform:uppercase;letter-spacing:-0.02em;color:var(--ink);">
           KIM<br/>SOONHA.
         </h1>
       </div>
@@ -41,11 +41,11 @@ const projects = [
         </p>
         <div style="display:flex;gap:12px;flex-wrap:wrap;">
           <a href="/posts" class="btn" data-cursor-hover>Posts</a>
-          <a href="/about"
+          <a href="/profile"
              style="display:inline-flex;align-items:center;padding:13px 28px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;border:1px solid var(--hairline-strong);color:var(--muted);transition:border-color 0.2s,color 0.2s;font-family:inherit;"
              onmouseover="this.style.borderColor='var(--muted)';this.style.color='var(--body)'"
              onmouseout="this.style.borderColor='var(--hairline-strong)';this.style.color='var(--muted)'"
-             data-cursor-hover>About</a>
+             data-cursor-hover>Profile</a>
         </div>
       </div>
 
@@ -57,9 +57,27 @@ const projects = [
     </div>
   </section>
 
+  <!-- ═══ TICKER ═══ -->
+  {posts.length > 0 && (
+    <div class="ticker-strip" style="border-top:1px solid var(--hairline);background:var(--surface-soft);">
+      <span class="ticker-label">Latest</span>
+      <div class="ticker-viewport">
+        <div class="ticker-track">
+          {[...Array(8)].map(() => posts.map(p => (
+            <a href={`/posts/${p.id}`} class="ticker-item" data-cursor-hover>
+              <span class="tick-cat">{p.data.subsubcategory ?? p.data.subcategory ?? p.data.category}</span>
+              {p.data.title}
+              <span class="tick-date">{p.data.date.toLocaleDateString('ko-KR',{month:'2-digit',day:'2-digit'})}</span>
+            </a>
+          )))}
+        </div>
+      </div>
+    </div>
+  )}
+
   <!-- ═══ STATS ═══ -->
   <section style="background:var(--surface-soft);border-top:1px solid var(--hairline);border-bottom:1px solid var(--hairline);">
-    <div style="max-width:1440px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);">
+    <div class="grid-4" style="max-width:1440px;margin:0 auto;">
       {[
         { val: 'Seoul', label: 'Location' },
         { val: '인하대', label: 'University' },
@@ -93,6 +111,7 @@ const projects = [
           <div style="padding:64px 0;font-size:12px;letter-spacing:1px;color:var(--hairline-strong);">No posts yet.</div>
         ) : posts.map((post, i) => (
           <a href={`/posts/${post.id}`}
+             class="post-item"
              style="display:flex;align-items:baseline;justify-content:space-between;gap:40px;padding:24px 0;border-bottom:1px solid var(--hairline);text-decoration:none;transition:background 0.15s;"
              data-cursor-hover
              onmouseover="this.querySelector('.pt').style.color='var(--ink)';this.style.background='var(--green-glow)'"

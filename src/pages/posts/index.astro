@@ -24,7 +24,7 @@ const SUB_SUB_CATEGORIES: Record<string, string[]> = {
 
       <div class="gsap-reveal" style="margin-bottom:40px;">
         <div class="label-upper" style="margin-bottom:12px;">Archive · {posts.length}편</div>
-        <h1 style="font-size:clamp(2.5rem,7vw,5rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1;letter-spacing:0.3px;">
+        <h1 data-decrypt style="font-size:clamp(2.5rem,7vw,5rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1;letter-spacing:0.3px;">
           Posts
         </h1>
       </div>
@@ -205,6 +205,16 @@ function renderSubTabs(subs: string[]) {
   });
 }
 
+/* ── URL 상태 동기화 ── */
+function updateURL() {
+  const params = new URLSearchParams();
+  if (currentCat    !== 'all') params.set('cat', currentCat);
+  if (currentSub    !== 'all') params.set('sub', currentSub);
+  if (currentSubsub !== 'all') params.set('subsub', currentSubsub);
+  const qs = params.toString();
+  history.replaceState(null, '', qs ? `?${qs}` : location.pathname);
+}
+
 /* ── 필터 ── */
 function filterPosts() {
   let visible = 0;
@@ -216,6 +226,7 @@ function filterPosts() {
     if (okCat && okSub && okSubsub) visible++;
   });
   emptyMsg.style.display = visible === 0 ? 'block' : 'none';
+  updateURL();
 }
 
 /* ── Lv.1 탭 이벤트 ── */
@@ -230,4 +241,24 @@ mainTabs.forEach(btn => {
     filterPosts();
   });
 });
+
+/* ── 진입 시 URL 파라미터 반영 ── */
+(function restoreFromURL() {
+  const params = new URLSearchParams(location.search);
+  const cat = params.get('cat'), sub = params.get('sub'), subsub = params.get('subsub');
+  if (!cat) return;
+  const catBtn = document.querySelector<HTMLButtonElement>(`.cat-tab[data-cat="${CSS.escape(cat)}"]`);
+  if (!catBtn) return;
+  catBtn.click();
+  if (sub) {
+    const subBtn = subTabsEl.querySelector<HTMLButtonElement>(`button[data-sub="${CSS.escape(sub)}"]`);
+    if (subBtn) {
+      subBtn.click();
+      if (subsub) {
+        const ssBtn = subsubEl.querySelector<HTMLButtonElement>(`button[data-subsub="${CSS.escape(subsub)}"]`);
+        if (ssBtn) ssBtn.click();
+      }
+    }
+  }
+})();
 </script>

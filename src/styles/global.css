@@ -38,6 +38,19 @@ html {
 
 body { min-height: 100vh; overflow-x: hidden; }
 
+/* ── 비네트 (관제화면 느낌) ── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 8;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 58%, rgba(0, 0, 0, 0.4) 100%);
+}
+
+/* ── 텍스트 선택 ── */
+::selection { background: var(--green); color: var(--canvas); }
+
 /* ── 커스텀 커서 ── */
 .cursor-dot {
   position: fixed;
@@ -262,6 +275,87 @@ a, button { cursor: none; }
   background-size: 200px;
 }
 
+/* ── 인텔 티커 ── */
+.ticker-strip {
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
+.ticker-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  padding: 12px 20px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--green);
+  border-right: 1px solid var(--hairline);
+  background: var(--surface-card);
+}
+.ticker-label::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  background: var(--green);
+  border-radius: 50%;
+  animation: tick-pulse 2s ease-in-out infinite;
+}
+@keyframes tick-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+.ticker-viewport { overflow: hidden; flex: 1; display: flex; align-items: center; }
+.ticker-track {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  animation: ticker-scroll 60s linear infinite;
+}
+.ticker-viewport:hover .ticker-track { animation-play-state: paused; }
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.ticker-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 12px 28px;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  color: var(--body);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.ticker-item:hover { color: var(--ink); }
+.ticker-item::before { content: '▸'; color: var(--green-dim); font-size: 9px; }
+.tick-cat  { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+.tick-date { font-size: 9px; letter-spacing: 1px; color: var(--muted); }
+
+/* ── 코드블록 복사 버튼 ── */
+.prose pre { position: relative; }
+.code-copy {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-family: inherit;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: var(--surface-elevated);
+  border: 1px solid var(--hairline-strong);
+  padding: 5px 10px;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s, border-color 0.15s;
+}
+.prose pre:hover .code-copy { opacity: 1; }
+.code-copy:hover { color: var(--green); border-color: var(--green-dim); }
+.code-copy.copied { color: var(--green); border-color: var(--green); opacity: 1; }
+
 /* ── GSAP ── */
 .gsap-reveal, .gsap-stagger > * { will-change: transform, opacity; }
 
@@ -270,3 +364,38 @@ a, button { cursor: none; }
 ::-webkit-scrollbar-track { background: var(--canvas); }
 ::-webkit-scrollbar-thumb { background: var(--green-dim); }
 ::-webkit-scrollbar-thumb:hover { background: var(--green); }
+
+/* ── 반응형 그리드 ── */
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); }
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); }
+
+@media (max-width: 900px) {
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .grid-2 { grid-template-columns: 1fr; }
+
+  /* 인라인 스타일로 지정된 여백을 모바일에서 축소 */
+  section, article, footer { padding-left: 20px !important; padding-right: 20px !important; }
+  nav > div:last-child { padding: 0 20px !important; }
+  #sub-tab-bar, #subsub-tab-bar { margin: 0 -20px !important; padding: 0 20px !important; }
+
+  /* 포스트 목록: 배지·날짜 줄바꿈 허용 */
+  .post-item { flex-wrap: wrap; gap: 12px !important; padding: 20px 0 !important; }
+
+  /* 네비 축소 */
+  nav a { letter-spacing: 1px !important; }
+  nav > div:last-child > div { gap: 16px !important; }
+}
+
+/* ── 터치 기기: 커스텀 커서 비활성화 ── */
+@media (pointer: coarse) {
+  html, a, button { cursor: auto; }
+  .cursor-dot, .cursor-ring { display: none; }
+  .code-copy { opacity: 1; }
+}
+
+/* ── 모션 감소 설정 존중 ── */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}

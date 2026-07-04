@@ -1,0 +1,248 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+/* ═══════════════════════════════════════════════════
+   이 파일 상단의 배열에 내용을 추가하면 페이지에 자동 반영됩니다.
+   비어있는 배열(awards 등)의 섹션은 페이지에 표시되지 않습니다.
+   ═══════════════════════════════════════════════════ */
+
+const specs = [
+  { val: 'Seoul',    label: 'Location' },
+  { val: '인하대',   label: 'University' },
+  { val: 'AI·Data',  label: 'Focus' },
+  { val: '2026',     label: 'Blog Est.' },
+];
+
+/* 연혁 — 학과·입학년도·활동·경력 등을 여기에 추가
+   형식: { period: '2024.03', title: '인하대학교 OO학과 입학', desc: '설명 (선택)' } */
+const timeline = [
+  { period: 'NOW',     title: '인하대학교 재학',  desc: 'AI·데이터 분야 학습, 개인 프로젝트 및 코딩테스트 진행' },
+  { period: '2026.07', title: '기술 블로그 개설', desc: 'Astro + GitHub Pages 기반 직접 설계·구축' },
+];
+
+/* 수상 · 자격증 — 비어있으면 섹션 자체가 숨겨짐
+   형식: { period: '2025.11', title: 'OO 공모전 대상', desc: '주최: OO (선택)' } */
+const awards: { period: string; title: string; desc?: string }[] = [
+];
+
+const stackGroups = [
+  { label: 'Languages',      items: ['Python', 'SQL'] },
+  { label: 'ML / Data',      items: ['PyTorch', 'Pandas', 'NumPy'] },
+  { label: 'Backend / Infra', items: ['FastAPI', 'Docker', 'Linux', 'Git'] },
+  { label: 'Tools',          items: ['Streamlit', 'VS Code'] },
+];
+
+/* 프로젝트 — url을 각 프로젝트의 실제 저장소 주소로 교체 */
+const projects = [
+  { num: '01', name: 'IntelligenceView',   desc: '한반도 공개출처정보(OSINT) 자동 수집 및 4D 시각화 대시보드. 뉴스·위성·지리 데이터를 시간축 위에 통합.', stack: 'Python · CesiumJS · SQLite', url: 'https://github.com/ksh1004' },
+  { num: '02', name: 'System Trading',     desc: '한국·미국 주식 자동매매 시스템. 전략 백테스팅부터 실계좌 자동 체결까지 전 과정 자동화.', stack: 'Python · Backtrader', url: 'https://github.com/ksh1004' },
+  { num: '03', name: 'Military Vehicle AI', desc: '군용 차량 이미지 다중 클래스 분류 모델. CNN 아키텍처 설계 및 데이터 증강 실험.', stack: 'PyTorch · CNN', url: 'https://github.com/ksh1004' },
+  { num: '04', name: 'News Bias Analyzer', desc: '뉴스 기사의 정치 편향을 NLP로 분석하고 시각화하는 웹 서비스.', stack: 'NLP · Streamlit', url: 'https://github.com/ksh1004' },
+];
+
+/* 섹션 번호 — awards가 비어있으면 자동으로 당겨짐 */
+const hasAwards = awards.length > 0;
+const secNum = {
+  about:     '01',
+  timeline:  '02',
+  awards:    '03',
+  stack:     hasAwards ? '04' : '03',
+  projects:  hasAwards ? '05' : '04',
+  interests: hasAwards ? '06' : '05',
+};
+
+const interests = [
+  { num: '01', name: '개발 / 엔지니어링', desc: '파이썬, 데이터 파이프라인, 백엔드 시스템 개발' },
+  { num: '02', name: '금융 / 퀀트',       desc: '시스템 트레이딩, 백테스팅, 시장 데이터 분석' },
+  { num: '03', name: '정보 분석',          desc: '공개출처정보(OSINT) 수집·분석·시각화' },
+  { num: '04', name: '프로젝트 기록',      desc: '개발 과정, 실험, 삽질 기록' },
+];
+
+const contacts = [
+  { label: 'GitHub', val: 'github.com/ksh1004',  href: 'https://github.com/ksh1004' },
+  { label: 'Velog',  val: 'velog.io/@ksh1004',   href: 'https://velog.io/@ksh1004' },
+  { label: 'Email',  val: 'soonha990@naver.com', href: 'mailto:soonha990@naver.com' },
+];
+---
+
+<BaseLayout title="Profile — KSH1004" description="김순하 — AI/Data 엔지니어를 목표로 하는 개발자 프로필">
+
+  <!-- 히어로 -->
+  <section style="background:transparent;padding:96px 40px;border-bottom:1px solid var(--hairline);">
+    <div style="max-width:1440px;margin:0 auto;">
+      <div class="gsap-reveal">
+        <div class="label-upper" style="margin-bottom:16px;">Profile</div>
+        <h1 data-decrypt style="font-size:clamp(3.5rem,9vw,7.5rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:0.95;">
+          KIM<br/>SOONHA.
+        </h1>
+      </div>
+      <div class="intel-stripe gsap-line" style="margin-top:40px;"></div>
+    </div>
+  </section>
+
+  <!-- 스펙 셀 -->
+  <section style="background:var(--surface-soft);border-bottom:1px solid var(--hairline);">
+    <div class="grid-4" style="max-width:1440px;margin:0 auto;">
+      {specs.map((s, i) => (
+        <div class="spec-cell" style={`border-radius:0;border:none;border-right:${i<3?'1px solid var(--hairline)':'none'};`}>
+          <div class="val">{s.val}</div>
+          <div class="spec-label">{s.label}</div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- 01 소개 + 연락처 -->
+  <section style="background:transparent;padding:96px 40px;border-bottom:1px solid var(--hairline);">
+    <div class="grid-2" style="max-width:1440px;margin:0 auto;gap:64px;align-items:start;">
+      <div class="gsap-reveal">
+        <div class="label-upper" style="margin-bottom:24px;">{secNum.about} · About</div>
+        <p style="font-size:16px;font-weight:400;color:var(--body-strong);line-height:1.9;letter-spacing:0.3px;">
+          AI/Data 엔지니어를 목표로 하는 인하대학교 학부생입니다.
+        </p>
+        <p style="font-size:14px;font-weight:300;color:var(--body);line-height:1.9;margin-top:16px;letter-spacing:0.3px;">
+          데이터가 실제 문제를 해결하는 과정 — 수집, 정제, 모델링, 서비스 배포까지의 전체 파이프라인에 관심이 있습니다.
+          머신러닝 모델 개발부터 금융 데이터 분석, 한반도 OSINT 모니터링 시스템까지 만들면서 배우는 것을 원칙으로 합니다.
+        </p>
+        <p style="font-size:14px;font-weight:300;color:var(--body);line-height:1.9;margin-top:16px;letter-spacing:0.3px;">
+          이 블로그는 그 과정의 기록입니다. 배운 것을 정리하고, 만든 것을 공유합니다.
+        </p>
+      </div>
+      <div class="gsap-reveal">
+        <div class="label-upper" style="margin-bottom:24px;">Contact</div>
+        <div style="display:flex;flex-direction:column;">
+          {contacts.map((item, i, arr) => (
+            <a href={item.href} target={item.href.startsWith('http')?'_blank':undefined} rel="noopener"
+               style={`display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding:20px 0;border-bottom:${i<arr.length-1?'1px solid var(--hairline)':'none'};text-decoration:none;`}
+               data-cursor-hover
+               onmouseover="this.querySelector('.cv').style.color='var(--green)'" onmouseout="this.querySelector('.cv').style.color='var(--body)'">
+              <span style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);">{item.label}</span>
+              <span class="cv" style="font-size:13px;font-weight:300;color:var(--body);transition:color 0.15s;letter-spacing:0.3px;">{item.val} →</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 타임라인 -->
+  <section style="background:var(--surface-soft);padding:96px 40px;border-bottom:1px solid var(--hairline);">
+    <div style="max-width:1440px;margin:0 auto;">
+      <div class="gsap-reveal" style="margin-bottom:40px;">
+        <div class="label-upper" style="margin-bottom:12px;">{secNum.timeline} · Timeline</div>
+        <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1.1;letter-spacing:0.5px;">Education & History</h2>
+      </div>
+      <div class="intel-stripe gsap-line" style="margin-bottom:0;"></div>
+      <div class="gsap-stagger">
+        {timeline.map(t => (
+          <div style="display:flex;gap:32px;padding:28px 0;border-bottom:1px solid var(--hairline);align-items:baseline;">
+            <span style="font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--green);width:90px;flex-shrink:0;">{t.period}</span>
+            <div>
+              <div style="font-size:16px;font-weight:700;text-transform:uppercase;color:var(--ink);letter-spacing:0.5px;margin-bottom:6px;">{t.title}</div>
+              <div style="font-size:13px;font-weight:300;color:var(--body);line-height:1.75;letter-spacing:0.3px;">{t.desc}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 수상 · 자격증 (내용이 있을 때만 표시) -->
+  {hasAwards && (
+    <section style="background:transparent;padding:96px 40px;border-bottom:1px solid var(--hairline);">
+      <div style="max-width:1440px;margin:0 auto;">
+        <div class="gsap-reveal" style="margin-bottom:40px;">
+          <div class="label-upper" style="margin-bottom:12px;">{secNum.awards} · Recognition</div>
+          <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1.1;letter-spacing:0.5px;">Awards & Certs</h2>
+        </div>
+        <div class="intel-stripe gsap-line" style="margin-bottom:0;"></div>
+        <div class="gsap-stagger">
+          {awards.map(a => (
+            <div style="display:flex;gap:32px;padding:28px 0;border-bottom:1px solid var(--hairline);align-items:baseline;">
+              <span style="font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--green);width:90px;flex-shrink:0;">{a.period}</span>
+              <div>
+                <div style="font-size:16px;font-weight:700;text-transform:uppercase;color:var(--ink);letter-spacing:0.5px;margin-bottom:6px;">{a.title}</div>
+                {a.desc && <div style="font-size:13px;font-weight:300;color:var(--body);line-height:1.75;letter-spacing:0.3px;">{a.desc}</div>}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- 기술 스택 -->
+  <section style="background:transparent;padding:96px 40px;border-bottom:1px solid var(--hairline);">
+    <div style="max-width:1440px;margin:0 auto;">
+      <div class="gsap-reveal" style="margin-bottom:40px;">
+        <div class="label-upper" style="margin-bottom:12px;">{secNum.stack} · Technical</div>
+        <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1.1;letter-spacing:0.5px;">Stack</h2>
+      </div>
+      <div class="intel-stripe gsap-line" style="margin-bottom:1px;"></div>
+      <div class="gsap-stagger grid-4" style="gap:1px;background:var(--hairline);">
+        {stackGroups.map(group => (
+          <div style="background:var(--surface-card);padding:28px;">
+            <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:20px;">{group.label}</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              {group.items.map(item => (
+                <div style="font-size:13px;font-weight:400;color:var(--body-strong);letter-spacing:0.5px;display:flex;align-items:center;gap:10px;">
+                  <span style="width:4px;height:4px;background:var(--green-dim);flex-shrink:0;"></span>
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 프로젝트 -->
+  <section style="background:var(--surface-soft);padding:96px 40px;border-bottom:1px solid var(--hairline);">
+    <div style="max-width:1440px;margin:0 auto;">
+      <div class="gsap-reveal" style="margin-bottom:40px;">
+        <div class="label-upper" style="margin-bottom:12px;">{secNum.projects} · Selected</div>
+        <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1.1;letter-spacing:0.5px;">Projects</h2>
+      </div>
+      <div class="intel-stripe gsap-line" style="margin-bottom:40px;"></div>
+      <div class="gsap-stagger" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1px;background:var(--hairline);">
+        {projects.map(proj => (
+          <a href={proj.url} target="_blank" rel="noopener"
+             class="intel-card"
+             style="background:var(--surface-card);text-decoration:none;display:flex;flex-direction:column;gap:12px;"
+             data-cursor-hover
+             onmouseover="this.style.background='var(--surface-elevated)'" onmouseout="this.style.background='var(--surface-card)'">
+            <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);">{proj.num}</div>
+            <div style="font-size:18px;font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1.3;">{proj.name}</div>
+            <div style="font-size:12px;font-weight:300;color:var(--body);line-height:1.75;flex:1;">{proj.desc}</div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;">
+              <span style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green-dim);">{proj.stack}</span>
+              <span style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);">GitHub →</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 관심 분야 -->
+  <section style="background:transparent;padding:96px 40px;">
+    <div style="max-width:1440px;margin:0 auto;">
+      <div class="gsap-reveal" style="margin-bottom:40px;">
+        <div class="label-upper" style="margin-bottom:12px;">{secNum.interests} · Areas</div>
+        <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1.1;letter-spacing:0.5px;">Of Interest</h2>
+      </div>
+      <div class="intel-stripe gsap-line" style="margin-bottom:1px;"></div>
+      <div class="gsap-stagger grid-2" style="gap:1px;background:var(--hairline);">
+        {interests.map(item => (
+          <div style="background:var(--surface-soft);padding:32px;">
+            <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;">{item.num}</div>
+            <div style="font-size:19px;font-weight:700;text-transform:uppercase;color:var(--ink);margin-bottom:12px;line-height:1.2;letter-spacing:0.3px;">{item.name}</div>
+            <div style="font-size:13px;font-weight:300;color:var(--body);line-height:1.75;letter-spacing:0.3px;">{item.desc}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>

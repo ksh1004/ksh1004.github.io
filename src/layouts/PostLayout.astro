@@ -14,7 +14,7 @@ const { title, date, tags = [], description, category, subcategory, subsubcatego
 const fmt = date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' });
 ---
 
-<BaseLayout title={`${title} — KSH1004`} description={description}>
+<BaseLayout title={`${title} — KSH1004`} description={description} ogType="article">
 
   <!-- 읽기 진행 바 -->
   <div id="progress-bar" style="position:fixed;top:0;left:0;height:2px;z-index:200;background:var(--green);width:0%;transition:width 0.08s linear;pointer-events:none;box-shadow:0 0 8px rgba(78,124,54,0.55);"></div>
@@ -81,4 +81,22 @@ if (bar) {
   window.addEventListener('scroll', updateProgress, { passive: true });
   updateProgress();
 }
+
+/* ── 코드블록 복사 버튼 ── */
+document.querySelectorAll<HTMLPreElement>('.prose pre').forEach(pre => {
+  const btn = document.createElement('button');
+  btn.className = 'code-copy';
+  btn.textContent = 'Copy';
+  btn.setAttribute('aria-label', '코드 복사');
+  btn.addEventListener('click', async () => {
+    const code = pre.querySelector('code')?.innerText ?? pre.innerText;
+    try {
+      await navigator.clipboard.writeText(code);
+      btn.textContent = 'Copied';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1600);
+    } catch { /* 클립보드 권한 없음 */ }
+  });
+  pre.appendChild(btn);
+});
 </script>
