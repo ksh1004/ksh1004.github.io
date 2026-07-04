@@ -9,7 +9,7 @@ const posts = (await getCollection('posts'))
 
 const projects = [
   { num: '01', name: 'IntelligenceView', desc: '한반도 공개출처정보 자동 수집 및 4D 시각화 대시보드.', stack: 'Python · CesiumJS · SQLite', url: 'https://github.com/ksh1004' },
-  { num: '02', name: 'System Trading', desc: '한국·미국 주식 자동매매 시스템. 백테스팅부터 자동 체결까지.', stack: 'Python · Backtrader', url: 'https://github.com/ksh1004' },
+  { num: '02', name: 'System Trading',   desc: '한국·미국 주식 자동매매 시스템. 백테스팅부터 자동 체결까지.', stack: 'Python · Backtrader', url: 'https://github.com/ksh1004' },
   { num: '03', name: 'Military Vehicle AI', desc: '군용 차량 이미지 분류 모델. CNN 기반 다중 클래스.', stack: 'PyTorch · CNN', url: 'https://github.com/ksh1004' },
   { num: '04', name: 'News Bias Analyzer', desc: '뉴스 기사 정치 편향 분석 및 시각화.', stack: 'NLP · Streamlit', url: 'https://github.com/ksh1004' },
 ];
@@ -20,73 +20,56 @@ const projects = [
   <!-- ═══ HERO ═══ -->
   <section style="background:var(--canvas);padding:96px 40px;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;">
 
-    <!-- 배경: 미세 격자 (전술 지도 느낌) -->
-    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(28,46,74,0.4) 1px,transparent 1px),linear-gradient(90deg,rgba(28,46,74,0.4) 1px,transparent 1px);background-size:64px 64px;pointer-events:none;"></div>
-    <!-- 대각선 클리핑 -->
-    <div style="position:absolute;top:0;right:0;width:40%;height:100%;background:linear-gradient(135deg,transparent 50%,rgba(9,12,24,0.6) 50%);pointer-events:none;"></div>
+    <!-- 배경 격자 -->
+    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(28,42,30,0.35) 1px,transparent 1px),linear-gradient(90deg,rgba(28,42,30,0.35) 1px,transparent 1px);background-size:72px 72px;pointer-events:none;"></div>
 
-    <!-- 좌상단: 분류 헤더 -->
-    <div style="position:absolute;top:40px;left:40px;" class="gsap-reveal">
-      <div style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:#445870;margin-bottom:6px;">
-        // SUBJECT PROFILE //
-      </div>
-      <div style="font-size:10px;letter-spacing:1.5px;color:#2e4060;">
-        37°33'N · 127°00'E &nbsp;·&nbsp; Seoul, KOR
-      </div>
-    </div>
-
-    <!-- 우상단: 상태 표시 -->
-    <div style="position:absolute;top:40px;right:40px;text-align:right;" class="gsap-reveal">
-      <div style="display:inline-flex;align-items:center;gap:6px;border:1px solid #2e4060;padding:4px 12px;background:rgba(200,150,60,0.05);">
-        <div style="width:6px;height:6px;background:#c8963c;border-radius:50%;animation:blink 2s infinite;"></div>
-        <span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#c8963c;">ACTIVE</span>
+    <!-- 우상단 상태 표시 -->
+    <div style="position:absolute;top:40px;right:40px;" class="gsap-reveal">
+      <div style="display:inline-flex;align-items:center;gap:6px;border:1px solid var(--green-dim);padding:5px 14px;background:var(--green-glow);">
+        <div style="width:5px;height:5px;background:var(--green);border-radius:50%;" id="status-dot"></div>
+        <span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--green);">Online</span>
       </div>
     </div>
 
     <!-- 메인 헤드라인 -->
     <div id="hero-hl" style="position:relative;z-index:1;">
-      <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#c8963c;margin-bottom:20px;">
-        FIELD AGENT ·&nbsp; KSH-1004
-      </div>
-      <h1 style="font-size:clamp(3.5rem,10vw,9rem);font-weight:700;line-height:0.95;text-transform:uppercase;letter-spacing:-0.02em;color:#dce8f4;">
+      <h1 style="font-size:clamp(3.5rem,10vw,9rem);font-weight:700;line-height:0.95;text-transform:uppercase;letter-spacing:-0.02em;color:var(--ink);">
         KIM<br/>SOONHA.
       </h1>
     </div>
 
-    <!-- 골드 구분선 -->
+    <!-- 구분선 -->
     <div class="intel-stripe gsap-line" style="margin:36px 0 28px;"></div>
 
     <!-- 서브 -->
     <div id="hero-sub" style="display:flex;align-items:flex-end;justify-content:space-between;gap:40px;position:relative;z-index:1;flex-wrap:wrap;">
-      <p style="font-size:14px;font-weight:300;color:#8aa0b8;max-width:420px;line-height:1.8;letter-spacing:0.5px;">
-        개발, 금융 데이터, 정보분석에 관심 있는 학생.<br/>
-        공부한 것을 기록하고 만든 것을 공유한다.
+      <p style="font-size:14px;font-weight:300;color:var(--body);max-width:400px;line-height:1.85;letter-spacing:0.3px;">
+        개발, 금융 데이터, 정보분석에 관심 있는 학생.<br/>공부한 것을 기록하고 만든 것을 공유한다.
       </p>
       <div style="display:flex;gap:12px;flex-shrink:0;flex-wrap:wrap;">
-        <a href="/posts" class="btn" data-cursor-hover>Dispatches</a>
+        <a href="/posts" class="btn" data-cursor-hover>Posts</a>
         <a href="/about"
-           style="display:inline-flex;align-items:center;padding:14px 28px;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;border:1px solid #1c2e4a;color:#445870;transition:border-color 0.2s,color 0.2s;"
-           onmouseover="this.style.borderColor='#445870';this.style.color='#8aa0b8'"
-           onmouseout="this.style.borderColor='#1c2e4a';this.style.color='#445870'"
-           data-cursor-hover>Profile</a>
+           style="display:inline-flex;align-items:center;padding:13px 28px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;border:1px solid var(--hairline-strong);color:var(--muted);transition:border-color 0.2s,color 0.2s;font-family:inherit;"
+           onmouseover="this.style.borderColor='var(--muted)';this.style.color='var(--body)'"
+           onmouseout="this.style.borderColor='var(--hairline-strong)';this.style.color='var(--muted)'"
+           data-cursor-hover>About</a>
       </div>
     </div>
 
-    <!-- 스크롤 인디케이터 -->
+    <!-- 스크롤 힌트 -->
     <div id="scroll-ind" style="position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;">
-      <span style="font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#2e4060;">Scroll</span>
-      <div style="width:1px;height:36px;background:linear-gradient(to bottom,#c8963c,transparent);"></div>
+      <div style="width:1px;height:36px;background:linear-gradient(to bottom,var(--green),transparent);"></div>
     </div>
   </section>
 
-  <!-- ═══ INTEL STATS ═══ -->
+  <!-- ═══ STATS ═══ -->
   <section style="background:var(--surface-soft);border-top:1px solid var(--hairline);border-bottom:1px solid var(--hairline);">
     <div style="max-width:1440px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);">
       {[
         { val: 'Seoul', label: 'Location' },
         { val: '인하대', label: 'University' },
-        { val: '개발', label: 'Primary Focus' },
-        { val: '2026', label: 'Established' },
+        { val: '개발', label: 'Focus' },
+        { val: '2026', label: 'Est.' },
       ].map((s, i) => (
         <div class="spec-cell" style={`border-radius:0;border:none;border-right:${i<3?'1px solid var(--hairline)':'none'};`}>
           <div class="val">{s.val}</div>
@@ -96,55 +79,43 @@ const projects = [
     </div>
   </section>
 
-  <!-- ═══ RECENT DISPATCHES ═══ -->
+  <!-- ═══ POSTS ═══ -->
   <section style="background:var(--canvas);padding:96px 40px;border-bottom:1px solid var(--hairline);">
     <div style="max-width:1440px;margin:0 auto;">
 
       <div class="gsap-reveal" style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:40px;flex-wrap:wrap;gap:16px;">
         <div>
-          <div class="label-upper" style="margin-bottom:12px;">// Latest</div>
-          <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1.05;letter-spacing:1px;">
-            Field Dispatches
-          </h2>
+          <div class="label-upper" style="margin-bottom:12px;">Recent</div>
+          <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1.05;letter-spacing:0.5px;">Posts</h2>
         </div>
         <a href="/posts"
            style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.15s;"
-           onmouseover="this.style.color='#c8963c'" onmouseout="this.style.color='var(--muted)'"
-           data-cursor-hover>
-          All Dispatches →
-        </a>
+           onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--muted)'"
+           data-cursor-hover>View All →</a>
       </div>
 
       <div class="intel-stripe gsap-line" style="margin-bottom:0;"></div>
 
       <div class="gsap-stagger">
         {posts.length === 0 ? (
-          <div style="padding:64px 0;font-size:12px;letter-spacing:1px;color:#2e4060;">
-            // NO DISPATCHES ON RECORD
-          </div>
+          <div style="padding:64px 0;font-size:12px;letter-spacing:1px;color:var(--hairline-strong);">No posts yet.</div>
         ) : posts.map((post, i) => (
           <a href={`/posts/${post.id}`}
-             style="display:flex;align-items:baseline;justify-content:space-between;gap:40px;padding:24px 0;border-bottom:1px solid var(--hairline);text-decoration:none;"
+             style="display:flex;align-items:baseline;justify-content:space-between;gap:40px;padding:24px 0;border-bottom:1px solid var(--hairline);text-decoration:none;transition:background 0.15s;"
              data-cursor-hover
-             onmouseover="this.querySelector('.pt').style.color='var(--ink)';this.style.background='rgba(200,150,60,0.03)'"
+             onmouseover="this.querySelector('.pt').style.color='var(--ink)';this.style.background='var(--green-glow)'"
              onmouseout="this.querySelector('.pt').style.color='var(--body-strong)';this.style.background='transparent'">
             <div style="display:flex;align-items:baseline;gap:24px;min-width:0;">
-              <span style="font-size:11px;font-weight:400;letter-spacing:1px;color:#2e4060;width:24px;flex-shrink:0;">
-                {String(i+1).padStart(2,'0')}
-              </span>
+              <span style="font-size:11px;color:var(--hairline-strong);width:24px;flex-shrink:0;letter-spacing:1px;">{String(i+1).padStart(2,'0')}</span>
               <div>
-                <div class="pt" style="font-size:17px;font-weight:700;text-transform:uppercase;color:var(--body-strong);transition:color 0.15s;line-height:1.3;letter-spacing:0.5px;">
-                  {post.data.title}
-                </div>
+                <div class="pt" style="font-size:17px;font-weight:700;text-transform:uppercase;color:var(--body-strong);transition:color 0.15s;line-height:1.3;letter-spacing:0.3px;">{post.data.title}</div>
                 {post.data.description && (
-                  <div style="font-size:12px;font-weight:300;color:var(--muted);margin-top:4px;letter-spacing:0.5px;">{post.data.description}</div>
+                  <div style="font-size:12px;font-weight:300;color:var(--muted);margin-top:4px;letter-spacing:0.3px;">{post.data.description}</div>
                 )}
               </div>
             </div>
-            <div style="display:flex;align-items:center;gap:12px;flex-shrink:0;">
-              {post.data.category && (
-                <span class="badge-muted">{post.data.category}</span>
-              )}
+            <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+              {post.data.category && <span class="badge-muted">{post.data.category}</span>}
               <span style="font-size:11px;letter-spacing:1px;color:var(--muted);white-space:nowrap;">
                 {post.data.date.toLocaleDateString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'})}
               </span>
@@ -155,15 +126,13 @@ const projects = [
     </div>
   </section>
 
-  <!-- ═══ OPERATIONS ═══ -->
+  <!-- ═══ PROJECTS ═══ -->
   <section style="background:var(--surface-soft);padding:96px 40px;border-bottom:1px solid var(--hairline);">
     <div style="max-width:1440px;margin:0 auto;">
 
       <div class="gsap-reveal" style="margin-bottom:40px;">
-        <div class="label-upper" style="margin-bottom:12px;">// Operations</div>
-        <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1.05;letter-spacing:1px;">
-          Projects
-        </h2>
+        <div class="label-upper" style="margin-bottom:12px;">Selected</div>
+        <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1.05;letter-spacing:0.5px;">Projects</h2>
       </div>
 
       <div class="intel-stripe gsap-line" style="margin-bottom:40px;"></div>
@@ -175,10 +144,10 @@ const projects = [
              style="background:var(--surface-card);text-decoration:none;display:flex;flex-direction:column;gap:12px;"
              data-cursor-hover
              onmouseover="this.style.background='var(--surface-elevated)'" onmouseout="this.style.background='var(--surface-card)'">
-            <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);">CASE {proj.num}</div>
-            <div style="font-size:18px;font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1.3;letter-spacing:0.5px;">{proj.name}</div>
-            <div style="font-size:12px;font-weight:300;color:var(--body);line-height:1.7;flex:1;letter-spacing:0.3px;">{proj.desc}</div>
-            <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-dim);">{proj.stack}</div>
+            <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);">{proj.num}</div>
+            <div style="font-size:18px;font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1.3;letter-spacing:0.3px;">{proj.name}</div>
+            <div style="font-size:12px;font-weight:300;color:var(--body);line-height:1.75;flex:1;letter-spacing:0.3px;">{proj.desc}</div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green-dim);">{proj.stack}</div>
           </a>
         ))}
       </div>
@@ -188,8 +157,8 @@ const projects = [
   <!-- ═══ CTA ═══ -->
   <section style="background:var(--canvas);padding:96px 40px;text-align:center;">
     <div style="max-width:1440px;margin:0 auto;" class="gsap-reveal">
-      <div class="label-upper" style="margin-bottom:24px;text-align:center;">// Contact</div>
-      <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:700;text-transform:uppercase;color:var(--ink);margin-bottom:40px;line-height:1.1;letter-spacing:1px;">
+      <div class="label-upper" style="margin-bottom:24px;text-align:center;">Contact</div>
+      <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:700;text-transform:uppercase;color:var(--ink);margin-bottom:40px;line-height:1.1;letter-spacing:0.5px;">
         Establish Contact.
       </h2>
       <a href="mailto:soonha990@naver.com" class="btn" data-cursor-hover>Send Message</a>
@@ -199,23 +168,15 @@ const projects = [
 </BaseLayout>
 
 <style>
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.3; }
-}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+#status-dot { animation: pulse 3s ease-in-out infinite; }
 </style>
 
 <script>
 import gsap from 'gsap';
-
 gsap.timeline({ defaults: { ease: 'power4.out' } })
   .from('#hero-hl', { y: 50, opacity: 0, duration: 1.0 })
   .from('#hero-sub', { opacity: 0, y: 20, duration: 0.7 }, '-=0.5')
   .from('#scroll-ind', { opacity: 0, duration: 0.5 }, '-=0.3');
-
-gsap.to('#scroll-ind > div', {
-  scaleY: 0, transformOrigin: 'top',
-  duration: 1.0, ease: 'power2.in',
-  repeat: -1, repeatDelay: 0.5,
-});
+gsap.to('#scroll-ind > div', { scaleY: 0, transformOrigin: 'top', duration: 1.0, ease: 'power2.in', repeat: -1, repeatDelay: 0.5 });
 </script>

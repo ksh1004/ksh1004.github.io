@@ -2,33 +2,31 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const specs = [
-  { val: 'Seoul', label: 'Location' },
+  { val: 'Seoul',  label: 'Location' },
   { val: '인하대', label: 'University' },
-  { val: '개발', label: 'Focus' },
-  { val: '2026', label: 'Year' },
+  { val: '개발',   label: 'Focus' },
+  { val: '2026',   label: 'Est.' },
 ];
 
 const interests = [
   { num: '01', name: '개발 / 엔지니어링', desc: '파이썬, 데이터 파이프라인, 백엔드 시스템 개발' },
-  { num: '02', name: '금융 / 퀀트', desc: '시스템 트레이딩, 백테스팅, 시장 데이터 분석' },
-  { num: '03', name: '정보 분석', desc: '공개출처정보(OSINT) 수집·분석·시각화' },
-  { num: '04', name: '프로젝트 기록', desc: '개발 과정, 실험, 삽질 기록' },
+  { num: '02', name: '금융 / 퀀트',       desc: '시스템 트레이딩, 백테스팅, 시장 데이터 분석' },
+  { num: '03', name: '정보 분석',          desc: '공개출처정보(OSINT) 수집·분석·시각화' },
+  { num: '04', name: '프로젝트 기록',      desc: '개발 과정, 실험, 삽질 기록' },
 ];
 
 const skills = ['Python', 'PyTorch', 'Pandas', 'NumPy', 'SQL', 'Streamlit', 'FastAPI', 'Docker', 'Git', 'Linux'];
 ---
 
-<BaseLayout title="Profile — KSH1004">
+<BaseLayout title="About — KSH1004">
 
   <!-- 히어로 -->
   <section style="background:var(--canvas);padding:96px 40px;border-bottom:1px solid var(--hairline);position:relative;overflow:hidden;">
-    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(28,46,74,0.3) 1px,transparent 1px),linear-gradient(90deg,rgba(28,46,74,0.3) 1px,transparent 1px);background-size:64px 64px;pointer-events:none;"></div>
+    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(28,42,30,0.3) 1px,transparent 1px),linear-gradient(90deg,rgba(28,42,30,0.3) 1px,transparent 1px);background-size:72px 72px;pointer-events:none;"></div>
     <div style="max-width:1440px;margin:0 auto;position:relative;z-index:1;">
       <div class="gsap-reveal">
-        <div style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;">
-          // SUBJECT PROFILE //
-        </div>
-        <h1 style="font-size:clamp(3.5rem,9vw,7.5rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:0.95;letter-spacing:-0.01em;">
+        <div class="label-upper" style="margin-bottom:16px;">Profile</div>
+        <h1 style="font-size:clamp(3.5rem,9vw,7.5rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:0.95;">
           KIM<br/>SOONHA.
         </h1>
       </div>
@@ -52,8 +50,8 @@ const skills = ['Python', 'PyTorch', 'Pandas', 'NumPy', 'SQL', 'Streamlit', 'Fas
   <section style="background:var(--canvas);padding:96px 40px;border-bottom:1px solid var(--hairline);">
     <div style="max-width:1440px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:96px;align-items:start;">
       <div class="gsap-reveal">
-        <div style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:24px;">// Introduction</div>
-        <p style="font-size:16px;font-weight:400;color:var(--body-strong);line-height:1.8;letter-spacing:0.3px;">
+        <div class="label-upper" style="margin-bottom:24px;">Introduction</div>
+        <p style="font-size:15px;font-weight:400;color:var(--body-strong);line-height:1.85;letter-spacing:0.3px;">
           AI/Data 엔지니어를 목표로 하는 학부생입니다.
         </p>
         <p style="font-size:14px;font-weight:300;color:var(--body);line-height:1.9;margin-top:16px;letter-spacing:0.3px;">
@@ -61,19 +59,19 @@ const skills = ['Python', 'PyTorch', 'Pandas', 'NumPy', 'SQL', 'Streamlit', 'Fas
         </p>
       </div>
       <div class="gsap-reveal">
-        <div style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:24px;">// Contact</div>
-        <div style="display:flex;flex-direction:column;gap:0;">
+        <div class="label-upper" style="margin-bottom:24px;">Contact</div>
+        <div style="display:flex;flex-direction:column;">
           {[
-            { label: 'GitHub',  val: 'github.com/ksh1004',   href: 'https://github.com/ksh1004' },
-            { label: 'Velog',   val: 'velog.io/@ksh1004',    href: 'https://velog.io/@ksh1004' },
-            { label: 'Email',   val: 'soonha990@naver.com',  href: 'mailto:soonha990@naver.com' },
+            { label: 'GitHub', val: 'github.com/ksh1004',  href: 'https://github.com/ksh1004' },
+            { label: 'Velog',  val: 'velog.io/@ksh1004',   href: 'https://velog.io/@ksh1004' },
+            { label: 'Email',  val: 'soonha990@naver.com', href: 'mailto:soonha990@naver.com' },
           ].map((item, i, arr) => (
             <a href={item.href} target={item.href.startsWith('http')?'_blank':undefined} rel="noopener"
-               style={`display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding:20px 0;border-bottom:${i<arr.length-1?'1px solid var(--hairline)':'none'};text-decoration:none;transition:background 0.15s;`}
+               style={`display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding:20px 0;border-bottom:${i<arr.length-1?'1px solid var(--hairline)':'none'};text-decoration:none;`}
                data-cursor-hover
-               onmouseover="this.querySelector('.cv').style.color='#c8963c'" onmouseout="this.querySelector('.cv').style.color='var(--body)'">
+               onmouseover="this.querySelector('.cv').style.color='var(--green)'" onmouseout="this.querySelector('.cv').style.color='var(--body)'">
               <span style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);">{item.label}</span>
-              <span class="cv" style="font-size:13px;font-weight:300;color:var(--body);transition:color 0.15s;letter-spacing:0.5px;">{item.val} →</span>
+              <span class="cv" style="font-size:13px;font-weight:300;color:var(--body);transition:color 0.15s;letter-spacing:0.3px;">{item.val} →</span>
             </a>
           ))}
         </div>
@@ -85,16 +83,16 @@ const skills = ['Python', 'PyTorch', 'Pandas', 'NumPy', 'SQL', 'Streamlit', 'Fas
   <section style="background:var(--surface-soft);padding:96px 40px;border-bottom:1px solid var(--hairline);">
     <div style="max-width:1440px;margin:0 auto;">
       <div class="gsap-reveal" style="margin-bottom:40px;">
-        <div style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">// Areas</div>
-        <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1.1;letter-spacing:1px;">Of Interest</h2>
+        <div class="label-upper" style="margin-bottom:12px;">Areas</div>
+        <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1.1;letter-spacing:0.5px;">Of Interest</h2>
       </div>
       <div class="intel-stripe gsap-line" style="margin-bottom:1px;"></div>
       <div class="gsap-stagger" style="display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--hairline);">
         {interests.map(item => (
           <div style="background:var(--surface-soft);padding:32px;">
             <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;">{item.num}</div>
-            <div style="font-size:20px;font-weight:700;text-transform:uppercase;color:var(--ink);margin-bottom:12px;line-height:1.2;letter-spacing:0.5px;">{item.name}</div>
-            <div style="font-size:13px;font-weight:300;color:var(--body);line-height:1.7;letter-spacing:0.3px;">{item.desc}</div>
+            <div style="font-size:19px;font-weight:700;text-transform:uppercase;color:var(--ink);margin-bottom:12px;line-height:1.2;letter-spacing:0.3px;">{item.name}</div>
+            <div style="font-size:13px;font-weight:300;color:var(--body);line-height:1.75;letter-spacing:0.3px;">{item.desc}</div>
           </div>
         ))}
       </div>
@@ -105,13 +103,13 @@ const skills = ['Python', 'PyTorch', 'Pandas', 'NumPy', 'SQL', 'Streamlit', 'Fas
   <section style="background:var(--canvas);padding:96px 40px;">
     <div style="max-width:1440px;margin:0 auto;">
       <div class="gsap-reveal" style="margin-bottom:40px;">
-        <div style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">// Technical</div>
-        <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1.1;letter-spacing:1px;">Stack</h2>
+        <div class="label-upper" style="margin-bottom:12px;">Technical</div>
+        <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1.1;letter-spacing:0.5px;">Stack</h2>
       </div>
       <div class="gsap-stagger" style="display:flex;flex-wrap:wrap;gap:1px;background:var(--hairline);">
         {skills.map(s => (
-          <div style="background:var(--canvas);padding:18px 28px;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);transition:background 0.15s,color 0.15s;"
-               onmouseover="this.style.background='var(--surface-elevated)';this.style.color='#c8963c'"
+          <div style="background:var(--canvas);padding:18px 28px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);transition:background 0.15s,color 0.15s;"
+               onmouseover="this.style.background='var(--surface-elevated)';this.style.color='var(--green)'"
                onmouseout="this.style.background='var(--canvas)';this.style.color='var(--muted)'">
             {s}
           </div>

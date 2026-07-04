@@ -1,25 +1,27 @@
 @import "tailwindcss";
 
-/* ── Intelligence Design System ── */
+/* ── Design Tokens ── */
 :root {
-  --canvas:           #06080f;
-  --surface-soft:     #090c18;
-  --surface-card:     #0d1422;
-  --surface-elevated: #12203a;
-  --carbon:           #162848;
-  --hairline:         #1c2e4a;
-  --hairline-strong:  #243858;
+  --canvas:           #07090a;
+  --surface-soft:     #0b0f0c;
+  --surface-card:     #0f160f;
+  --surface-elevated: #162018;
+  --hairline:         #1c2a1e;
+  --hairline-strong:  #253528;
 
-  --ink:              #dce8f4;
-  --body:             #8aa0b8;
-  --body-strong:      #b8cce0;
-  --muted:            #445870;
+  --ink:              #ddeedd;
+  --body:             #7a9880;
+  --body-strong:      #adc4b0;
+  --muted:            #3e5444;
 
-  --gold:             #c8963c;
-  --gold-dim:         #7a5c22;
-  --gold-glow:        rgba(200, 150, 60, 0.12);
-  --alert:            #a83228;
-  --green:            #2e5c42;
+  --green:            #4e7c36;
+  --green-dim:        #2e4a20;
+  --green-glow:       rgba(78, 124, 54, 0.10);
+
+  --navy:             #1a2e44;
+  --navy-dim:         #0e1e2e;
+
+  --alert:            #7c3228;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -41,7 +43,7 @@ body { min-height: 100vh; overflow-x: hidden; }
   position: fixed;
   width: 4px;
   height: 4px;
-  background: var(--gold);
+  background: var(--green);
   border-radius: 50%;
   pointer-events: none;
   z-index: 99999;
@@ -49,9 +51,9 @@ body { min-height: 100vh; overflow-x: hidden; }
 }
 .cursor-ring {
   position: fixed;
-  width: 28px;
-  height: 28px;
-  border: 1px solid rgba(200, 150, 60, 0.4);
+  width: 26px;
+  height: 26px;
+  border: 1px solid rgba(78, 124, 54, 0.5);
   border-radius: 0;
   pointer-events: none;
   z-index: 99998;
@@ -59,31 +61,23 @@ body { min-height: 100vh; overflow-x: hidden; }
   transition: width 0.2s, height 0.2s, border-color 0.2s;
 }
 .cursor-ring.hover {
-  width: 48px;
-  height: 48px;
-  border-color: var(--gold);
+  width: 44px;
+  height: 44px;
+  border-color: var(--green);
 }
 
 a, button { cursor: none; }
 
-/* ── 골드 스트라이프 구분선 ── */
+/* ── 구분선 스트라이프 ── */
 .intel-stripe {
   width: 100%;
-  height: 3px;
-  background: linear-gradient(90deg, var(--gold) 0%, var(--gold-dim) 60%, transparent 100%);
+  height: 2px;
+  background: linear-gradient(90deg, var(--green) 0%, var(--green-dim) 50%, transparent 100%);
 }
 
-/* ── 분류 레이블 ── */
-.classify-label {
-  font-size: 10px;
-  font-weight: 400;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
+/* ── 레이블 ── */
 .label-upper {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -94,41 +88,36 @@ a, button { cursor: none; }
 .btn {
   display: inline-flex;
   align-items: center;
-  padding: 14px 28px;
-  font-size: 12px;
+  padding: 13px 28px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 2px;
   text-transform: uppercase;
   text-decoration: none;
-  border: 1px solid var(--gold);
+  border: 1px solid var(--green);
   background: transparent;
-  color: var(--gold);
+  color: var(--green);
   border-radius: 0;
   transition: background 0.2s, color 0.2s;
   font-family: inherit;
 }
-.btn:hover { background: var(--gold); color: var(--canvas); }
+.btn:hover { background: var(--green); color: var(--canvas); }
 
 /* ── 카드 ── */
 .intel-card {
   background: var(--surface-card);
   border: 1px solid var(--hairline);
-  border-top: 2px solid var(--gold);
+  border-left: 2px solid var(--green-dim);
   border-radius: 0;
   padding: 24px;
   position: relative;
   overflow: hidden;
-  transition: border-color 0.2s, background 0.2s;
+  transition: border-left-color 0.2s, background 0.2s;
 }
-.intel-card:hover { border-top-color: var(--gold); background: var(--surface-elevated); }
+.intel-card:hover { border-left-color: var(--green); background: var(--surface-elevated); }
 
 /* ── 헤어라인 ── */
-.hairline {
-  width: 100%;
-  height: 1px;
-  background: var(--hairline);
-  border: none;
-}
+.hairline { width: 100%; height: 1px; background: var(--hairline); border: none; }
 
 /* ── 스펙 셀 ── */
 .spec-cell {
@@ -138,10 +127,10 @@ a, button { cursor: none; }
   padding: 24px;
 }
 .spec-cell .val {
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 700;
-  color: var(--gold);
-  line-height: 1.15;
+  color: var(--green);
+  line-height: 1.2;
   letter-spacing: 1px;
 }
 .spec-cell .spec-label {
@@ -153,16 +142,16 @@ a, button { cursor: none; }
   margin-top: 8px;
 }
 
-/* ── 분류 배지 ── */
-.badge-gold {
+/* ── 배지 ── */
+.badge-green {
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: var(--gold);
-  border: 1px solid var(--gold-dim);
+  color: var(--green);
+  border: 1px solid var(--green-dim);
   padding: 3px 8px;
-  background: var(--gold-glow);
+  background: var(--green-glow);
 }
 .badge-muted {
   font-size: 10px;
@@ -179,7 +168,7 @@ a, button { cursor: none; }
   color: var(--body);
   font-weight: 400;
   font-size: 15px;
-  line-height: 1.8;
+  line-height: 1.85;
   max-width: 68ch;
 }
 .prose h1, .prose h2, .prose h3 {
@@ -189,33 +178,32 @@ a, button { cursor: none; }
   letter-spacing: 1px;
   margin: 2.5rem 0 1rem;
 }
-.prose h1 { font-size: 40px; line-height: 1.1; }
+.prose h1 { font-size: 38px; line-height: 1.1; }
 .prose h2 { font-size: 28px; line-height: 1.15; }
 .prose h3 { font-size: 22px; line-height: 1.2; }
 .prose p { margin-bottom: 1.5rem; }
 .prose strong { font-weight: 700; color: var(--ink); }
-.prose a { color: var(--gold); text-decoration: underline; text-underline-offset: 3px; transition: opacity 0.2s; }
+.prose a { color: var(--green); text-decoration: underline; text-underline-offset: 3px; transition: opacity 0.2s; }
 .prose a:hover { opacity: 0.7; }
 .prose code {
   background: var(--surface-card);
   border: 1px solid var(--hairline);
   padding: 0.1em 0.4em;
   font-size: 0.88em;
-  font-weight: 400;
+  color: var(--green);
   border-radius: 0;
-  color: var(--gold);
 }
 .prose pre {
   background: var(--surface-card) !important;
   border: 1px solid var(--hairline);
-  border-left: 3px solid var(--gold);
+  border-left: 3px solid var(--green-dim);
   padding: 24px;
   overflow-x: auto;
   margin: 1.5rem 0;
 }
 .prose pre code { background: none; border: none; padding: 0; color: var(--body); }
 .prose blockquote {
-  border-left: 3px solid var(--gold-dim);
+  border-left: 3px solid var(--green-dim);
   padding-left: 24px;
   color: var(--muted);
   margin: 1.5rem 0;
@@ -224,11 +212,11 @@ a, button { cursor: none; }
 .prose ul, .prose ol { padding-left: 1.5em; margin-bottom: 1.5rem; }
 .prose li { margin-bottom: 0.5rem; }
 
-/* ── GSAP 유틸 ── */
+/* ── GSAP ── */
 .gsap-reveal, .gsap-stagger > * { will-change: transform, opacity; }
 
 /* ── 스크롤바 ── */
 ::-webkit-scrollbar { width: 2px; }
 ::-webkit-scrollbar-track { background: var(--canvas); }
-::-webkit-scrollbar-thumb { background: var(--gold-dim); }
-::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+::-webkit-scrollbar-thumb { background: var(--green-dim); }
+::-webkit-scrollbar-thumb:hover { background: var(--green); }
