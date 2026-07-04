@@ -8,8 +8,8 @@ const posts = (await getCollection('posts'))
   .slice(0, 6);
 
 const projects = [
-  { num: '01', name: 'IntelligenceView', desc: '한반도 공개출처정보 자동 수집 및 4D 시각화 대시보드.', stack: 'Python · CesiumJS · SQLite', url: 'https://github.com/ksh1004' },
-  { num: '02', name: 'System Trading',   desc: '한국·미국 주식 자동매매 시스템. 백테스팅부터 자동 체결까지.', stack: 'Python · Backtrader', url: 'https://github.com/ksh1004' },
+  { num: '01', name: 'IntelligenceView',  desc: '한반도 공개출처정보 자동 수집 및 4D 시각화 대시보드.', stack: 'Python · CesiumJS · SQLite', url: 'https://github.com/ksh1004' },
+  { num: '02', name: 'System Trading',    desc: '한국·미국 주식 자동매매 시스템. 백테스팅부터 자동 체결까지.', stack: 'Python · Backtrader', url: 'https://github.com/ksh1004' },
   { num: '03', name: 'Military Vehicle AI', desc: '군용 차량 이미지 분류 모델. CNN 기반 다중 클래스.', stack: 'PyTorch · CNN', url: 'https://github.com/ksh1004' },
   { num: '04', name: 'News Bias Analyzer', desc: '뉴스 기사 정치 편향 분석 및 시각화.', stack: 'NLP · Streamlit', url: 'https://github.com/ksh1004' },
 ];
@@ -18,47 +18,54 @@ const projects = [
 <BaseLayout title="KSH·1004 — 김순하">
 
   <!-- ═══ HERO ═══ -->
-  <section style="background:var(--canvas);padding:96px 40px;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;">
+  <section style="background:var(--canvas);min-height:100svh;display:flex;align-items:center;overflow:hidden;position:relative;">
 
-    <!-- 배경 격자 -->
-    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(28,42,30,0.35) 1px,transparent 1px),linear-gradient(90deg,rgba(28,42,30,0.35) 1px,transparent 1px);background-size:72px 72px;pointer-events:none;"></div>
+    <!-- 좌: 텍스트 -->
+    <div style="flex:0 0 55%;padding:96px 0 96px 40px;position:relative;z-index:2;display:flex;flex-direction:column;justify-content:flex-end;min-height:100svh;">
 
-    <!-- 우상단 상태 표시 -->
-    <div style="position:absolute;top:40px;right:40px;" class="gsap-reveal">
-      <div style="display:inline-flex;align-items:center;gap:6px;border:1px solid var(--green-dim);padding:5px 14px;background:var(--green-glow);">
-        <div style="width:5px;height:5px;background:var(--green);border-radius:50%;" id="status-dot"></div>
-        <span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--green);">Online</span>
+      <!-- 우상단 상태 -->
+      <div style="position:absolute;top:40px;left:40px;display:flex;align-items:center;gap:8px;">
+        <div id="status-dot" style="width:6px;height:6px;background:var(--green);border-radius:50%;"></div>
+        <span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);">Online</span>
+      </div>
+
+      <div id="hero-hl">
+        <h1 style="font-size:clamp(3rem,8vw,8rem);font-weight:700;line-height:0.95;text-transform:uppercase;letter-spacing:-0.02em;color:var(--ink);">
+          KIM<br/>SOONHA.
+        </h1>
+      </div>
+
+      <div class="intel-stripe gsap-line" style="margin:36px 0 28px;width:80%;"></div>
+
+      <div id="hero-sub">
+        <p style="font-size:14px;font-weight:300;color:var(--body);max-width:380px;line-height:1.85;letter-spacing:0.3px;margin-bottom:32px;">
+          개발, 금융 데이터, 정보분석에 관심 있는 학생.<br/>공부한 것을 기록하고 만든 것을 공유한다.
+        </p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <a href="/posts" class="btn" data-cursor-hover>Posts</a>
+          <a href="/about"
+             style="display:inline-flex;align-items:center;padding:13px 28px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;border:1px solid var(--hairline-strong);color:var(--muted);transition:border-color 0.2s,color 0.2s;font-family:inherit;"
+             onmouseover="this.style.borderColor='var(--muted)';this.style.color='var(--body)'"
+             onmouseout="this.style.borderColor='var(--hairline-strong)';this.style.color='var(--muted)'"
+             data-cursor-hover>About</a>
+        </div>
+      </div>
+
+      <!-- 스크롤 힌트 -->
+      <div id="scroll-ind" style="position:absolute;bottom:40px;left:40px;display:flex;align-items:center;gap:8px;">
+        <div style="width:32px;height:1px;background:linear-gradient(to right,var(--green),transparent);"></div>
+        <span style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);">Scroll</span>
       </div>
     </div>
 
-    <!-- 메인 헤드라인 -->
-    <div id="hero-hl" style="position:relative;z-index:1;">
-      <h1 style="font-size:clamp(3.5rem,10vw,9rem);font-weight:700;line-height:0.95;text-transform:uppercase;letter-spacing:-0.02em;color:var(--ink);">
-        KIM<br/>SOONHA.
-      </h1>
-    </div>
+    <!-- 우: 지구본 -->
+    <div style="flex:0 0 45%;display:flex;align-items:center;justify-content:center;padding:40px;position:relative;">
+      <canvas id="globe-canvas" style="display:block;max-width:100%;"></canvas>
 
-    <!-- 구분선 -->
-    <div class="intel-stripe gsap-line" style="margin:36px 0 28px;"></div>
-
-    <!-- 서브 -->
-    <div id="hero-sub" style="display:flex;align-items:flex-end;justify-content:space-between;gap:40px;position:relative;z-index:1;flex-wrap:wrap;">
-      <p style="font-size:14px;font-weight:300;color:var(--body);max-width:400px;line-height:1.85;letter-spacing:0.3px;">
-        개발, 금융 데이터, 정보분석에 관심 있는 학생.<br/>공부한 것을 기록하고 만든 것을 공유한다.
-      </p>
-      <div style="display:flex;gap:12px;flex-shrink:0;flex-wrap:wrap;">
-        <a href="/posts" class="btn" data-cursor-hover>Posts</a>
-        <a href="/about"
-           style="display:inline-flex;align-items:center;padding:13px 28px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;border:1px solid var(--hairline-strong);color:var(--muted);transition:border-color 0.2s,color 0.2s;font-family:inherit;"
-           onmouseover="this.style.borderColor='var(--muted)';this.style.color='var(--body)'"
-           onmouseout="this.style.borderColor='var(--hairline-strong)';this.style.color='var(--muted)'"
-           data-cursor-hover>About</a>
+      <!-- 좌표 오버레이 -->
+      <div style="position:absolute;bottom:60px;left:40px;font-size:10px;letter-spacing:1.5px;color:var(--muted);">
+        37°33'N · 127°00'E
       </div>
-    </div>
-
-    <!-- 스크롤 힌트 -->
-    <div id="scroll-ind" style="position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;">
-      <div style="width:1px;height:36px;background:linear-gradient(to bottom,var(--green),transparent);"></div>
     </div>
   </section>
 
@@ -68,8 +75,8 @@ const projects = [
       {[
         { val: 'Seoul', label: 'Location' },
         { val: '인하대', label: 'University' },
-        { val: '개발', label: 'Focus' },
-        { val: '2026', label: 'Est.' },
+        { val: '개발',  label: 'Focus' },
+        { val: '2026',  label: 'Est.' },
       ].map((s, i) => (
         <div class="spec-cell" style={`border-radius:0;border:none;border-right:${i<3?'1px solid var(--hairline)':'none'};`}>
           <div class="val">{s.val}</div>
@@ -82,20 +89,17 @@ const projects = [
   <!-- ═══ POSTS ═══ -->
   <section style="background:var(--canvas);padding:96px 40px;border-bottom:1px solid var(--hairline);">
     <div style="max-width:1440px;margin:0 auto;">
-
       <div class="gsap-reveal" style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:40px;flex-wrap:wrap;gap:16px;">
         <div>
           <div class="label-upper" style="margin-bottom:12px;">Recent</div>
           <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1.05;letter-spacing:0.5px;">Posts</h2>
         </div>
-        <a href="/posts"
-           style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.15s;"
-           onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--muted)'"
-           data-cursor-hover>View All →</a>
+        <a href="/posts" style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.15s;"
+           onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--muted)'" data-cursor-hover>
+          View All →
+        </a>
       </div>
-
       <div class="intel-stripe gsap-line" style="margin-bottom:0;"></div>
-
       <div class="gsap-stagger">
         {posts.length === 0 ? (
           <div style="padding:64px 0;font-size:12px;letter-spacing:1px;color:var(--hairline-strong);">No posts yet.</div>
@@ -109,9 +113,7 @@ const projects = [
               <span style="font-size:11px;color:var(--hairline-strong);width:24px;flex-shrink:0;letter-spacing:1px;">{String(i+1).padStart(2,'0')}</span>
               <div>
                 <div class="pt" style="font-size:17px;font-weight:700;text-transform:uppercase;color:var(--body-strong);transition:color 0.15s;line-height:1.3;letter-spacing:0.3px;">{post.data.title}</div>
-                {post.data.description && (
-                  <div style="font-size:12px;font-weight:300;color:var(--muted);margin-top:4px;letter-spacing:0.3px;">{post.data.description}</div>
-                )}
+                {post.data.description && <div style="font-size:12px;font-weight:300;color:var(--muted);margin-top:4px;">{post.data.description}</div>}
               </div>
             </div>
             <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
@@ -129,14 +131,11 @@ const projects = [
   <!-- ═══ PROJECTS ═══ -->
   <section style="background:var(--surface-soft);padding:96px 40px;border-bottom:1px solid var(--hairline);">
     <div style="max-width:1440px;margin:0 auto;">
-
       <div class="gsap-reveal" style="margin-bottom:40px;">
         <div class="label-upper" style="margin-bottom:12px;">Selected</div>
         <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1.05;letter-spacing:0.5px;">Projects</h2>
       </div>
-
       <div class="intel-stripe gsap-line" style="margin-bottom:40px;"></div>
-
       <div class="gsap-stagger" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1px;background:var(--hairline);">
         {projects.map(proj => (
           <a href={proj.url} target="_blank" rel="noopener"
@@ -145,8 +144,8 @@ const projects = [
              data-cursor-hover
              onmouseover="this.style.background='var(--surface-elevated)'" onmouseout="this.style.background='var(--surface-card)'">
             <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);">{proj.num}</div>
-            <div style="font-size:18px;font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1.3;letter-spacing:0.3px;">{proj.name}</div>
-            <div style="font-size:12px;font-weight:300;color:var(--body);line-height:1.75;flex:1;letter-spacing:0.3px;">{proj.desc}</div>
+            <div style="font-size:18px;font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1.3;">{proj.name}</div>
+            <div style="font-size:12px;font-weight:300;color:var(--body);line-height:1.75;flex:1;">{proj.desc}</div>
             <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green-dim);">{proj.stack}</div>
           </a>
         ))}
@@ -158,7 +157,7 @@ const projects = [
   <section style="background:var(--canvas);padding:96px 40px;text-align:center;">
     <div style="max-width:1440px;margin:0 auto;" class="gsap-reveal">
       <div class="label-upper" style="margin-bottom:24px;text-align:center;">Contact</div>
-      <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:700;text-transform:uppercase;color:var(--ink);margin-bottom:40px;line-height:1.1;letter-spacing:0.5px;">
+      <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:700;text-transform:uppercase;color:var(--ink);margin-bottom:40px;line-height:1.1;">
         Establish Contact.
       </h2>
       <a href="mailto:soonha990@naver.com" class="btn" data-cursor-hover>Send Message</a>
@@ -170,13 +169,166 @@ const projects = [
 <style>
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 #status-dot { animation: pulse 3s ease-in-out infinite; }
+
+@media (max-width: 768px) {
+  #globe-canvas { display: none; }
+}
 </style>
 
 <script>
 import gsap from 'gsap';
+
+/* ── 히어로 진입 ── */
 gsap.timeline({ defaults: { ease: 'power4.out' } })
   .from('#hero-hl', { y: 50, opacity: 0, duration: 1.0 })
   .from('#hero-sub', { opacity: 0, y: 20, duration: 0.7 }, '-=0.5')
   .from('#scroll-ind', { opacity: 0, duration: 0.5 }, '-=0.3');
-gsap.to('#scroll-ind > div', { scaleY: 0, transformOrigin: 'top', duration: 1.0, ease: 'power2.in', repeat: -1, repeatDelay: 0.5 });
+
+/* ── 지구본 ── */
+const canvas = document.getElementById('globe-canvas') as HTMLCanvasElement | null;
+if (canvas) {
+  const ctx = canvas.getContext('2d')!;
+
+  // OSINT 주요 지점
+  const MARKERS = [
+    { lat: 37.5,  lon: 127.0,  label: 'SEL' },  // 서울
+    { lat: 39.0,  lon: 125.7,  label: 'PYG' },  // 평양
+    { lat: 39.9,  lon: 116.4,  label: 'BJG' },  // 베이징
+    { lat: 35.7,  lon: 139.7,  label: 'TKY' },  // 도쿄
+    { lat: 38.9,  lon: -77.0,  label: 'WDC' },  // 워싱턴
+    { lat: 55.7,  lon:  37.6,  label: 'MSC' },  // 모스크바
+  ];
+
+  function resize() {
+    const parent = canvas.parentElement!;
+    const sz = Math.min(parent.clientWidth, parent.clientHeight, 480);
+    canvas.width  = sz;
+    canvas.height = sz;
+  }
+  resize();
+  window.addEventListener('resize', () => { resize(); });
+
+  function draw(ts: number) {
+    const W = canvas.width, H = canvas.height;
+    const cx = W / 2, cy = H / 2;
+    const r  = Math.min(W, H) * 0.42;
+    const rot = ts * 0.003; // 3°/s
+
+    ctx.clearRect(0, 0, W, H);
+
+    // 구면 투영
+    function proj(lat: number, lon: number) {
+      const φ = (lat * Math.PI) / 180;
+      const λ = ((lon + rot) * Math.PI) / 180;
+      return {
+        x: cx + r * Math.cos(φ) * Math.sin(λ),
+        y: cy - r * Math.sin(φ),
+        v: Math.cos(φ) * Math.cos(λ) > 0,
+      };
+    }
+
+    // 레이더 스윕
+    const sweep = (ts * 0.0004) % (Math.PI * 2);
+    const sg = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+    sg.addColorStop(0, 'rgba(78,124,54,0.14)');
+    sg.addColorStop(1, 'rgba(78,124,54,0.01)');
+    ctx.fillStyle = sg;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, r, sweep - 0.55, sweep);
+    ctx.closePath();
+    ctx.fill();
+
+    // 외곽 원
+    ctx.strokeStyle = 'rgba(78,124,54,0.8)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // 보조 원 (절반 반지름)
+    ctx.strokeStyle = 'rgba(78,124,54,0.12)';
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r * 0.5, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // 위도선
+    [-60, -30, 0, 30, 60].forEach(lat => {
+      ctx.strokeStyle = lat === 0 ? 'rgba(78,124,54,0.4)' : 'rgba(78,124,54,0.18)';
+      ctx.lineWidth = 0.5;
+      ctx.beginPath();
+      let go = false;
+      for (let lo = 0; lo <= 362; lo += 2) {
+        const p = proj(lat, lo);
+        if (p.v) { go ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y); go = true; }
+        else go = false;
+      }
+      ctx.stroke();
+    });
+
+    // 경도선
+    [0, 30, 60, 90, 120, 150].forEach(lon => {
+      [lon, lon + 180].forEach(l => {
+        ctx.strokeStyle = 'rgba(78,124,54,0.15)';
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        let go = false;
+        for (let la = -90; la <= 90; la += 2) {
+          const p = proj(la, l);
+          if (p.v) { go ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y); go = true; }
+          else go = false;
+        }
+        ctx.stroke();
+      });
+    });
+
+    // 연결선 (점선)
+    ctx.setLineDash([2, 5]);
+    ctx.lineWidth = 0.5;
+    for (let i = 0; i < MARKERS.length; i++) {
+      for (let j = i + 1; j < MARKERS.length; j++) {
+        const a = proj(MARKERS[i].lat, MARKERS[i].lon);
+        const b = proj(MARKERS[j].lat, MARKERS[j].lon);
+        if (!a.v || !b.v) continue;
+        if (Math.hypot(a.x - b.x, a.y - b.y) / r > 0.75) continue;
+        ctx.strokeStyle = 'rgba(78,124,54,0.13)';
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.stroke();
+      }
+    }
+    ctx.setLineDash([]);
+
+    // 마커
+    const pulse = 0.5 + 0.5 * Math.sin(ts * 0.003);
+    MARKERS.forEach(m => {
+      const p = proj(m.lat, m.lon);
+      if (!p.v) return;
+
+      // 펄스 링
+      ctx.strokeStyle = `rgba(78,124,54,${0.3 * pulse})`;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 5 + 4 * pulse, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // 중심 점
+      ctx.fillStyle = '#4e7c36';
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      // 레이블
+      ctx.fillStyle = 'rgba(78,124,54,0.7)';
+      ctx.font = '10px monospace';
+      ctx.fillText(m.label, p.x + 6, p.y + 4);
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  requestAnimationFrame(draw);
+}
 </script>

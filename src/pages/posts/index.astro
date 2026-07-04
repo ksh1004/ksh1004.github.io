@@ -9,7 +9,11 @@ const posts = (await getCollection('posts'))
 const categories = ['개발', '프로젝트', '코딩테스트', '일상'];
 
 const SUB_CATEGORIES: Record<string, string[]> = {
-  '코딩테스트': ['C++', 'Python', 'Java'],
+  '코딩테스트': ['코드트리', 'solve.ac'],
+};
+
+const SUB_SUB_CATEGORIES: Record<string, string[]> = {
+  '코드트리': ['codetree101', 'Novice Low', 'Novice Mid', 'Novice High'],
 };
 ---
 
@@ -25,7 +29,7 @@ const SUB_CATEGORIES: Record<string, string[]> = {
         </h1>
       </div>
 
-      <!-- 카테고리 탭 -->
+      <!-- Lv.1 메인 카테고리 -->
       <div style="display:flex;gap:0;overflow-x:auto;scrollbar-width:none;" class="gsap-reveal">
         <button class="cat-tab active" data-cat="all"
           style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--ink);padding:16px 24px;border:none;border-bottom:2px solid var(--green);background:none;cursor:none;white-space:nowrap;transition:color 0.15s,border-color 0.15s;font-family:inherit;">
@@ -39,9 +43,14 @@ const SUB_CATEGORIES: Record<string, string[]> = {
         ))}
       </div>
 
-      <!-- 하위 카테고리 -->
+      <!-- Lv.2 하위 카테고리 -->
       <div id="sub-tab-bar" style="display:none;background:var(--surface-soft);margin:0 -40px;padding:0 40px;border-top:1px solid var(--hairline);">
         <div id="sub-tabs" style="display:flex;gap:0;"></div>
+      </div>
+
+      <!-- Lv.3 하위-하위 카테고리 -->
+      <div id="subsub-tab-bar" style="display:none;background:var(--surface-card);margin:0 -40px;padding:0 40px;border-top:1px solid var(--hairline);">
+        <div id="subsub-tabs" style="display:flex;gap:0;"></div>
       </div>
     </div>
   </section>
@@ -58,6 +67,7 @@ const SUB_CATEGORIES: Record<string, string[]> = {
             class="post-item"
             data-category={post.data.category ?? '개발'}
             data-subcategory={post.data.subcategory ?? ''}
+            data-subsubcategory={post.data.subsubcategory ?? ''}
             style="display:flex;align-items:baseline;justify-content:space-between;gap:40px;padding:28px 0;border-bottom:1px solid var(--hairline);text-decoration:none;transition:background 0.15s;"
             data-cursor-hover
             onmouseover="this.querySelector('.pt').style.color='var(--ink)';this.style.background='var(--green-glow)'"
@@ -71,8 +81,9 @@ const SUB_CATEGORIES: Record<string, string[]> = {
                 )}
               </div>
             </div>
-            <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
-              {post.data.subcategory && <span class="badge-green">{post.data.subcategory}</span>}
+            <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+              {post.data.subsubcategory && <span class="badge-green">{post.data.subsubcategory}</span>}
+              {post.data.subcategory && <span class="badge-green" style="opacity:0.7;">{post.data.subcategory}</span>}
               <span class="badge-muted">{post.data.category ?? '개발'}</span>
               <span style="font-size:11px;letter-spacing:1px;color:var(--muted);white-space:nowrap;">
                 {post.data.date.toLocaleDateString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'})}
@@ -92,67 +103,131 @@ const SUB_CATEGORIES: Record<string, string[]> = {
 
 <script>
 const SUB_CATEGORIES: Record<string, string[]> = {
-  '코딩테스트': ['C++', 'Python', 'Java'],
+  '코딩테스트': ['코드트리', 'solve.ac'],
 };
-const mainTabs  = document.querySelectorAll<HTMLButtonElement>('.cat-tab');
-const items     = document.querySelectorAll<HTMLElement>('.post-item');
-const subBar    = document.getElementById('sub-tab-bar')!;
-const subTabsEl = document.getElementById('sub-tabs')!;
-const emptyMsg  = document.getElementById('empty-msg')!;
-let currentCat  = 'all';
+const SUB_SUB_CATEGORIES: Record<string, string[]> = {
+  '코드트리': ['codetree101', 'Novice Low', 'Novice Mid', 'Novice High'],
+};
 
-function setActiveMain(btn: HTMLButtonElement) {
-  mainTabs.forEach(t => { t.style.color = 'var(--muted)'; t.style.borderBottomColor = 'transparent'; });
-  btn.style.color = 'var(--ink)';
-  btn.style.borderBottomColor = 'var(--green)';
-}
+const mainTabs   = document.querySelectorAll<HTMLButtonElement>('.cat-tab');
+const items      = document.querySelectorAll<HTMLElement>('.post-item');
+const subBar     = document.getElementById('sub-tab-bar')!;
+const subTabsEl  = document.getElementById('sub-tabs')!;
+const subsubBar  = document.getElementById('subsub-tab-bar')!;
+const subsubEl   = document.getElementById('subsub-tabs')!;
+const emptyMsg   = document.getElementById('empty-msg')!;
 
-function subStyle(btn: HTMLButtonElement, active: boolean) {
-  btn.style.cssText = `font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
-    padding:12px 20px;border:none;border-bottom:2px solid ${active?'var(--green-dim)':'transparent'};
+let currentCat    = 'all';
+let currentSub    = 'all';
+let currentSubsub = 'all';
+
+/* ── 스타일 헬퍼 ── */
+function tabStyle(btn: HTMLButtonElement, active: boolean, level: 1|2|3) {
+  const sizes = { 1: '11px', 2: '10px', 3: '10px' };
+  const pads  = { 1: '16px 24px', 2: '12px 20px', 3: '10px 18px' };
+  btn.style.cssText = `
+    font-size:${sizes[level]};font-weight:700;letter-spacing:2px;text-transform:uppercase;
+    padding:${pads[level]};border:none;
+    border-bottom:2px solid ${active ? 'var(--green)' : 'transparent'};
     background:none;cursor:none;white-space:nowrap;font-family:inherit;
-    color:${active?'var(--green)':'var(--muted)'};transition:color 0.15s,border-color 0.15s;`;
+    color:${active ? 'var(--ink)' : 'var(--muted)'};
+    transition:color 0.15s,border-color 0.15s;
+  `;
 }
 
+/* ── Lv.3 탭 렌더 ── */
+function renderSubsubTabs(subs: string[]) {
+  subsubEl.innerHTML = '';
+  if (!subs.length) { subsubBar.style.display = 'none'; return; }
+  subsubBar.style.display = 'block';
+
+  const all = document.createElement('button');
+  all.textContent = '전체'; all.dataset.subsub = 'all';
+  tabStyle(all, true, 3);
+  all.addEventListener('click', () => {
+    subsubEl.querySelectorAll<HTMLButtonElement>('button').forEach(b => tabStyle(b, false, 3));
+    tabStyle(all, true, 3);
+    currentSubsub = 'all';
+    filterPosts();
+  });
+  subsubEl.appendChild(all);
+
+  subs.forEach(s => {
+    const btn = document.createElement('button');
+    btn.textContent = s; btn.dataset.subsub = s;
+    tabStyle(btn, false, 3);
+    btn.addEventListener('click', () => {
+      subsubEl.querySelectorAll<HTMLButtonElement>('button').forEach(b => tabStyle(b, false, 3));
+      tabStyle(btn, true, 3);
+      currentSubsub = s;
+      filterPosts();
+    });
+    subsubEl.appendChild(btn);
+  });
+}
+
+/* ── Lv.2 탭 렌더 ── */
 function renderSubTabs(subs: string[]) {
   subTabsEl.innerHTML = '';
+  subsubBar.style.display = 'none';
+  currentSub = 'all';
+  currentSubsub = 'all';
+
   if (!subs.length) { subBar.style.display = 'none'; return; }
   subBar.style.display = 'block';
+
   const all = document.createElement('button');
   all.textContent = '전체'; all.dataset.sub = 'all';
-  subStyle(all, true);
-  all.addEventListener('click', () => { subStyle(all, true); subTabsEl.querySelectorAll<HTMLButtonElement>('button:not(:first-child)').forEach(b => subStyle(b, false)); filterPosts(currentCat,'all'); });
+  tabStyle(all, true, 2);
+  all.addEventListener('click', () => {
+    subTabsEl.querySelectorAll<HTMLButtonElement>('button').forEach(b => tabStyle(b, false, 2));
+    tabStyle(all, true, 2);
+    currentSub = 'all';
+    currentSubsub = 'all';
+    renderSubsubTabs([]);
+    filterPosts();
+  });
   subTabsEl.appendChild(all);
+
   subs.forEach(sub => {
     const btn = document.createElement('button');
     btn.textContent = sub; btn.dataset.sub = sub;
-    subStyle(btn, false);
+    tabStyle(btn, false, 2);
     btn.addEventListener('click', () => {
-      subTabsEl.querySelectorAll<HTMLButtonElement>('button').forEach(b => subStyle(b, false));
-      subStyle(btn, true);
-      filterPosts(currentCat, sub);
+      subTabsEl.querySelectorAll<HTMLButtonElement>('button').forEach(b => tabStyle(b, false, 2));
+      tabStyle(btn, true, 2);
+      currentSub = sub;
+      currentSubsub = 'all';
+      renderSubsubTabs(SUB_SUB_CATEGORIES[sub] ?? []);
+      filterPosts();
     });
     subTabsEl.appendChild(btn);
   });
 }
 
-function filterPosts(cat: string, sub: string) {
+/* ── 필터 ── */
+function filterPosts() {
   let visible = 0;
   items.forEach(item => {
-    const ok = (cat === 'all' || item.dataset.category === cat) && (sub === 'all' || item.dataset.subcategory === sub);
-    item.style.display = ok ? '' : 'none';
-    if (ok) visible++;
+    const okCat    = currentCat    === 'all' || item.dataset.category    === currentCat;
+    const okSub    = currentSub    === 'all' || item.dataset.subcategory  === currentSub;
+    const okSubsub = currentSubsub === 'all' || item.dataset.subsubcategory === currentSubsub;
+    item.style.display = okCat && okSub && okSubsub ? '' : 'none';
+    if (okCat && okSub && okSubsub) visible++;
   });
   emptyMsg.style.display = visible === 0 ? 'block' : 'none';
 }
 
+/* ── Lv.1 탭 이벤트 ── */
 mainTabs.forEach(btn => {
   btn.addEventListener('click', () => {
-    const cat = btn.dataset.cat ?? 'all';
-    currentCat = cat;
-    setActiveMain(btn);
-    renderSubTabs(cat !== 'all' && SUB_CATEGORIES[cat] ? SUB_CATEGORIES[cat] : []);
-    filterPosts(cat, 'all');
+    mainTabs.forEach(t => tabStyle(t, false, 1));
+    tabStyle(btn, true, 1);
+    currentCat = btn.dataset.cat ?? 'all';
+    currentSub = 'all';
+    currentSubsub = 'all';
+    renderSubTabs(currentCat !== 'all' && SUB_CATEGORIES[currentCat] ? SUB_CATEGORIES[currentCat] : []);
+    filterPosts();
   });
 });
 </script>
