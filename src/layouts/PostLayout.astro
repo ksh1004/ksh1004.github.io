@@ -8,12 +8,17 @@ interface Props {
   description?: string;
   category?: string;
   subcategory?: string;
+  subsubcategory?: string;
 }
-const { title, date, tags = [], description, category, subcategory } = Astro.props;
+const { title, date, tags = [], description, category, subcategory, subsubcategory } = Astro.props;
 const fmt = date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' });
 ---
 
 <BaseLayout title={`${title} — KSH1004`} description={description}>
+
+  <!-- 읽기 진행 바 -->
+  <div id="progress-bar" style="position:fixed;top:0;left:0;height:2px;z-index:200;background:var(--green);width:0%;transition:width 0.08s linear;pointer-events:none;box-shadow:0 0 8px rgba(78,124,54,0.55);"></div>
+
   <article style="max-width:1440px;margin:0 auto;padding:64px 40px 96px;">
 
     <div class="gsap-reveal" style="margin-bottom:48px;">
@@ -25,18 +30,19 @@ const fmt = date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit'
       </a>
     </div>
 
-    <header style="max-width:900px;margin-bottom:64px;">
+    <header style="max-width:720px;margin-bottom:64px;">
       <div class="gsap-reveal">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
           <span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);">{fmt}</span>
-          {category && <span class="badge-muted">{category}</span>}
-          {subcategory && <span class="badge-green">{subcategory}</span>}
+          {category    && <span class="badge-muted">{category}</span>}
+          {subcategory && <span class="badge-green" style="opacity:0.8;">{subcategory}</span>}
+          {subsubcategory && <span class="badge-green">{subsubcategory}</span>}
         </div>
-        <h1 style="font-size:clamp(2rem,4.5vw,3.5rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1.05;margin-bottom:24px;letter-spacing:0.3px;">
+        <h1 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1.05;margin-bottom:24px;letter-spacing:0.3px;">
           {title}
         </h1>
         {description && (
-          <p style="font-size:15px;font-weight:300;color:var(--body);line-height:1.75;letter-spacing:0.3px;">{description}</p>
+          <p style="font-size:15px;font-weight:300;color:var(--body);line-height:1.8;letter-spacing:0.3px;">{description}</p>
         )}
       </div>
 
@@ -63,3 +69,16 @@ const fmt = date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit'
     </div>
   </article>
 </BaseLayout>
+
+<script>
+const bar = document.getElementById('progress-bar');
+if (bar) {
+  function updateProgress() {
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    const pct   = total > 0 ? Math.min((window.scrollY / total) * 100, 100) : 0;
+    bar.style.width = pct + '%';
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
+}
+</script>

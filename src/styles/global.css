@@ -27,7 +27,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html {
-  background: var(--canvas);
+  background: radial-gradient(ellipse at 50% 38%, #0d1711 0%, #07090a 70%);
   color: var(--ink);
   font-family: 'IBM Plex Mono', 'Courier New', monospace;
   font-weight: 400;
@@ -163,60 +163,104 @@ a, button { cursor: none; }
   padding: 3px 8px;
 }
 
-/* ── 프로즈 ── */
+/* ── 프로즈 (가독성 개선) ── */
 .prose {
-  color: var(--body);
+  color: var(--body-strong);
   font-weight: 400;
-  font-size: 15px;
-  line-height: 1.85;
-  max-width: 68ch;
+  font-size: 16px;
+  line-height: 1.95;
+  max-width: 70ch;
 }
 .prose h1, .prose h2, .prose h3 {
   font-weight: 700;
   color: var(--ink);
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin: 2.5rem 0 1rem;
+  letter-spacing: 0.8px;
+  margin: 3rem 0 1.1rem;
+  line-height: 1.15;
 }
-.prose h1 { font-size: 38px; line-height: 1.1; }
-.prose h2 { font-size: 28px; line-height: 1.15; }
-.prose h3 { font-size: 22px; line-height: 1.2; }
-.prose p { margin-bottom: 1.5rem; }
+.prose h1 { font-size: 36px; }
+.prose h2 {
+  font-size: 22px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--hairline);
+}
+.prose h3 { font-size: 17px; color: var(--body-strong); letter-spacing: 1px; }
+.prose p { margin-bottom: 1.6rem; }
 .prose strong { font-weight: 700; color: var(--ink); }
-.prose a { color: var(--green); text-decoration: underline; text-underline-offset: 3px; transition: opacity 0.2s; }
-.prose a:hover { opacity: 0.7; }
+.prose em { color: var(--body-strong); font-style: italic; }
+.prose a {
+  color: var(--green);
+  text-decoration: none;
+  border-bottom: 1px solid var(--green-dim);
+  transition: border-color 0.15s, color 0.15s;
+}
+.prose a:hover { color: var(--ink); border-color: var(--green); }
+/* 인라인 코드 */
 .prose code {
-  background: var(--surface-card);
-  border: 1px solid var(--hairline);
-  padding: 0.1em 0.4em;
-  font-size: 0.88em;
+  background: var(--surface-elevated);
+  border: 1px solid var(--hairline-strong);
+  padding: 0.15em 0.45em;
+  font-size: 0.875em;
   color: var(--green);
   border-radius: 0;
 }
-.prose pre {
+/* 코드 블록 (Shiki 호환) */
+.prose pre,
+.prose pre.astro-code {
   background: var(--surface-card) !important;
   border: 1px solid var(--hairline);
-  border-left: 3px solid var(--green-dim);
-  padding: 24px;
+  border-left: 2px solid var(--green-dim);
+  padding: 22px 26px;
   overflow-x: auto;
-  margin: 1.5rem 0;
+  margin: 1.8rem 0;
+  font-size: 13.5px;
+  line-height: 1.7;
 }
-.prose pre code { background: none; border: none; padding: 0; color: var(--body); }
+.prose pre code,
+.prose pre.astro-code code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+}
+/* 인용구 */
 .prose blockquote {
-  border-left: 3px solid var(--green-dim);
-  padding-left: 24px;
-  color: var(--muted);
-  margin: 1.5rem 0;
+  border-left: 2px solid var(--green-dim);
+  padding: 4px 0 4px 24px;
+  color: var(--body);
+  margin: 2rem 0;
+  font-style: italic;
 }
-.prose hr { height: 1px; background: var(--hairline); border: none; margin: 2.5rem 0; }
-.prose ul, .prose ol { padding-left: 1.5em; margin-bottom: 1.5rem; }
-.prose li { margin-bottom: 0.5rem; }
-.prose table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; font-size: 13px; }
+.prose blockquote p { margin-bottom: 0; }
+/* 구분선 */
+.prose hr { height: 1px; background: var(--hairline); border: none; margin: 3rem 0; }
+/* 리스트 */
+.prose ul { list-style: none; padding-left: 0; margin-bottom: 1.6rem; }
+.prose ul > li { position: relative; padding-left: 1.4em; margin-bottom: 0.65rem; }
+.prose ul > li::before { content: '▸'; position: absolute; left: 0; color: var(--green-dim); font-size: 0.85em; line-height: 1.95; }
+.prose ol { padding-left: 1.8em; margin-bottom: 1.6rem; counter-reset: li; list-style: none; }
+.prose ol > li { position: relative; padding-left: 0.4em; margin-bottom: 0.65rem; counter-increment: li; }
+.prose ol > li::before { content: counter(li, decimal-leading-zero) '.'; position: absolute; left: -1.8em; color: var(--green-dim); font-weight: 700; font-size: 0.82em; line-height: 2.1; letter-spacing: 0.5px; }
+/* 테이블 */
+.prose table { width: 100%; border-collapse: collapse; margin-bottom: 1.8rem; font-size: 13px; }
 .prose thead tr { border-bottom: 1px solid var(--hairline-strong); }
 .prose th { padding: 10px 16px; text-align: left; font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
-.prose td { padding: 12px 16px; border-bottom: 1px solid var(--hairline); color: var(--body); }
+.prose td { padding: 12px 16px; border-bottom: 1px solid var(--hairline); color: var(--body-strong); }
 .prose tr:last-child td { border-bottom: none; }
-.prose tbody tr:hover td { background: var(--green-glow); color: var(--body-strong); }
+.prose tbody tr:hover td { background: var(--green-glow); }
+
+/* ── 그레인 오버레이 ── */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9;
+  pointer-events: none;
+  opacity: 0.055;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px;
+}
 
 /* ── GSAP ── */
 .gsap-reveal, .gsap-stagger > * { will-change: transform, opacity; }

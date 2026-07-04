@@ -6,6 +6,7 @@ interface Props {
   description?: string;
 }
 const { title, description = '김순하 — 개발·금융·정보분석 블로그' } = Astro.props;
+const pathname = Astro.url.pathname;
 ---
 
 <!doctype html>
@@ -22,12 +23,18 @@ const { title, description = '김순하 — 개발·금융·정보분석 블로�
 </head>
 
 <body>
+  <!-- 배경 지구본 -->
+  <canvas id="globe-bg" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:1;pointer-events:none;opacity:0.13;mix-blend-mode:screen;"></canvas>
+
+  <!-- 필름 그레인 -->
+  <div class="grain-overlay" aria-hidden="true"></div>
+
   <div class="cursor-dot" id="cursor-dot"></div>
   <div class="cursor-ring" id="cursor-ring"></div>
 
   <!-- 상단 상태바 -->
-  <div style="background:#050708;border-bottom:1px solid var(--hairline);padding:5px 40px;display:flex;align-items:center;justify-content:space-between;">
-    <span style="font-size:10px;letter-spacing:1.5px;color:var(--muted);">KSH-1004 · Seoul, KOR · 37°33'N 127°00'E</span>
+  <div style="position:relative;z-index:2;background:#050708;border-bottom:1px solid var(--hairline);padding:5px 40px;display:flex;align-items:center;justify-content:space-between;">
+    <span></span>
     <span id="clock" style="font-size:10px;letter-spacing:1px;color:var(--muted);"></span>
   </div>
 
@@ -36,16 +43,48 @@ const { title, description = '김순하 — 개발·금융·정보분석 블로�
     <div class="intel-stripe"></div>
     <div style="max-width:1440px;margin:0 auto;padding:0 40px;height:58px;display:flex;align-items:center;justify-content:space-between;">
 
-      <!-- 로고 -->
-      <a href="/" style="display:flex;align-items:center;gap:12px;text-decoration:none;" data-cursor-hover>
-        <div style="width:30px;height:30px;border:1px solid var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;">
-          <div style="position:absolute;inset:4px;border:1px solid var(--green-dim);"></div>
-          <span style="font-size:8px;font-weight:700;letter-spacing:1px;color:var(--green);z-index:1;">KSH</span>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:2px;">
-          <span style="font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--ink);line-height:1;">KIM SOONHA</span>
-          <span style="font-size:9px;font-weight:400;letter-spacing:2px;text-transform:uppercase;color:var(--muted);line-height:1;">1004</span>
-        </div>
+      <!-- 로고: 나침반 (thin needle style) -->
+      <a href="/" style="display:flex;align-items:center;gap:0;text-decoration:none;" data-cursor-hover>
+        <svg width="30" height="30" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:var(--green);">
+          <!-- 외곽 베젤 링 -->
+          <circle cx="20" cy="20" r="18.5" stroke="currentColor" stroke-width="0.7" opacity="0.5"/>
+          <!-- 베젤 눈금 16개 -->
+          <line x1="20" y1="1.5"  x2="20"   y2="5.8"  stroke="currentColor" stroke-width="1.6"/>
+          <line x1="27.1" y1="2.9" x2="26.3" y2="4.8"  stroke="currentColor" stroke-width="0.6" opacity="0.38"/>
+          <line x1="33.1" y1="6.9" x2="30.8" y2="9.2"  stroke="currentColor" stroke-width="1"   opacity="0.6"/>
+          <line x1="37.1" y1="12.9" x2="35.2" y2="13.7" stroke="currentColor" stroke-width="0.6" opacity="0.38"/>
+          <line x1="38.5" y1="20"  x2="34.2" y2="20"   stroke="currentColor" stroke-width="1"   opacity="0.6"/>
+          <line x1="37.1" y1="27.1" x2="35.2" y2="26.3" stroke="currentColor" stroke-width="0.6" opacity="0.38"/>
+          <line x1="33.1" y1="33.1" x2="30.8" y2="30.8" stroke="currentColor" stroke-width="1"   opacity="0.6"/>
+          <line x1="27.1" y1="37.1" x2="26.3" y2="35.2" stroke="currentColor" stroke-width="0.6" opacity="0.38"/>
+          <line x1="20"   y1="38.5" x2="20"   y2="34.2" stroke="currentColor" stroke-width="1"   opacity="0.6"/>
+          <line x1="12.9" y1="37.1" x2="13.7" y2="35.2" stroke="currentColor" stroke-width="0.6" opacity="0.38"/>
+          <line x1="6.9"  y1="33.1" x2="9.2"  y2="30.8" stroke="currentColor" stroke-width="1"   opacity="0.6"/>
+          <line x1="2.9"  y1="27.1" x2="4.8"  y2="26.3" stroke="currentColor" stroke-width="0.6" opacity="0.38"/>
+          <line x1="1.5"  y1="20"   x2="5.8"  y2="20"   stroke="currentColor" stroke-width="1"   opacity="0.6"/>
+          <line x1="2.9"  y1="12.9" x2="4.8"  y2="13.7" stroke="currentColor" stroke-width="0.6" opacity="0.38"/>
+          <line x1="6.9"  y1="6.9"  x2="9.2"  y2="9.2"  stroke="currentColor" stroke-width="1"   opacity="0.6"/>
+          <line x1="12.9" y1="2.9"  x2="13.7" y2="4.8"  stroke="currentColor" stroke-width="0.6" opacity="0.38"/>
+          <!-- 내부 링 -->
+          <circle cx="20" cy="20" r="12" stroke="currentColor" stroke-width="0.45" opacity="0.2"/>
+          <!-- 바늘: N (가장 밝고 굵음) -->
+          <line x1="20" y1="20" x2="20"  y2="8.5"  stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- N 끝 삼각 표시자 -->
+          <polygon points="20,6.5 18.5,9.5 21.5,9.5" fill="currentColor"/>
+          <!-- 바늘: S (반대쪽, 얇고 흐림) -->
+          <line x1="20" y1="20" x2="20"  y2="31.5" stroke="currentColor" stroke-width="1"   stroke-linecap="round" opacity="0.32"/>
+          <!-- 바늘: E / W -->
+          <line x1="20" y1="20" x2="31.5" y2="20"  stroke="currentColor" stroke-width="0.9" stroke-linecap="round" opacity="0.38"/>
+          <line x1="20" y1="20" x2="8.5"  y2="20"  stroke="currentColor" stroke-width="0.9" stroke-linecap="round" opacity="0.38"/>
+          <!-- 대각선 바늘 (NE/SE/SW/NW) 더 짧고 가늘게 -->
+          <line x1="20" y1="20" x2="27.5" y2="12.5" stroke="currentColor" stroke-width="0.6" stroke-linecap="round" opacity="0.22"/>
+          <line x1="20" y1="20" x2="27.5" y2="27.5" stroke="currentColor" stroke-width="0.6" stroke-linecap="round" opacity="0.22"/>
+          <line x1="20" y1="20" x2="12.5" y2="27.5" stroke="currentColor" stroke-width="0.6" stroke-linecap="round" opacity="0.22"/>
+          <line x1="20" y1="20" x2="12.5" y2="12.5" stroke="currentColor" stroke-width="0.6" stroke-linecap="round" opacity="0.22"/>
+          <!-- 중심 링 + 점 -->
+          <circle cx="20" cy="20" r="3.5" stroke="currentColor" stroke-width="0.6" opacity="0.35"/>
+          <circle cx="20" cy="20" r="1.4" fill="currentColor"/>
+        </svg>
       </a>
 
       <!-- 네비 -->
@@ -55,25 +94,30 @@ const { title, description = '김순하 — 개발·금융·정보분석 블로�
           { href: '/about',  label: 'About' },
           { href: 'https://velog.io/@ksh1004', label: 'Velog', ext: true },
           { href: 'https://github.com/ksh1004', label: 'GitHub', ext: true },
-        ].map(l => (
-          <a href={l.href}
-             target={l.ext ? '_blank' : undefined}
-             rel={l.ext ? 'noopener' : undefined}
-             style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.15s;"
-             onmouseover="this.style.color='var(--green)'"
-             onmouseout="this.style.color='var(--muted)'"
-             data-cursor-hover>
-            {l.label}
-          </a>
-        ))}
+        ].map(l => {
+          const active = !l.ext && (l.href === '/' ? pathname === '/' : pathname.startsWith(l.href));
+          return (
+            <a href={l.href}
+               target={l.ext ? '_blank' : undefined}
+               rel={l.ext ? 'noopener' : undefined}
+               style={`font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;transition:color 0.15s;padding-bottom:3px;color:${active?'var(--ink)':'var(--muted)'};border-bottom:${active?'1px solid var(--green)':'1px solid transparent'};`}
+               onmouseover="this.style.color='var(--green)'"
+               onmouseout={active ? "this.style.color='var(--ink)'" : "this.style.color='var(--muted)'"}
+               data-cursor-hover>
+              {l.label}
+            </a>
+          );
+        })}
       </div>
     </div>
   </nav>
 
-  <slot />
+  <div style="position:relative;z-index:2;">
+    <slot />
+  </div>
 
   <!-- FOOTER -->
-  <footer style="background:#050708;border-top:1px solid var(--hairline);padding:60px 40px 40px;">
+  <footer style="position:relative;z-index:2;background:#050708;border-top:1px solid var(--hairline);padding:60px 40px 40px;">
     <div class="intel-stripe" style="margin-bottom:48px;"></div>
     <div style="max-width:1440px;margin:0 auto;display:flex;align-items:flex-start;justify-content:space-between;gap:40px;flex-wrap:wrap;">
       <div>
@@ -108,9 +152,22 @@ const { title, description = '김순하 — 개발·금융·정보분석 블로�
 <script>
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { geoOrthographic, geoPath, geoGraticule, geoDistance } from 'd3-geo';
+import { feature } from 'topojson-client';
+
+const CITIES = [
+  { lat: 37.5,  lon: 127.0, label: 'SEL' },
+  { lat: 39.0,  lon: 125.7, label: 'PYG' },
+  { lat: 39.9,  lon: 116.4, label: 'BJG' },
+  { lat: 35.7,  lon: 139.7, label: 'TKY' },
+  { lat: 38.9,  lon: -77.0, label: 'WDC' },
+  { lat: 55.7,  lon:  37.6, label: 'MSC' },
+  { lat: 51.5,  lon:  -0.1, label: 'LON' },
+  { lat: 48.9,  lon:   2.3, label: 'PAR' },
+];
 gsap.registerPlugin(ScrollTrigger);
 
-// 시계
+/* ── 시계 ── */
 function tick() {
   const now = new Date();
   const p = (n: number) => String(n).padStart(2, '0');
@@ -119,7 +176,7 @@ function tick() {
 }
 tick(); setInterval(tick, 1000);
 
-// 커서
+/* ── 커서 ── */
 const dot  = document.getElementById('cursor-dot')!;
 const ring = document.getElementById('cursor-ring')!;
 window.addEventListener('mousemove', e => {
@@ -133,7 +190,7 @@ document.querySelectorAll('[data-cursor-hover], a, button').forEach(el => {
 document.addEventListener('mouseleave', () => gsap.to([dot, ring], { opacity: 0, duration: 0.2 }));
 document.addEventListener('mouseenter', () => gsap.to([dot, ring], { opacity: 1, duration: 0.2 }));
 
-// 스크롤 애니메이션
+/* ── 스크롤 애니메이션 ── */
 gsap.utils.toArray<HTMLElement>('.gsap-reveal').forEach(el => {
   gsap.from(el, { y: 30, opacity: 0, duration: 0.7, ease: 'power3.out',
     scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' } });
@@ -146,4 +203,136 @@ gsap.utils.toArray<HTMLElement>('.gsap-line').forEach(el => {
   gsap.from(el, { scaleX: 0, transformOrigin: 'left', duration: 0.8, ease: 'power4.out',
     scrollTrigger: { trigger: el, start: 'top 92%', toggleActions: 'play none none none' } });
 });
+
+/* ── 배경 지구본 ── */
+const globeCanvas = document.getElementById('globe-bg') as HTMLCanvasElement;
+const globeCtx = globeCanvas?.getContext('2d');
+
+if (globeCanvas && globeCtx) {
+  function resizeGlobe() {
+    globeCanvas.width  = window.innerWidth;
+    globeCanvas.height = window.innerHeight;
+  }
+  resizeGlobe();
+  window.addEventListener('resize', resizeGlobe);
+
+  let rotX = 0;
+  let worldData: any = null;
+  let rafId = 0;
+
+  function drawGlobe() {
+    const W = globeCanvas.width, H = globeCanvas.height;
+    globeCtx.clearRect(0, 0, W, H);
+
+    const scale = Math.min(W, H) * 0.44;
+
+    const projection = geoOrthographic()
+      .scale(scale)
+      .translate([W / 2, H / 2])
+      .rotate([rotX, -20, 0])
+      .clipAngle(90);
+
+    const pathGen = geoPath(projection, globeCtx);
+
+    // ── 중앙 방사형 글로우 ──
+    const radGlow = globeCtx.createRadialGradient(W/2, H/2, 0, W/2, H/2, scale * 1.1);
+    radGlow.addColorStop(0, 'rgba(78,124,54,0.06)');
+    radGlow.addColorStop(1, 'rgba(78,124,54,0)');
+    globeCtx.fillStyle = radGlow;
+    globeCtx.fillRect(0, 0, W, H);
+
+    // ── 지구 외곽선 ──
+    globeCtx.beginPath();
+    pathGen({ type: 'Sphere' } as any);
+    globeCtx.strokeStyle = 'rgba(78,124,54,0.3)';
+    globeCtx.lineWidth = 0.8;
+    globeCtx.stroke();
+
+    // ── 위경도 그물망 ──
+    const graticule = geoGraticule()();
+    globeCtx.beginPath();
+    pathGen(graticule);
+    globeCtx.strokeStyle = 'rgba(78,124,54,0.055)';
+    globeCtx.lineWidth = 0.3;
+    globeCtx.stroke();
+
+    // ── 대륙 윤곽선 ──
+    if (worldData) {
+      const land = feature(worldData, worldData.objects.land as any);
+      globeCtx.beginPath();
+      pathGen(land as any);
+      globeCtx.strokeStyle = 'rgba(78,124,54,0.82)';
+      globeCtx.lineWidth = 0.65;
+      globeCtx.stroke();
+    }
+
+    // ── 코너 HUD 브래킷 ──
+    const bSize = Math.min(W, H) * 0.055;
+    const bM    = Math.min(W, H) * 0.035;
+    const corners: [number, number, number, number][] = [
+      [bM, bM, 1, 1], [W-bM, bM, -1, 1],
+      [W-bM, H-bM, -1, -1], [bM, H-bM, 1, -1],
+    ];
+    globeCtx.strokeStyle = 'rgba(78,124,54,0.42)';
+    globeCtx.lineWidth = 1.1;
+    corners.forEach(([x, y, dx, dy]) => {
+      globeCtx.beginPath();
+      globeCtx.moveTo(x + dx * bSize, y);
+      globeCtx.lineTo(x, y);
+      globeCtx.lineTo(x, y + dy * bSize);
+      globeCtx.stroke();
+    });
+
+    // ── 수평 스캔라인 ──
+    const scanY = ((Date.now() * 0.028) % (H + 60)) - 30;
+    const scanGrad = globeCtx.createLinearGradient(0, scanY - 6, 0, scanY + 6);
+    scanGrad.addColorStop(0,   'rgba(78,124,54,0)');
+    scanGrad.addColorStop(0.5, 'rgba(78,124,54,0.1)');
+    scanGrad.addColorStop(1,   'rgba(78,124,54,0)');
+    globeCtx.fillStyle = scanGrad;
+    globeCtx.fillRect(0, scanY - 6, W, 12);
+
+    // ── HUD 데이터 텍스트 ──
+    globeCtx.font = '10px "IBM Plex Mono", monospace';
+    globeCtx.fillStyle = 'rgba(78,124,54,0.28)';
+    globeCtx.fillText('37°33\'N  127°00\'E', bM + 4, H - bM - 6);
+    globeCtx.fillText(`ROT ${(((rotX % 360) + 360) % 360).toFixed(1)}°`, W - bM - 72, H - bM - 6);
+    globeCtx.fillText('SIG ▮▮▮▮▯', bM + 4, bM + 14);
+
+    // ── 도시 마커 ──
+    const globeCenter: [number, number] = [-(rotX % 360), 20];
+    const pulse = 0.5 + 0.5 * Math.sin(Date.now() * 0.003);
+    CITIES.forEach(({ lat, lon, label }) => {
+      if (geoDistance(globeCenter, [lon, lat]) >= Math.PI / 2) return;
+      const pt = projection([lon, lat]);
+      if (!pt) return;
+      const [px, py] = pt;
+
+      globeCtx.beginPath();
+      globeCtx.arc(px, py, 3.5 + 3 * pulse, 0, Math.PI * 2);
+      globeCtx.strokeStyle = `rgba(78,124,54,${0.28 * pulse})`;
+      globeCtx.lineWidth = 0.8;
+      globeCtx.stroke();
+
+      globeCtx.beginPath();
+      globeCtx.arc(px, py, 1.8, 0, Math.PI * 2);
+      globeCtx.fillStyle = 'rgba(78,124,54,0.9)';
+      globeCtx.fill();
+
+      globeCtx.font = '9px "IBM Plex Mono", monospace';
+      globeCtx.fillStyle = 'rgba(78,124,54,0.55)';
+      globeCtx.fillText(label, px + 4, py + 3);
+    });
+
+    rotX += 0.008;
+    rafId = requestAnimationFrame(drawGlobe);
+  }
+
+  fetch('/world-110m.json')
+    .then(r => r.json())
+    .then(data => { worldData = data; })
+    .catch(() => {});
+
+  drawGlobe();
+}
 </script>
