@@ -13,50 +13,50 @@ const SUB_CATEGORIES: Record<string, string[]> = {
 };
 ---
 
-<BaseLayout title="Posts — KSH1004">
+<BaseLayout title="Dispatches — KSH1004">
 
-  <!-- 헤더 -->
-  <section style="background:#000;padding:72px 40px 0;border-bottom:1px solid #3c3c3c;">
+  <section style="background:var(--canvas);padding:72px 40px 0;border-bottom:1px solid var(--hairline);">
     <div style="max-width:1440px;margin:0 auto;">
 
       <div class="gsap-reveal" style="margin-bottom:40px;">
-        <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7e7e7e;margin-bottom:12px;">
-          Archive · {posts.length}편
+        <div style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">
+          // FIELD DISPATCH ARCHIVE //
         </div>
-        <h1 style="font-size:clamp(2.5rem,7vw,5rem);font-weight:700;text-transform:uppercase;color:#fff;line-height:1;">
-          Posts
+        <h1 style="font-size:clamp(2.5rem,7vw,5rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1;letter-spacing:0.5px;">
+          Dispatches
+          <span style="font-size:16px;font-weight:400;letter-spacing:2px;color:var(--muted);margin-left:16px;">· {posts.length}</span>
         </h1>
       </div>
 
       <!-- 메인 카테고리 탭 -->
-      <div style="display:flex;gap:0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;" class="gsap-reveal">
+      <div style="display:flex;gap:0;overflow-x:auto;scrollbar-width:none;" class="gsap-reveal">
         <button class="cat-tab active" data-cat="all"
-          style="font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#fff;padding:16px 24px;border:none;border-bottom:2px solid #1c69d4;background:none;cursor:none;white-space:nowrap;transition:color 0.15s,border-color 0.15s;">
+          style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--ink);padding:16px 24px;border:none;border-bottom:2px solid #c8963c;background:none;cursor:none;white-space:nowrap;transition:color 0.15s,border-color 0.15s;font-family:inherit;">
           전체
         </button>
         {categories.map(cat => (
           <button class="cat-tab" data-cat={cat}
-            style="font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7e7e7e;padding:16px 24px;border:none;border-bottom:2px solid transparent;background:none;cursor:none;white-space:nowrap;transition:color 0.15s,border-color 0.15s;">
+            style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:16px 24px;border:none;border-bottom:2px solid transparent;background:none;cursor:none;white-space:nowrap;transition:color 0.15s,border-color 0.15s;font-family:inherit;">
             {cat}
           </button>
         ))}
       </div>
 
-      <!-- 하위 카테고리 탭 (JS로 제어) -->
-      <div id="sub-tab-bar" style="display:none;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;background:#0d0d0d;margin:0 -40px;padding:0 40px;border-top:1px solid #1a1a1a;">
+      <!-- 하위 카테고리 탭 -->
+      <div id="sub-tab-bar" style="display:none;background:var(--surface-soft);margin:0 -40px;padding:0 40px;border-top:1px solid var(--hairline);">
         <div id="sub-tabs" style="display:flex;gap:0;"></div>
       </div>
     </div>
   </section>
 
   <!-- 포스트 목록 -->
-  <section style="background:#000;padding:0 40px 96px;">
+  <section style="background:var(--canvas);padding:0 40px 96px;">
     <div style="max-width:1440px;margin:0 auto;">
 
       <div id="post-list">
         {posts.length === 0 ? (
-          <div style="padding:80px 0;font-size:14px;font-weight:300;color:#3c3c3c;">
-            아직 작성된 글이 없습니다.
+          <div style="padding:80px 0;font-size:12px;letter-spacing:1px;color:#2e4060;">
+            // NO DISPATCHES ON RECORD
           </div>
         ) : posts.map((post, i) => (
           <a
@@ -64,33 +64,29 @@ const SUB_CATEGORIES: Record<string, string[]> = {
             class="post-item"
             data-category={post.data.category ?? '개발'}
             data-subcategory={post.data.subcategory ?? ''}
-            style="display:flex;align-items:baseline;justify-content:space-between;gap:40px;padding:28px 0;border-bottom:1px solid #3c3c3c;text-decoration:none;"
+            style="display:flex;align-items:baseline;justify-content:space-between;gap:40px;padding:28px 0;border-bottom:1px solid var(--hairline);text-decoration:none;transition:background 0.15s;"
             data-cursor-hover
-            onmouseover="this.querySelector('.pt').style.color='#fff'"
-            onmouseout="this.querySelector('.pt').style.color='#e6e6e6'">
+            onmouseover="this.querySelector('.pt').style.color='var(--ink)';this.style.background='rgba(200,150,60,0.03)'"
+            onmouseout="this.querySelector('.pt').style.color='var(--body-strong)';this.style.background='transparent'">
             <div style="display:flex;align-items:baseline;gap:24px;min-width:0;">
-              <span style="font-size:12px;font-weight:400;color:#3c3c3c;width:24px;flex-shrink:0;letter-spacing:0.5px;">
+              <span style="font-size:11px;font-weight:400;color:#2e4060;width:28px;flex-shrink:0;letter-spacing:1px;">
                 {String(i+1).padStart(2,'0')}
               </span>
               <div>
-                <div class="pt" style="font-size:19px;font-weight:700;text-transform:uppercase;color:#e6e6e6;transition:color 0.15s;line-height:1.3;">
+                <div class="pt" style="font-size:17px;font-weight:700;text-transform:uppercase;color:var(--body-strong);transition:color 0.15s;line-height:1.3;letter-spacing:0.5px;">
                   {post.data.title}
                 </div>
                 {post.data.description && (
-                  <div style="font-size:14px;font-weight:300;color:#7e7e7e;margin-top:4px;">{post.data.description}</div>
+                  <div style="font-size:12px;font-weight:300;color:var(--muted);margin-top:4px;letter-spacing:0.3px;">{post.data.description}</div>
                 )}
               </div>
             </div>
-            <div style="display:flex;align-items:center;gap:12px;flex-shrink:0;">
+            <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
               {post.data.subcategory && (
-                <span style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#1c69d4;border:1px solid #1c69d4;padding:3px 8px;white-space:nowrap;">
-                  {post.data.subcategory}
-                </span>
+                <span class="badge-gold">{post.data.subcategory}</span>
               )}
-              <span style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#3c3c3c;border:1px solid #3c3c3c;padding:3px 8px;white-space:nowrap;">
-                {post.data.category ?? '개발'}
-              </span>
-              <span style="font-size:12px;font-weight:400;letter-spacing:0.5px;color:#7e7e7e;white-space:nowrap;">
+              <span class="badge-muted">{post.data.category ?? '개발'}</span>
+              <span style="font-size:11px;letter-spacing:1px;color:var(--muted);white-space:nowrap;">
                 {post.data.date.toLocaleDateString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'})}
               </span>
             </div>
@@ -98,8 +94,8 @@ const SUB_CATEGORIES: Record<string, string[]> = {
         ))}
       </div>
 
-      <div id="empty-msg" style="display:none;padding:64px 0;font-size:14px;font-weight:300;color:#3c3c3c;">
-        해당 카테고리의 글이 없습니다.
+      <div id="empty-msg" style="display:none;padding:64px 0;font-size:12px;letter-spacing:1px;color:#2e4060;">
+        // NO DISPATCHES IN THIS CATEGORY
       </div>
     </div>
   </section>
@@ -112,30 +108,32 @@ const SUB_CATEGORIES: Record<string, string[]> = {
 };
 
 const mainTabs = document.querySelectorAll<HTMLButtonElement>('.cat-tab');
-const items = document.querySelectorAll<HTMLElement>('.post-item');
-const subBar = document.getElementById('sub-tab-bar')!;
+const items    = document.querySelectorAll<HTMLElement>('.post-item');
+const subBar   = document.getElementById('sub-tab-bar')!;
 const subTabsEl = document.getElementById('sub-tabs')!;
 const emptyMsg = document.getElementById('empty-msg')!;
 
 let currentCat = 'all';
-let currentSub = 'all';
 
 function setActiveMain(btn: HTMLButtonElement) {
-  mainTabs.forEach(t => {
-    t.style.color = '#7e7e7e';
-    t.style.borderBottomColor = 'transparent';
-  });
-  btn.style.color = '#fff';
-  btn.style.borderBottomColor = '#1c69d4';
+  mainTabs.forEach(t => { t.style.color = 'var(--muted)'; t.style.borderBottomColor = 'transparent'; });
+  btn.style.color = 'var(--ink)';
+  btn.style.borderBottomColor = '#c8963c';
+}
+
+function applySubStyle(btn: HTMLButtonElement, active: boolean) {
+  btn.style.cssText = `
+    font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+    padding:12px 20px;border:none;border-bottom:2px solid ${active ? '#7a5c22' : 'transparent'};
+    background:none;cursor:none;white-space:nowrap;
+    color:${active ? '#c8963c' : 'var(--muted)'};
+    transition:color 0.15s,border-color 0.15s;font-family:inherit;
+  `;
 }
 
 function renderSubTabs(subs: string[]) {
   subTabsEl.innerHTML = '';
-  if (subs.length === 0) {
-    subBar.style.display = 'none';
-    return;
-  }
-
+  if (!subs.length) { subBar.style.display = 'none'; return; }
   subBar.style.display = 'block';
 
   const allBtn = document.createElement('button');
@@ -155,33 +153,18 @@ function renderSubTabs(subs: string[]) {
   });
 }
 
-function applySubStyle(btn: HTMLButtonElement, active: boolean) {
-  btn.style.cssText = `
-    font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
-    padding:12px 20px;border:none;border-bottom:2px solid ${active ? '#0066b1' : 'transparent'};
-    background:none;cursor:none;white-space:nowrap;
-    color:${active ? '#fff' : '#7e7e7e'};
-    transition:color 0.15s,border-color 0.15s;
-  `;
-}
-
 function setActiveSub(btn: HTMLButtonElement) {
-  currentSub = btn.dataset.sub ?? 'all';
-  subTabsEl.querySelectorAll<HTMLButtonElement>('button').forEach(t => {
-    applySubStyle(t, false);
-  });
+  subTabsEl.querySelectorAll<HTMLButtonElement>('button').forEach(t => applySubStyle(t, false));
   applySubStyle(btn, true);
 }
 
 function filterPosts(cat: string, sub: string) {
-  currentSub = sub;
   let visible = 0;
   items.forEach(item => {
     const matchCat = cat === 'all' || item.dataset.category === cat;
     const matchSub = sub === 'all' || item.dataset.subcategory === sub;
-    const show = matchCat && matchSub;
-    item.style.display = show ? '' : 'none';
-    if (show) visible++;
+    item.style.display = matchCat && matchSub ? '' : 'none';
+    if (matchCat && matchSub) visible++;
   });
   emptyMsg.style.display = visible === 0 ? 'block' : 'none';
 }

@@ -5,7 +5,7 @@ interface Props {
   title: string;
   description?: string;
 }
-const { title, description = 'AI/Data 엔지니어 김순하의 기술 블로그' } = Astro.props;
+const { title, description = '김순하 — 개발·금융·정보분석 블로그' } = Astro.props;
 ---
 
 <!doctype html>
@@ -18,47 +18,53 @@ const { title, description = 'AI/Data 엔지니어 김순하의 기술 블로그
   <title>{title}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;700&display=swap" rel="stylesheet" />
 </head>
 
 <body>
-  <!-- 커스텀 커서 -->
   <div class="cursor-dot" id="cursor-dot"></div>
   <div class="cursor-ring" id="cursor-ring"></div>
 
-  <!-- TOP NAV: 64px, pure black, M stripe at bottom -->
-  <nav style="position:sticky;top:0;z-index:100;background:#000;border-bottom:1px solid #3c3c3c;">
-    <!-- M 트리컬러 스트라이프 — 네비게이션 최상단 -->
-    <div class="m-stripe" style="height:3px;"><span></span><span></span><span></span></div>
-    <div style="max-width:1440px;margin:0 auto;padding:0 40px;height:61px;display:flex;align-items:center;justify-content:space-between;">
+  <!-- 최상단 분류 표시줄 -->
+  <div style="background:#04060e;border-bottom:1px solid #1c2e4a;padding:6px 40px;display:flex;align-items:center;justify-content:space-between;">
+    <span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#445870;">
+      // PERSONAL INTELLIGENCE FILE //
+    </span>
+    <span id="clock" style="font-size:10px;letter-spacing:1.5px;color:#445870;"></span>
+  </div>
+
+  <!-- NAV -->
+  <nav style="position:sticky;top:0;z-index:100;background:#06080f;border-bottom:1px solid #1c2e4a;">
+    <div class="intel-stripe"></div>
+    <div style="max-width:1440px;margin:0 auto;padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between;">
+
       <!-- 로고 -->
-      <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;" data-cursor-hover>
-        <!-- M 트리컬러 수직 바 -->
-        <div style="display:flex;flex-direction:column;width:3px;height:30px;gap:0;flex-shrink:0;">
-          <span style="flex:1;background:#0066b1;"></span>
-          <span style="flex:1;background:#1c69d4;"></span>
-          <span style="flex:1;background:#e22718;"></span>
+      <a href="/" style="display:flex;align-items:center;gap:12px;text-decoration:none;" data-cursor-hover>
+        <!-- 에이전시 배지 아이콘 -->
+        <div style="width:32px;height:32px;border:1px solid #c8963c;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;">
+          <div style="position:absolute;inset:3px;border:1px solid #7a5c22;"></div>
+          <span style="font-size:9px;font-weight:700;letter-spacing:1px;color:#c8963c;z-index:1;">KSH</span>
         </div>
-        <!-- 텍스트 스택 -->
         <div style="display:flex;flex-direction:column;gap:2px;">
-          <span style="font-size:14px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#fff;line-height:1;">KSH</span>
-          <span style="font-size:9px;font-weight:400;letter-spacing:3px;text-transform:uppercase;color:#7e7e7e;line-height:1;">1004</span>
+          <span style="font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#dce8f4;line-height:1;">KIM SOONHA</span>
+          <span style="font-size:9px;font-weight:400;letter-spacing:2.5px;text-transform:uppercase;color:#445870;line-height:1;">FIELD LOG · 1004</span>
         </div>
       </a>
-      <!-- 네비 링크 -->
-      <div style="display:flex;align-items:center;gap:40px;">
+
+      <!-- 네비 -->
+      <div style="display:flex;align-items:center;gap:32px;">
         {[
-          { href: '/posts', label: 'Posts' },
-          { href: '/about', label: 'About' },
+          { href: '/posts', label: 'Dispatches' },
+          { href: '/about',  label: 'Profile' },
           { href: 'https://velog.io/@ksh1004', label: 'Velog', ext: true },
           { href: 'https://github.com/ksh1004', label: 'GitHub', ext: true },
         ].map(l => (
           <a href={l.href}
              target={l.ext ? '_blank' : undefined}
              rel={l.ext ? 'noopener' : undefined}
-             style="font-size:14px;font-weight:400;letter-spacing:0.5px;color:#7e7e7e;text-decoration:none;transition:color 0.15s;"
-             onmouseover="this.style.color='#fff'"
-             onmouseout="this.style.color='#7e7e7e'"
+             style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#445870;text-decoration:none;transition:color 0.15s;"
+             onmouseover="this.style.color='#c8963c'"
+             onmouseout="this.style.color='#445870'"
              data-cursor-hover>
             {l.label}
           </a>
@@ -67,38 +73,42 @@ const { title, description = 'AI/Data 엔지니어 김순하의 기술 블로그
     </div>
   </nav>
 
-  <!-- 콘텐츠 -->
   <slot />
 
   <!-- FOOTER -->
-  <footer style="background:#000;border-top:1px solid #3c3c3c;padding:64px 40px;">
+  <footer style="background:#04060e;border-top:1px solid #1c2e4a;padding:64px 40px 40px;">
+    <div class="intel-stripe" style="margin-bottom:48px;"></div>
     <div style="max-width:1440px;margin:0 auto;display:flex;align-items:flex-start;justify-content:space-between;gap:40px;flex-wrap:wrap;">
       <div>
-        <div style="font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#fff;margin-bottom:16px;">KSH1004</div>
-        <div style="font-size:14px;font-weight:300;color:#7e7e7e;line-height:1.6;">
-          AI / Data Engineering<br/>
-          OSINT · Finance · ML
+        <div style="font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#dce8f4;margin-bottom:8px;">KIM SOONHA</div>
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#445870;margin-bottom:16px;">FIELD LOG · 1004</div>
+        <div style="font-size:12px;font-weight:300;color:#445870;line-height:1.8;">
+          개발 · 금융 데이터 · 정보분석<br/>
+          Seoul, Republic of Korea
         </div>
       </div>
       <div style="display:flex;gap:64px;flex-wrap:wrap;">
         {[
-          { label: 'Blog', links: [{ t: 'Posts', h: '/posts' }, { t: 'About', h: '/about' }] },
+          { label: 'Navigation', links: [{ t: 'Dispatches', h: '/posts' }, { t: 'Profile', h: '/about' }] },
           { label: 'External', links: [{ t: 'GitHub', h: 'https://github.com/ksh1004' }, { t: 'Velog', h: 'https://velog.io/@ksh1004' }, { t: 'Email', h: 'mailto:soonha990@naver.com' }] },
         ].map(col => (
           <div>
-            <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7e7e7e;margin-bottom:16px;">{col.label}</div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#445870;margin-bottom:16px;">{col.label}</div>
             <div style="display:flex;flex-direction:column;gap:12px;">
               {col.links.map(l => (
-                <a href={l.h} style="font-size:14px;font-weight:300;color:#bbbbbb;text-decoration:none;transition:color 0.15s;"
-                   onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#bbbbbb'">{l.t}</a>
+                <a href={l.h} style="font-size:12px;font-weight:300;color:#8aa0b8;text-decoration:none;letter-spacing:1px;transition:color 0.15s;"
+                   onmouseover="this.style.color='#c8963c'" onmouseout="this.style.color='#8aa0b8'">{l.t}</a>
               ))}
             </div>
           </div>
         ))}
       </div>
     </div>
-    <div style="max-width:1440px;margin:48px auto 0;padding-top:24px;border-top:1px solid #3c3c3c;font-size:12px;font-weight:400;letter-spacing:0.5px;color:#7e7e7e;">
-      © 2026 Kim SoonHa. All rights reserved.
+    <div style="max-width:1440px;margin:48px auto 0;padding-top:24px;border-top:1px solid #1c2e4a;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+      <span style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#445870;">
+        // DECLASSIFIED · FOR OFFICIAL USE ONLY //
+      </span>
+      <span style="font-size:10px;letter-spacing:1px;color:#2e4060;">© 2026 Kim SoonHa</span>
     </div>
   </footer>
 </body>
@@ -109,13 +119,22 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
+// ── 시계 ──
+function updateClock() {
+  const now = new Date();
+  const pad = (n: number) => String(n).padStart(2, '0');
+  const el = document.getElementById('clock');
+  if (el) el.textContent = `${now.getUTCFullYear()}.${pad(now.getUTCMonth()+1)}.${pad(now.getUTCDate())} · ${pad(now.getUTCHours())}:${pad(now.getUTCMinutes())}:${pad(now.getUTCSeconds())} UTC`;
+}
+updateClock();
+setInterval(updateClock, 1000);
+
 // ── 커스텀 커서 ──
 const dot  = document.getElementById('cursor-dot')!;
 const ring = document.getElementById('cursor-ring')!;
-
 window.addEventListener('mousemove', (e) => {
   gsap.to(dot,  { x: e.clientX, y: e.clientY, duration: 0.05 });
-  gsap.to(ring, { x: e.clientX, y: e.clientY, duration: 0.3, ease: 'power2.out' });
+  gsap.to(ring, { x: e.clientX, y: e.clientY, duration: 0.25, ease: 'power2.out' });
 });
 document.querySelectorAll('[data-cursor-hover], a, button').forEach(el => {
   el.addEventListener('mouseenter', () => ring.classList.add('hover'));
@@ -124,26 +143,22 @@ document.querySelectorAll('[data-cursor-hover], a, button').forEach(el => {
 document.addEventListener('mouseleave', () => gsap.to([dot, ring], { opacity: 0, duration: 0.2 }));
 document.addEventListener('mouseenter', () => gsap.to([dot, ring], { opacity: 1, duration: 0.2 }));
 
-// ── 스크롤 트리거: .gsap-reveal ──
+// ── 스크롤 애니메이션 ──
 gsap.utils.toArray<HTMLElement>('.gsap-reveal').forEach(el => {
   gsap.from(el, {
-    y: 40, opacity: 0, duration: 0.8, ease: 'power3.out',
+    y: 30, opacity: 0, duration: 0.7, ease: 'power3.out',
     scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' },
   });
 });
-
-// ── 스크롤 트리거: .gsap-stagger ──
 gsap.utils.toArray<HTMLElement>('.gsap-stagger').forEach(parent => {
   gsap.from(Array.from(parent.children), {
-    y: 30, opacity: 0, duration: 0.6, stagger: 0.08, ease: 'power3.out',
+    y: 20, opacity: 0, duration: 0.5, stagger: 0.06, ease: 'power3.out',
     scrollTrigger: { trigger: parent, start: 'top 85%', toggleActions: 'play none none none' },
   });
 });
-
-// ── 헤어라인 왼→오른 ──
 gsap.utils.toArray<HTMLElement>('.gsap-line').forEach(el => {
   gsap.from(el, {
-    scaleX: 0, transformOrigin: 'left', duration: 1.0, ease: 'power4.out',
+    scaleX: 0, transformOrigin: 'left', duration: 0.8, ease: 'power4.out',
     scrollTrigger: { trigger: el, start: 'top 92%', toggleActions: 'play none none none' },
   });
 });

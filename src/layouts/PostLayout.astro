@@ -6,8 +6,10 @@ interface Props {
   date: Date;
   tags?: string[];
   description?: string;
+  category?: string;
+  subcategory?: string;
 }
-const { title, date, tags = [], description } = Astro.props;
+const { title, date, tags = [], description, category, subcategory } = Astro.props;
 const fmt = date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' });
 ---
 
@@ -16,38 +18,39 @@ const fmt = date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit'
 
     <!-- 브레드크럼 -->
     <div class="gsap-reveal" style="margin-bottom:48px;">
-      <a href="/posts" style="font-size:14px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7e7e7e;text-decoration:none;transition:color 0.15s;"
-         onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#7e7e7e'" data-cursor-hover>
-        ← All Posts
+      <a href="/posts"
+         style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.15s;"
+         onmouseover="this.style.color='#c8963c'" onmouseout="this.style.color='var(--muted)'"
+         data-cursor-hover>
+        ← All Dispatches
       </a>
     </div>
 
     <!-- 글 헤더 -->
     <header style="max-width:900px;margin-bottom:64px;">
       <div class="gsap-reveal">
-        <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7e7e7e;margin-bottom:16px;">
-          {fmt}
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
+          <span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);">{fmt}</span>
+          {category && <span class="badge-muted">{category}</span>}
+          {subcategory && <span class="badge-gold">{subcategory}</span>}
         </div>
-        <h1 style="font-size:clamp(2.5rem,5vw,4rem);font-weight:700;text-transform:uppercase;color:#fff;line-height:1.05;margin-bottom:24px;">
+        <h1 style="font-size:clamp(2rem,4.5vw,3.5rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1.05;margin-bottom:24px;letter-spacing:0.5px;">
           {title}
         </h1>
         {description && (
-          <p style="font-size:18px;font-weight:300;color:#bbbbbb;line-height:1.5;">{description}</p>
+          <p style="font-size:16px;font-weight:300;color:var(--body);line-height:1.7;letter-spacing:0.3px;">{description}</p>
         )}
       </div>
 
       {tags.length > 0 && (
         <div class="gsap-reveal" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:24px;">
           {tags.map(tag => (
-            <span style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7e7e7e;border:1px solid #3c3c3c;padding:6px 12px;border-radius:0;">
-              {tag}
-            </span>
+            <span class="badge-muted">{tag}</span>
           ))}
         </div>
       )}
 
-      <!-- M 스트라이프 구분선 -->
-      <div class="m-stripe gsap-line" style="margin-top:40px;"><span></span><span></span><span></span></div>
+      <div class="intel-stripe gsap-line" style="margin-top:40px;"></div>
     </header>
 
     <!-- 본문 -->
@@ -56,10 +59,12 @@ const fmt = date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit'
     </div>
 
     <!-- 하단 -->
-    <div style="margin-top:80px;padding-top:40px;border-top:1px solid #3c3c3c;" class="gsap-reveal">
-      <a href="/posts" style="font-size:14px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7e7e7e;text-decoration:none;transition:color 0.15s;"
-         onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#7e7e7e'" data-cursor-hover>
-        ← Back to Posts
+    <div style="margin-top:80px;padding-top:40px;border-top:1px solid var(--hairline);" class="gsap-reveal">
+      <a href="/posts"
+         style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.15s;"
+         onmouseover="this.style.color='#c8963c'" onmouseout="this.style.color='var(--muted)'"
+         data-cursor-hover>
+        ← Back to Dispatches
       </a>
     </div>
   </article>

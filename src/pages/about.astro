@@ -18,26 +18,29 @@ const interests = [
 const skills = ['Python', 'PyTorch', 'Pandas', 'NumPy', 'SQL', 'Streamlit', 'FastAPI', 'Docker', 'Git', 'Linux'];
 ---
 
-<BaseLayout title="About — KSH1004">
+<BaseLayout title="Profile — KSH1004">
 
   <!-- 히어로 -->
-  <section style="background:#000;padding:96px 40px;border-bottom:1px solid #3c3c3c;">
-    <div style="max-width:1440px;margin:0 auto;">
+  <section style="background:var(--canvas);padding:96px 40px;border-bottom:1px solid var(--hairline);position:relative;overflow:hidden;">
+    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(28,46,74,0.3) 1px,transparent 1px),linear-gradient(90deg,rgba(28,46,74,0.3) 1px,transparent 1px);background-size:64px 64px;pointer-events:none;"></div>
+    <div style="max-width:1440px;margin:0 auto;position:relative;z-index:1;">
       <div class="gsap-reveal">
-        <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7e7e7e;margin-bottom:16px;">Profile</div>
-        <h1 style="font-size:clamp(4rem,10vw,8rem);font-weight:700;text-transform:uppercase;color:#fff;line-height:1;">
+        <div style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;">
+          // SUBJECT PROFILE //
+        </div>
+        <h1 style="font-size:clamp(3.5rem,9vw,7.5rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:0.95;letter-spacing:-0.01em;">
           KIM<br/>SOONHA.
         </h1>
       </div>
-      <div class="m-stripe gsap-line" style="margin-top:40px;"><span></span><span></span><span></span></div>
+      <div class="intel-stripe gsap-line" style="margin-top:40px;"></div>
     </div>
   </section>
 
   <!-- 스펙 셀 -->
-  <section style="background:#0d0d0d;border-bottom:1px solid #3c3c3c;">
+  <section style="background:var(--surface-soft);border-bottom:1px solid var(--hairline);">
     <div style="max-width:1440px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);">
       {specs.map((s, i) => (
-        <div class="spec-cell" style={`border-radius:0;border:none;border-right:${i<3?'1px solid #3c3c3c':'none'};`}>
+        <div class="spec-cell" style={`border-radius:0;border:none;border-right:${i<3?'1px solid var(--hairline)':'none'};`}>
           <div class="val">{s.val}</div>
           <div class="spec-label">{s.label}</div>
         </div>
@@ -46,31 +49,31 @@ const skills = ['Python', 'PyTorch', 'Pandas', 'NumPy', 'SQL', 'Streamlit', 'Fas
   </section>
 
   <!-- 소개 -->
-  <section style="background:#000;padding:96px 40px;border-bottom:1px solid #3c3c3c;">
+  <section style="background:var(--canvas);padding:96px 40px;border-bottom:1px solid var(--hairline);">
     <div style="max-width:1440px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:96px;align-items:start;">
       <div class="gsap-reveal">
-        <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7e7e7e;margin-bottom:24px;">Introduction</div>
-        <p style="font-size:18px;font-weight:300;color:#bbbbbb;line-height:1.7;">
+        <div style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:24px;">// Introduction</div>
+        <p style="font-size:16px;font-weight:400;color:var(--body-strong);line-height:1.8;letter-spacing:0.3px;">
           AI/Data 엔지니어를 목표로 하는 학부생입니다.
         </p>
-        <p style="font-size:16px;font-weight:300;color:#7e7e7e;line-height:1.75;margin-top:16px;">
-          머신러닝 모델 개발부터 금융 데이터 분석, 한반도 OSINT 모니터링 시스템까지 데이터가 실제 문제를 해결하는 과정에 관심이 있습니다. 배운 것을 기록하고, 만든 것을 공유합니다.
+        <p style="font-size:14px;font-weight:300;color:var(--body);line-height:1.9;margin-top:16px;letter-spacing:0.3px;">
+          머신러닝 모델 개발부터 금융 데이터 분석, 한반도 OSINT 모니터링 시스템까지 — 데이터가 실제 문제를 해결하는 과정에 관심이 있습니다. 배운 것을 기록하고 만든 것을 공유합니다.
         </p>
       </div>
       <div class="gsap-reveal">
-        <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7e7e7e;margin-bottom:24px;">Contact</div>
+        <div style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:24px;">// Contact</div>
         <div style="display:flex;flex-direction:column;gap:0;">
           {[
-            { label: 'GitHub',  val: 'github.com/ksh1004',        href: 'https://github.com/ksh1004' },
-            { label: 'Velog',   val: 'velog.io/@ksh1004',          href: 'https://velog.io/@ksh1004' },
-            { label: 'Email',   val: 'soonha990@naver.com',        href: 'mailto:soonha990@naver.com' },
+            { label: 'GitHub',  val: 'github.com/ksh1004',   href: 'https://github.com/ksh1004' },
+            { label: 'Velog',   val: 'velog.io/@ksh1004',    href: 'https://velog.io/@ksh1004' },
+            { label: 'Email',   val: 'soonha990@naver.com',  href: 'mailto:soonha990@naver.com' },
           ].map((item, i, arr) => (
             <a href={item.href} target={item.href.startsWith('http')?'_blank':undefined} rel="noopener"
-               style={`display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding:20px 0;border-bottom:${i<arr.length-1?'1px solid #3c3c3c':'none'};text-decoration:none;`}
+               style={`display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding:20px 0;border-bottom:${i<arr.length-1?'1px solid var(--hairline)':'none'};text-decoration:none;transition:background 0.15s;`}
                data-cursor-hover
-               onmouseover="this.querySelector('.cv').style.color='#fff'" onmouseout="this.querySelector('.cv').style.color='#bbbbbb'">
-              <span style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7e7e7e;">{item.label}</span>
-              <span class="cv" style="font-size:14px;font-weight:300;color:#bbbbbb;transition:color 0.15s;">{item.val} →</span>
+               onmouseover="this.querySelector('.cv').style.color='#c8963c'" onmouseout="this.querySelector('.cv').style.color='var(--body)'">
+              <span style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);">{item.label}</span>
+              <span class="cv" style="font-size:13px;font-weight:300;color:var(--body);transition:color 0.15s;letter-spacing:0.5px;">{item.val} →</span>
             </a>
           ))}
         </div>
@@ -79,19 +82,19 @@ const skills = ['Python', 'PyTorch', 'Pandas', 'NumPy', 'SQL', 'Streamlit', 'Fas
   </section>
 
   <!-- 관심 분야 -->
-  <section style="background:#0d0d0d;padding:96px 40px;border-bottom:1px solid #3c3c3c;">
+  <section style="background:var(--surface-soft);padding:96px 40px;border-bottom:1px solid var(--hairline);">
     <div style="max-width:1440px;margin:0 auto;">
       <div class="gsap-reveal" style="margin-bottom:40px;">
-        <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7e7e7e;margin-bottom:12px;">Areas</div>
-        <h2 style="font-size:40px;font-weight:700;text-transform:uppercase;color:#fff;line-height:1.1;">Of Interest</h2>
+        <div style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">// Areas</div>
+        <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1.1;letter-spacing:1px;">Of Interest</h2>
       </div>
-      <div class="m-stripe gsap-line" style="margin-bottom:1px;"><span></span><span></span><span></span></div>
-      <div class="gsap-stagger" style="display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:#3c3c3c;">
+      <div class="intel-stripe gsap-line" style="margin-bottom:1px;"></div>
+      <div class="gsap-stagger" style="display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--hairline);">
         {interests.map(item => (
-          <div class="m-card" style="background:#0d0d0d;border:none;border-radius:0;">
-            <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7e7e7e;margin-bottom:16px;">{item.num}</div>
-            <div style="font-size:24px;font-weight:700;text-transform:uppercase;color:#fff;margin-bottom:12px;line-height:1.2;">{item.name}</div>
-            <div style="font-size:14px;font-weight:300;color:#7e7e7e;line-height:1.5;">{item.desc}</div>
+          <div style="background:var(--surface-soft);padding:32px;">
+            <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;">{item.num}</div>
+            <div style="font-size:20px;font-weight:700;text-transform:uppercase;color:var(--ink);margin-bottom:12px;line-height:1.2;letter-spacing:0.5px;">{item.name}</div>
+            <div style="font-size:13px;font-weight:300;color:var(--body);line-height:1.7;letter-spacing:0.3px;">{item.desc}</div>
           </div>
         ))}
       </div>
@@ -99,17 +102,17 @@ const skills = ['Python', 'PyTorch', 'Pandas', 'NumPy', 'SQL', 'Streamlit', 'Fas
   </section>
 
   <!-- 기술 스택 -->
-  <section style="background:#000;padding:96px 40px;">
+  <section style="background:var(--canvas);padding:96px 40px;">
     <div style="max-width:1440px;margin:0 auto;">
       <div class="gsap-reveal" style="margin-bottom:40px;">
-        <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7e7e7e;margin-bottom:12px;">Technical</div>
-        <h2 style="font-size:40px;font-weight:700;text-transform:uppercase;color:#fff;line-height:1.1;">Stack</h2>
+        <div style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">// Technical</div>
+        <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1.1;letter-spacing:1px;">Stack</h2>
       </div>
-      <div class="gsap-stagger" style="display:flex;flex-wrap:wrap;gap:1px;background:#3c3c3c;">
+      <div class="gsap-stagger" style="display:flex;flex-wrap:wrap;gap:1px;background:var(--hairline);">
         {skills.map(s => (
-          <div style="background:#000;padding:20px 32px;font-size:14px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7e7e7e;transition:background 0.15s,color 0.15s;"
-               onmouseover="this.style.background='#1a1a1a';this.style.color='#fff'"
-               onmouseout="this.style.background='#000';this.style.color='#7e7e7e'">
+          <div style="background:var(--canvas);padding:18px 28px;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);transition:background 0.15s,color 0.15s;"
+               onmouseover="this.style.background='var(--surface-elevated)';this.style.color='#c8963c'"
+               onmouseout="this.style.background='var(--canvas)';this.style.color='var(--muted)'">
             {s}
           </div>
         ))}

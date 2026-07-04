@@ -1,21 +1,25 @@
 @import "tailwindcss";
 
-/* ── BMW M Design Tokens ── */
+/* ── Intelligence Design System ── */
 :root {
-  --canvas:           #000000;
-  --surface-soft:     #0d0d0d;
-  --surface-card:     #1a1a1a;
-  --surface-elevated: #262626;
-  --carbon:           #2b2b2b;
-  --hairline:         #3c3c3c;
-  --hairline-strong:  #262626;
-  --ink:              #ffffff;
-  --body:             #bbbbbb;
-  --body-strong:      #e6e6e6;
-  --muted:            #7e7e7e;
-  --m-blue-light:     #0066b1;
-  --m-blue-dark:      #1c69d4;
-  --m-red:            #e22718;
+  --canvas:           #06080f;
+  --surface-soft:     #090c18;
+  --surface-card:     #0d1422;
+  --surface-elevated: #12203a;
+  --carbon:           #162848;
+  --hairline:         #1c2e4a;
+  --hairline-strong:  #243858;
+
+  --ink:              #dce8f4;
+  --body:             #8aa0b8;
+  --body-strong:      #b8cce0;
+  --muted:            #445870;
+
+  --gold:             #c8963c;
+  --gold-dim:         #7a5c22;
+  --gold-glow:        rgba(200, 150, 60, 0.12);
+  --alert:            #a83228;
+  --green:            #2e5c42;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -23,8 +27,8 @@
 html {
   background: var(--canvas);
   color: var(--ink);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  font-weight: 300;
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   scroll-behavior: smooth;
   cursor: none;
@@ -35,9 +39,9 @@ body { min-height: 100vh; overflow-x: hidden; }
 /* ── 커스텀 커서 ── */
 .cursor-dot {
   position: fixed;
-  width: 5px;
-  height: 5px;
-  background: #ffffff;
+  width: 4px;
+  height: 4px;
+  background: var(--gold);
   border-radius: 50%;
   pointer-events: none;
   z-index: 99999;
@@ -45,76 +49,80 @@ body { min-height: 100vh; overflow-x: hidden; }
 }
 .cursor-ring {
   position: fixed;
-  width: 32px;
-  height: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(200, 150, 60, 0.4);
+  border-radius: 0;
   pointer-events: none;
   z-index: 99998;
   transform: translate(-50%, -50%);
-  transition: width 0.25s, height 0.25s, border-color 0.25s;
+  transition: width 0.2s, height 0.2s, border-color 0.2s;
 }
 .cursor-ring.hover {
-  width: 56px;
-  height: 56px;
-  border-color: #ffffff;
+  width: 48px;
+  height: 48px;
+  border-color: var(--gold);
 }
 
 a, button { cursor: none; }
 
-/* ── M 트리컬러 스트라이프 ── */
-.m-stripe {
-  display: flex;
-  height: 4px;
+/* ── 골드 스트라이프 구분선 ── */
+.intel-stripe {
   width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold) 0%, var(--gold-dim) 60%, transparent 100%);
 }
-.m-stripe span:nth-child(1) { flex: 1; background: var(--m-blue-light); }
-.m-stripe span:nth-child(2) { flex: 1; background: var(--m-blue-dark); }
-.m-stripe span:nth-child(3) { flex: 1; background: var(--m-red); }
 
-/* ── 섹션 레이블 ── */
-.label-upper {
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
+/* ── 분류 레이블 ── */
+.classify-label {
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--muted);
 }
 
-/* ── 버튼 (날카로운 직사각형) ── */
-.btn {
-  display: inline-block;
-  padding: 16px 32px;
-  height: 48px;
-  font-size: 14px;
+.label-upper {
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 1.5px;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  text-decoration: none;
-  border: 1px solid var(--ink);
-  background: transparent;
-  color: var(--ink);
-  border-radius: 0;
-  line-height: 1;
+  color: var(--muted);
+}
+
+/* ── 버튼 ── */
+.btn {
   display: inline-flex;
   align-items: center;
+  padding: 14px 28px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid var(--gold);
+  background: transparent;
+  color: var(--gold);
+  border-radius: 0;
   transition: background 0.2s, color 0.2s;
+  font-family: inherit;
 }
-.btn:hover { background: var(--ink); color: var(--canvas); }
+.btn:hover { background: var(--gold); color: var(--canvas); }
 
 /* ── 카드 ── */
-.m-card {
+.intel-card {
   background: var(--surface-card);
   border: 1px solid var(--hairline);
+  border-top: 2px solid var(--gold);
   border-radius: 0;
   padding: 24px;
   position: relative;
   overflow: hidden;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, background 0.2s;
 }
-.m-card:hover { border-color: var(--ink); }
+.intel-card:hover { border-top-color: var(--gold); background: var(--surface-elevated); }
 
-/* ── 헤어라인 구분선 ── */
+/* ── 헤어라인 ── */
 .hairline {
   width: 100%;
   height: 1px;
@@ -130,41 +138,63 @@ a, button { cursor: none; }
   padding: 24px;
 }
 .spec-cell .val {
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 700;
-  color: var(--ink);
+  color: var(--gold);
   line-height: 1.15;
+  letter-spacing: 1px;
 }
 .spec-cell .spec-label {
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--muted);
   margin-top: 8px;
 }
 
-/* ── 프로즈 (글 본문) ── */
+/* ── 분류 배지 ── */
+.badge-gold {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gold);
+  border: 1px solid var(--gold-dim);
+  padding: 3px 8px;
+  background: var(--gold-glow);
+}
+.badge-muted {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--hairline-strong);
+  padding: 3px 8px;
+}
+
+/* ── 프로즈 ── */
 .prose {
   color: var(--body);
-  font-weight: 300;
-  font-size: 16px;
-  line-height: 1.75;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.8;
   max-width: 68ch;
 }
 .prose h1, .prose h2, .prose h3 {
   font-weight: 700;
   color: var(--ink);
   text-transform: uppercase;
-  letter-spacing: 0;
+  letter-spacing: 1px;
   margin: 2.5rem 0 1rem;
 }
-.prose h1 { font-size: 56px; line-height: 1.05; }
-.prose h2 { font-size: 40px; line-height: 1.1; }
-.prose h3 { font-size: 32px; line-height: 1.15; }
+.prose h1 { font-size: 40px; line-height: 1.1; }
+.prose h2 { font-size: 28px; line-height: 1.15; }
+.prose h3 { font-size: 22px; line-height: 1.2; }
 .prose p { margin-bottom: 1.5rem; }
 .prose strong { font-weight: 700; color: var(--ink); }
-.prose a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; transition: opacity 0.2s; }
+.prose a { color: var(--gold); text-decoration: underline; text-underline-offset: 3px; transition: opacity 0.2s; }
 .prose a:hover { opacity: 0.7; }
 .prose code {
   background: var(--surface-card);
@@ -173,18 +203,19 @@ a, button { cursor: none; }
   font-size: 0.88em;
   font-weight: 400;
   border-radius: 0;
+  color: var(--gold);
 }
 .prose pre {
   background: var(--surface-card) !important;
   border: 1px solid var(--hairline);
-  border-left: 4px solid var(--m-blue-dark);
+  border-left: 3px solid var(--gold);
   padding: 24px;
   overflow-x: auto;
   margin: 1.5rem 0;
 }
-.prose pre code { background: none; border: none; padding: 0; }
+.prose pre code { background: none; border: none; padding: 0; color: var(--body); }
 .prose blockquote {
-  border-left: 4px solid var(--hairline);
+  border-left: 3px solid var(--gold-dim);
   padding-left: 24px;
   color: var(--muted);
   margin: 1.5rem 0;
@@ -193,11 +224,11 @@ a, button { cursor: none; }
 .prose ul, .prose ol { padding-left: 1.5em; margin-bottom: 1.5rem; }
 .prose li { margin-bottom: 0.5rem; }
 
-/* ── GSAP 애니메이션 유틸 ── */
+/* ── GSAP 유틸 ── */
 .gsap-reveal, .gsap-stagger > * { will-change: transform, opacity; }
 
 /* ── 스크롤바 ── */
 ::-webkit-scrollbar { width: 2px; }
 ::-webkit-scrollbar-track { background: var(--canvas); }
-::-webkit-scrollbar-thumb { background: var(--hairline); }
-::-webkit-scrollbar-thumb:hover { background: var(--ink); }
+::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }

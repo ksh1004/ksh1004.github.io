@@ -15,94 +15,137 @@ const projects = [
 ];
 ---
 
-<BaseLayout title="KSH1004 — 김순하">
+<BaseLayout title="KSH·1004 — 김순하">
 
   <!-- ═══ HERO ═══ -->
-  <section style="background:#000;padding:120px 40px 96px;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;">
+  <section style="background:var(--canvas);padding:96px 40px;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;">
+
+    <!-- 배경: 미세 격자 (전술 지도 느낌) -->
+    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(28,46,74,0.4) 1px,transparent 1px),linear-gradient(90deg,rgba(28,46,74,0.4) 1px,transparent 1px);background-size:64px 64px;pointer-events:none;"></div>
+    <!-- 대각선 클리핑 -->
+    <div style="position:absolute;top:0;right:0;width:40%;height:100%;background:linear-gradient(135deg,transparent 50%,rgba(9,12,24,0.6) 50%);pointer-events:none;"></div>
+
+    <!-- 좌상단: 분류 헤더 -->
+    <div style="position:absolute;top:40px;left:40px;" class="gsap-reveal">
+      <div style="font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:#445870;margin-bottom:6px;">
+        // SUBJECT PROFILE //
+      </div>
+      <div style="font-size:10px;letter-spacing:1.5px;color:#2e4060;">
+        37°33'N · 127°00'E &nbsp;·&nbsp; Seoul, KOR
+      </div>
+    </div>
+
+    <!-- 우상단: 상태 표시 -->
+    <div style="position:absolute;top:40px;right:40px;text-align:right;" class="gsap-reveal">
+      <div style="display:inline-flex;align-items:center;gap:6px;border:1px solid #2e4060;padding:4px 12px;background:rgba(200,150,60,0.05);">
+        <div style="width:6px;height:6px;background:#c8963c;border-radius:50%;animation:blink 2s infinite;"></div>
+        <span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#c8963c;">ACTIVE</span>
+      </div>
+    </div>
 
     <!-- 메인 헤드라인 -->
     <div id="hero-hl" style="position:relative;z-index:1;">
-      <h1 style="font-size:clamp(4rem,12vw,10rem);font-weight:700;line-height:1;text-transform:uppercase;letter-spacing:-0.02em;color:#fff;margin-bottom:0;">
+      <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#c8963c;margin-bottom:20px;">
+        FIELD AGENT ·&nbsp; KSH-1004
+      </div>
+      <h1 style="font-size:clamp(3.5rem,10vw,9rem);font-weight:700;line-height:0.95;text-transform:uppercase;letter-spacing:-0.02em;color:#dce8f4;">
         KIM<br/>SOONHA.
       </h1>
     </div>
 
-    <!-- M 스트라이프 구분선 -->
-    <div class="m-stripe gsap-line" style="margin:40px 0 32px;"><span></span><span></span><span></span></div>
+    <!-- 골드 구분선 -->
+    <div class="intel-stripe gsap-line" style="margin:36px 0 28px;"></div>
 
-    <!-- 서브헤드 + CTA -->
+    <!-- 서브 -->
     <div id="hero-sub" style="display:flex;align-items:flex-end;justify-content:space-between;gap:40px;position:relative;z-index:1;flex-wrap:wrap;">
-      <p style="font-size:17px;font-weight:300;color:#bbbbbb;max-width:440px;line-height:1.65;">
-        개발, 금융 데이터, 정보분석에 관심 있는 학생입니다.<br/>
-        공부한 것을 기록하고 만든 것을 공유합니다.
+      <p style="font-size:14px;font-weight:300;color:#8aa0b8;max-width:420px;line-height:1.8;letter-spacing:0.5px;">
+        개발, 금융 데이터, 정보분석에 관심 있는 학생.<br/>
+        공부한 것을 기록하고 만든 것을 공유한다.
       </p>
-      <div style="display:flex;gap:16px;flex-shrink:0;">
-        <a href="/posts" class="btn" data-cursor-hover>글 보기</a>
-        <a href="/about" class="btn"
-           style="border-color:#3c3c3c;color:#7e7e7e;"
-           onmouseover="this.style.borderColor='#fff';this.style.color='#fff'"
-           onmouseout="this.style.borderColor='#3c3c3c';this.style.color='#7e7e7e'"
-           data-cursor-hover>소개</a>
+      <div style="display:flex;gap:12px;flex-shrink:0;flex-wrap:wrap;">
+        <a href="/posts" class="btn" data-cursor-hover>Dispatches</a>
+        <a href="/about"
+           style="display:inline-flex;align-items:center;padding:14px 28px;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;border:1px solid #1c2e4a;color:#445870;transition:border-color 0.2s,color 0.2s;"
+           onmouseover="this.style.borderColor='#445870';this.style.color='#8aa0b8'"
+           onmouseout="this.style.borderColor='#1c2e4a';this.style.color='#445870'"
+           data-cursor-hover>Profile</a>
       </div>
     </div>
 
     <!-- 스크롤 인디케이터 -->
-    <div id="scroll-ind" style="position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;">
-      <span style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#3c3c3c;">Scroll</span>
-      <div style="width:1px;height:40px;background:linear-gradient(to bottom,#3c3c3c,transparent);"></div>
+    <div id="scroll-ind" style="position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;">
+      <span style="font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#2e4060;">Scroll</span>
+      <div style="width:1px;height:36px;background:linear-gradient(to bottom,#c8963c,transparent);"></div>
     </div>
   </section>
 
-  <!-- ═══ RECENT POSTS ═══ -->
-  <section style="background:#000;padding:96px 40px;border-top:1px solid #3c3c3c;">
+  <!-- ═══ INTEL STATS ═══ -->
+  <section style="background:var(--surface-soft);border-top:1px solid var(--hairline);border-bottom:1px solid var(--hairline);">
+    <div style="max-width:1440px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);">
+      {[
+        { val: 'Seoul', label: 'Location' },
+        { val: '인하대', label: 'University' },
+        { val: '개발', label: 'Primary Focus' },
+        { val: '2026', label: 'Established' },
+      ].map((s, i) => (
+        <div class="spec-cell" style={`border-radius:0;border:none;border-right:${i<3?'1px solid var(--hairline)':'none'};`}>
+          <div class="val">{s.val}</div>
+          <div class="spec-label">{s.label}</div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ═══ RECENT DISPATCHES ═══ -->
+  <section style="background:var(--canvas);padding:96px 40px;border-bottom:1px solid var(--hairline);">
     <div style="max-width:1440px;margin:0 auto;">
 
       <div class="gsap-reveal" style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:40px;flex-wrap:wrap;gap:16px;">
         <div>
-          <div class="label-upper" style="margin-bottom:12px;">Latest</div>
-          <h2 style="font-size:clamp(2rem,5vw,3.5rem);font-weight:700;text-transform:uppercase;color:#fff;line-height:1.05;">Posts</h2>
+          <div class="label-upper" style="margin-bottom:12px;">// Latest</div>
+          <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1.05;letter-spacing:1px;">
+            Field Dispatches
+          </h2>
         </div>
         <a href="/posts"
-           style="font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#7e7e7e;text-decoration:none;transition:color 0.15s;"
-           onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#7e7e7e'"
+           style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.15s;"
+           onmouseover="this.style.color='#c8963c'" onmouseout="this.style.color='var(--muted)'"
            data-cursor-hover>
-          전체 보기 →
+          All Dispatches →
         </a>
       </div>
 
-      <hr class="hairline gsap-line" style="margin-bottom:0;" />
+      <div class="intel-stripe gsap-line" style="margin-bottom:0;"></div>
 
       <div class="gsap-stagger">
         {posts.length === 0 ? (
-          <div style="padding:64px 0;font-size:14px;font-weight:300;color:#3c3c3c;">
-            아직 작성된 글이 없습니다.
+          <div style="padding:64px 0;font-size:12px;letter-spacing:1px;color:#2e4060;">
+            // NO DISPATCHES ON RECORD
           </div>
         ) : posts.map((post, i) => (
           <a href={`/posts/${post.id}`}
-             style="display:flex;align-items:baseline;justify-content:space-between;gap:40px;padding:24px 0;border-bottom:1px solid #3c3c3c;text-decoration:none;"
+             style="display:flex;align-items:baseline;justify-content:space-between;gap:40px;padding:24px 0;border-bottom:1px solid var(--hairline);text-decoration:none;"
              data-cursor-hover
-             onmouseover="this.querySelector('.pt').style.color='#fff'"
-             onmouseout="this.querySelector('.pt').style.color='#e6e6e6'">
+             onmouseover="this.querySelector('.pt').style.color='var(--ink)';this.style.background='rgba(200,150,60,0.03)'"
+             onmouseout="this.querySelector('.pt').style.color='var(--body-strong)';this.style.background='transparent'">
             <div style="display:flex;align-items:baseline;gap:24px;min-width:0;">
-              <span style="font-size:12px;font-weight:400;letter-spacing:0.5px;color:#3c3c3c;width:24px;flex-shrink:0;">
+              <span style="font-size:11px;font-weight:400;letter-spacing:1px;color:#2e4060;width:24px;flex-shrink:0;">
                 {String(i+1).padStart(2,'0')}
               </span>
               <div>
-                <div class="pt" style="font-size:19px;font-weight:700;text-transform:uppercase;color:#e6e6e6;transition:color 0.15s;line-height:1.3;">
+                <div class="pt" style="font-size:17px;font-weight:700;text-transform:uppercase;color:var(--body-strong);transition:color 0.15s;line-height:1.3;letter-spacing:0.5px;">
                   {post.data.title}
                 </div>
                 {post.data.description && (
-                  <div style="font-size:14px;font-weight:300;color:#7e7e7e;margin-top:4px;">{post.data.description}</div>
+                  <div style="font-size:12px;font-weight:300;color:var(--muted);margin-top:4px;letter-spacing:0.5px;">{post.data.description}</div>
                 )}
               </div>
             </div>
-            <div style="display:flex;align-items:center;gap:16px;flex-shrink:0;">
+            <div style="display:flex;align-items:center;gap:12px;flex-shrink:0;">
               {post.data.category && (
-                <span style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#3c3c3c;border:1px solid #3c3c3c;padding:4px 10px;">
-                  {post.data.category}
-                </span>
+                <span class="badge-muted">{post.data.category}</span>
               )}
-              <span style="font-size:12px;font-weight:400;letter-spacing:0.5px;color:#7e7e7e;white-space:nowrap;">
+              <span style="font-size:11px;letter-spacing:1px;color:var(--muted);white-space:nowrap;">
                 {post.data.date.toLocaleDateString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'})}
               </span>
             </div>
@@ -112,59 +155,67 @@ const projects = [
     </div>
   </section>
 
-  <!-- ═══ PROJECTS ═══ -->
-  <section style="background:#0d0d0d;padding:96px 40px;border-top:1px solid #3c3c3c;">
+  <!-- ═══ OPERATIONS ═══ -->
+  <section style="background:var(--surface-soft);padding:96px 40px;border-bottom:1px solid var(--hairline);">
     <div style="max-width:1440px;margin:0 auto;">
 
       <div class="gsap-reveal" style="margin-bottom:40px;">
-        <div class="label-upper" style="margin-bottom:12px;">Selected</div>
-        <h2 style="font-size:clamp(2rem,5vw,3.5rem);font-weight:700;text-transform:uppercase;color:#fff;line-height:1.05;">Projects</h2>
+        <div class="label-upper" style="margin-bottom:12px;">// Operations</div>
+        <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1.05;letter-spacing:1px;">
+          Projects
+        </h2>
       </div>
 
-      <hr class="hairline gsap-line" style="margin-bottom:40px;" />
+      <div class="intel-stripe gsap-line" style="margin-bottom:40px;"></div>
 
-      <div class="gsap-stagger" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1px;background:#3c3c3c;">
+      <div class="gsap-stagger" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1px;background:var(--hairline);">
         {projects.map(proj => (
           <a href={proj.url} target="_blank" rel="noopener"
-             class="m-card"
-             style="background:#0d0d0d;text-decoration:none;display:flex;flex-direction:column;gap:12px;"
+             class="intel-card"
+             style="background:var(--surface-card);text-decoration:none;display:flex;flex-direction:column;gap:12px;"
              data-cursor-hover
-             onmouseover="this.style.background='#1a1a1a'" onmouseout="this.style.background='#0d0d0d'">
-            <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#3c3c3c;">{proj.num}</div>
-            <div style="font-size:22px;font-weight:700;text-transform:uppercase;color:#fff;line-height:1.3;">{proj.name}</div>
-            <div style="font-size:14px;font-weight:300;color:#7e7e7e;line-height:1.6;flex:1;">{proj.desc}</div>
-            <div class="m-stripe" style="height:2px;margin-top:8px;"><span></span><span></span><span></span></div>
-            <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#3c3c3c;">{proj.stack}</div>
+             onmouseover="this.style.background='var(--surface-elevated)'" onmouseout="this.style.background='var(--surface-card)'">
+            <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);">CASE {proj.num}</div>
+            <div style="font-size:18px;font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1.3;letter-spacing:0.5px;">{proj.name}</div>
+            <div style="font-size:12px;font-weight:300;color:var(--body);line-height:1.7;flex:1;letter-spacing:0.3px;">{proj.desc}</div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold-dim);">{proj.stack}</div>
           </a>
         ))}
       </div>
     </div>
   </section>
 
-  <!-- ═══ CTA BAND ═══ -->
-  <section style="background:#000;padding:96px 40px;border-top:1px solid #3c3c3c;text-align:center;">
+  <!-- ═══ CTA ═══ -->
+  <section style="background:var(--canvas);padding:96px 40px;text-align:center;">
     <div style="max-width:1440px;margin:0 auto;" class="gsap-reveal">
-      <div class="label-upper" style="margin-bottom:24px;text-align:center;">Contact</div>
-      <h2 style="font-size:clamp(2rem,5vw,3.5rem);font-weight:700;text-transform:uppercase;color:#fff;margin-bottom:40px;line-height:1.1;">
-        Let's Work Together.
+      <div class="label-upper" style="margin-bottom:24px;text-align:center;">// Contact</div>
+      <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:700;text-transform:uppercase;color:var(--ink);margin-bottom:40px;line-height:1.1;letter-spacing:1px;">
+        Establish Contact.
       </h2>
-      <a href="mailto:soonha990@naver.com" class="btn" data-cursor-hover>연락하기</a>
+      <a href="mailto:soonha990@naver.com" class="btn" data-cursor-hover>Send Message</a>
     </div>
   </section>
 
 </BaseLayout>
 
+<style>
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+</style>
+
 <script>
 import gsap from 'gsap';
 
 gsap.timeline({ defaults: { ease: 'power4.out' } })
-  .from('#hero-hl h1', { y: 60, opacity: 0, duration: 1.0 })
+  .from('#hero-hl', { y: 50, opacity: 0, duration: 1.0 })
   .from('#hero-sub', { opacity: 0, y: 20, duration: 0.7 }, '-=0.5')
   .from('#scroll-ind', { opacity: 0, duration: 0.5 }, '-=0.3');
 
 gsap.to('#scroll-ind > div', {
   scaleY: 0, transformOrigin: 'top',
   duration: 1.0, ease: 'power2.in',
-  repeat: -1, repeatDelay: 0.6,
+  repeat: -1, repeatDelay: 0.5,
 });
 </script>
