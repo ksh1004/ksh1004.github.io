@@ -1,6 +1,22 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 
+/* ═══ giscus 댓글 설정 ═══
+   1. GitHub 저장소 Settings → General → Features → Discussions 활성화
+   2. https://github.com/apps/giscus 에서 앱 설치
+   3. https://giscus.app 에서 저장소 입력 후 아래 4개 값 복사
+   값이 비어있으면 댓글 영역이 표시되지 않습니다. */
+const GISCUS = {
+  repo: '',        // 예: 'ksh1004/ksh1004.github.io'
+  repoId: '',
+  category: '',    // 예: 'General'
+  categoryId: '',
+};
+
+interface LinkedPost { id: string; title: string }
+interface RelatedPost { id: string; title: string; dateStr: string; badge?: string }
+interface Heading { depth: number; slug: string; text: string }
+
 interface Props {
   title: string;
   date: Date;
@@ -9,15 +25,40 @@ interface Props {
   category?: string;
   subcategory?: string;
   subsubcategory?: string;
+  readingMins?: number;
+  headings?: Heading[];
+  prev?: LinkedPost | null;
+  next?: LinkedPost | null;
+  related?: RelatedPost[];
+  seriesName?: string;
+  seriesPosts?: LinkedPost[];
+  currentId?: string;
 }
-const { title, date, tags = [], description, category, subcategory, subsubcategory } = Astro.props;
+const {
+  title, date, tags = [], description, category, subcategory, subsubcategory,
+  readingMins, headings = [], prev = null, next = null, related = [],
+  seriesName, seriesPosts = [], currentId,
+} = Astro.props;
 const fmt = date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' });
+const showToc = headings.length >= 2;
+const showSeries = seriesName && seriesPosts.length > 1;
+const giscusEnabled = GISCUS.repo && GISCUS.repoId && GISCUS.categoryId;
 ---
 
 <BaseLayout title={`${title} — KSH1004`} description={description} ogType="article">
 
   <!-- 읽기 진행 바 -->
   <div id="progress-bar" style="position:fixed;top:0;left:0;height:2px;z-index:200;background:var(--green);width:0%;transition:width 0.08s linear;pointer-events:none;box-shadow:0 0 8px rgba(78,124,54,0.55);"></div>
+
+  <!-- 목차 -->
+  {showToc && (
+    <nav id="toc" aria-label="목차">
+      <div class="toc-label">Contents</div>
+      {headings.map(h => (
+        <a href={`#${h.slug}`} class="toc-link" data-slug={h.slug} style={h.depth === 3 ? 'padding-left:26px;' : ''}>{h.text}</a>
+      ))}
+    </nav>
+  )}
 
   <article style="max-width:1440px;margin:0 auto;padding:64px 40px 96px;">
 
@@ -34,6 +75,7 @@ const fmt = date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit'
       <div class="gsap-reveal">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
           <span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);">{fmt}</span>
+          {readingMins && <span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);">약 {readingMins}분</span>}
           {category    && <span class="badge-muted">{category}</span>}
           {subcategory && <span class="badge-green" style="opacity:0.8;">{subcategory}</span>}
           {subsubcategory && <span class="badge-green">{subsubcategory}</span>}
@@ -55,11 +97,105 @@ const fmt = date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit'
       <div class="intel-stripe gsap-line" style="margin-top:40px;"></div>
     </header>
 
+    <!-- 시리즈 -->
+    {showSeries && (
+      <div class="gsap-reveal" style="max-width:720px;margin-bottom:48px;border:1px solid var(--hairline);border-left:2px solid var(--green-dim);background:var(--surface-card);padding:22px 26px;">
+        <div class="label-upper" style="margin-bottom:16px;color:var(--green);">Series · {seriesName}</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          {seriesPosts.map((sp, i) => (
+            <div style="display:flex;gap:14px;align-items:baseline;">
+              <span style="font-size:10px;color:var(--muted);letter-spacing:1px;flex-shrink:0;">{String(i + 1).padStart(2, '0')}</span>
+              {sp.id === currentId ? (
+                <span style="font-size:13px;color:var(--green);font-weight:700;letter-spacing:0.3px;">{sp.title} ◂ 현재 글</span>
+              ) : (
+                <a href={`/posts/${sp.id}`}
+                   style="font-size:13px;color:var(--body);text-decoration:none;letter-spacing:0.3px;transition:color 0.15s;"
+                   onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--body)'"
+                   data-cursor-hover>{sp.title}</a>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
     <div class="prose gsap-reveal" style="max-width:720px;">
       <slot />
     </div>
 
-    <div style="margin-top:80px;padding-top:40px;border-top:1px solid var(--hairline);" class="gsap-reveal">
+    <!-- 이전 / 다음 글 -->
+    {(prev || next) && (
+      <div class="grid-2" style="max-width:720px;margin-top:80px;gap:1px;background:var(--hairline);border:1px solid var(--hairline);">
+        {prev ? (
+          <a href={`/posts/${prev.id}`}
+             style="background:var(--surface-card);padding:24px;text-decoration:none;transition:background 0.15s;"
+             onmouseover="this.style.background='var(--surface-elevated)'" onmouseout="this.style.background='var(--surface-card)'"
+             data-cursor-hover>
+            <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">← 이전 글</div>
+            <div style="font-size:14px;font-weight:700;color:var(--body-strong);line-height:1.4;letter-spacing:0.3px;">{prev.title}</div>
+          </a>
+        ) : (
+          <div style="background:var(--surface-soft);"></div>
+        )}
+        {next ? (
+          <a href={`/posts/${next.id}`}
+             class="pn-next"
+             style="background:var(--surface-card);padding:24px;text-decoration:none;text-align:right;transition:background 0.15s;"
+             onmouseover="this.style.background='var(--surface-elevated)'" onmouseout="this.style.background='var(--surface-card)'"
+             data-cursor-hover>
+            <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">다음 글 →</div>
+            <div style="font-size:14px;font-weight:700;color:var(--body-strong);line-height:1.4;letter-spacing:0.3px;">{next.title}</div>
+          </a>
+        ) : (
+          <div style="background:var(--surface-soft);"></div>
+        )}
+      </div>
+    )}
+
+    <!-- 관련 글 -->
+    {related.length > 0 && (
+      <div style="max-width:720px;margin-top:64px;">
+        <div class="label-upper" style="margin-bottom:8px;">Related</div>
+        <div style="border-top:1px solid var(--hairline-strong);">
+          {related.map(r => (
+            <a href={`/posts/${r.id}`}
+               style="display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding:18px 0;border-bottom:1px solid var(--hairline);text-decoration:none;transition:background 0.15s;"
+               onmouseover="this.querySelector('.rt').style.color='var(--ink)'" onmouseout="this.querySelector('.rt').style.color='var(--body-strong)'"
+               data-cursor-hover>
+              <span class="rt" style="font-size:14px;font-weight:700;color:var(--body-strong);letter-spacing:0.3px;line-height:1.4;transition:color 0.15s;">{r.title}</span>
+              <span style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+                {r.badge && <span class="badge-muted">{r.badge}</span>}
+                <span style="font-size:11px;letter-spacing:1px;color:var(--muted);white-space:nowrap;">{r.dateStr}</span>
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- 댓글 (giscus) -->
+    {giscusEnabled && (
+      <div style="max-width:720px;margin-top:80px;padding-top:48px;border-top:1px solid var(--hairline);">
+        <div class="label-upper" style="margin-bottom:24px;">Comments</div>
+        <script is:inline src="https://giscus.app/client.js"
+          data-repo={GISCUS.repo}
+          data-repo-id={GISCUS.repoId}
+          data-category={GISCUS.category}
+          data-category-id={GISCUS.categoryId}
+          data-mapping="pathname"
+          data-strict="0"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="bottom"
+          data-theme="transparent_dark"
+          data-lang="ko"
+          crossorigin="anonymous"
+          async>
+        </script>
+      </div>
+    )}
+
+    <div style="margin-top:80px;padding-top:40px;border-top:1px solid var(--hairline);">
       <a href="/posts"
          style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.15s;"
          onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--muted)'"
@@ -71,6 +207,7 @@ const fmt = date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit'
 </BaseLayout>
 
 <script>
+/* ── 읽기 진행 바 ── */
 const bar = document.getElementById('progress-bar');
 if (bar) {
   function updateProgress() {
@@ -99,4 +236,30 @@ document.querySelectorAll<HTMLPreElement>('.prose pre').forEach(pre => {
   });
   pre.appendChild(btn);
 });
+
+/* ── 헤딩 앵커 링크 ── */
+document.querySelectorAll<HTMLElement>('.prose h2[id], .prose h3[id]').forEach(h => {
+  const a = document.createElement('a');
+  a.href = `#${h.id}`;
+  a.className = 'heading-anchor';
+  a.textContent = '#';
+  a.setAttribute('aria-label', '섹션 링크');
+  h.appendChild(a);
+});
+
+/* ── 목차 스크롤 스파이 ── */
+const tocLinks = document.querySelectorAll<HTMLAnchorElement>('.toc-link');
+if (tocLinks.length) {
+  const linkMap = new Map<string, HTMLAnchorElement>();
+  tocLinks.forEach(l => { const s = l.dataset.slug; if (s) linkMap.set(s, l); });
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tocLinks.forEach(l => l.classList.remove('active'));
+        linkMap.get(e.target.id)?.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-10% 0px -75% 0px' });
+  document.querySelectorAll('.prose h2[id], .prose h3[id]').forEach(h => observer.observe(h));
+}
 </script>

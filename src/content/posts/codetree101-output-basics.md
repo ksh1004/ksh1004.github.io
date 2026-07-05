@@ -6,6 +6,7 @@ tags: ["출력", "Python", "기초"]
 category: "코딩테스트"
 subcategory: "코드트리"
 subsubcategory: "codetree101"
+series: "codetree101"
 draft: false
 ---
 

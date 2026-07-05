@@ -1,10 +1,17 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import fs from 'node:fs';
 
 /* ═══════════════════════════════════════════════════
    이 파일 상단의 배열에 내용을 추가하면 페이지에 자동 반영됩니다.
    비어있는 배열(awards 등)의 섹션은 페이지에 표시되지 않습니다.
+
+   프로필 사진: public 폴더에 profile.jpg / profile.png /
+   profile.webp 중 하나를 넣으면 자동으로 표시됩니다.
    ═══════════════════════════════════════════════════ */
+
+const photoExt = ['jpg', 'png', 'webp'].find(ext => fs.existsSync(`./public/profile.${ext}`));
+const photoUrl = photoExt ? `/profile.${photoExt}` : null;
 
 const specs = [
   { val: 'Seoul',    label: 'Location' },
@@ -70,11 +77,22 @@ const contacts = [
   <!-- 히어로 -->
   <section style="background:transparent;padding:96px 40px;border-bottom:1px solid var(--hairline);">
     <div style="max-width:1440px;margin:0 auto;">
-      <div class="gsap-reveal">
-        <div class="label-upper" style="margin-bottom:16px;">Profile</div>
-        <h1 data-decrypt style="font-size:clamp(3.5rem,9vw,7.5rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:0.95;">
-          KIM<br/>SOONHA.
-        </h1>
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:48px;flex-wrap:wrap;">
+        <div class="gsap-reveal">
+          <div class="label-upper" style="margin-bottom:16px;">Profile</div>
+          <h1 data-decrypt style="font-size:clamp(3.5rem,9vw,7.5rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:0.95;">
+            KIM<br/>SOONHA.
+          </h1>
+        </div>
+        {photoUrl && (
+          <div class="gsap-reveal photo-frame">
+            <img src={photoUrl} alt="김순하 프로필 사진" />
+            <span class="pf-corner tl"></span>
+            <span class="pf-corner tr"></span>
+            <span class="pf-corner bl"></span>
+            <span class="pf-corner br"></span>
+          </div>
+        )}
       </div>
       <div class="intel-stripe gsap-line" style="margin-top:40px;"></div>
     </div>

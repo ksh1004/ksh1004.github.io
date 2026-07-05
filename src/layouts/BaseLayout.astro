@@ -9,6 +9,12 @@ interface Props {
 const { title, description = '김순하 — 개발·금융·정보분석 블로그', ogType = 'website' } = Astro.props;
 const pathname = Astro.url.pathname;
 const canonical = new URL(pathname, Astro.site);
+
+/* ═══ 방문자 통계 (GoatCounter) ═══
+   goatcounter.com 무료 가입 후 선택한 코드를 아래에 입력.
+   예: 코드가 'ksh1004'이면 통계는 https://ksh1004.goatcounter.com 에서 확인.
+   비어있으면 아무것도 로드되지 않습니다. */
+const GOATCOUNTER = '';
 ---
 
 <!doctype html>
@@ -30,6 +36,7 @@ const canonical = new URL(pathname, Astro.site);
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
+  {GOATCOUNTER && <script is:inline data-goatcounter={`https://${GOATCOUNTER}.goatcounter.com/count`} async src="//gc.zgo.at/count.js"></script>}
   <title>{title}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -44,7 +51,12 @@ const canonical = new URL(pathname, Astro.site);
   <div class="grain-overlay" aria-hidden="true"></div>
 
   <div class="cursor-dot" id="cursor-dot"></div>
-  <div class="cursor-ring" id="cursor-ring"></div>
+  <div class="cursor-ring" id="cursor-ring">
+    <span class="rt rt-t"></span>
+    <span class="rt rt-b"></span>
+    <span class="rt rt-l"></span>
+    <span class="rt rt-r"></span>
+  </div>
 
   <!-- 상단 상태바 -->
   <div style="position:relative;z-index:2;background:#050708;border-bottom:1px solid var(--hairline);padding:5px 40px;display:flex;align-items:center;justify-content:space-between;">
@@ -117,7 +129,8 @@ const canonical = new URL(pathname, Astro.site);
                style={`font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;transition:color 0.15s;padding-bottom:3px;color:${active?'var(--ink)':'var(--muted)'};border-bottom:${active?'1px solid var(--green)':'1px solid transparent'};`}
                onmouseover="this.style.color='var(--green)'"
                onmouseout={active ? "this.style.color='var(--ink)'" : "this.style.color='var(--muted)'"}
-               data-cursor-hover>
+               data-cursor-hover
+               data-scramble>
               {l.label}
             </a>
           );
@@ -218,6 +231,28 @@ function decryptEl(el: HTMLElement) {
 }
 document.querySelectorAll<HTMLElement>('[data-decrypt]').forEach(decryptEl);
 
+/* ── 네비 호버 스크램블 ── */
+function scrambleHover(el: HTMLElement) {
+  if (el.dataset.scrambling === '1') return;
+  el.dataset.scrambling = '1';
+  const orig = el.textContent ?? '';
+  const total = orig.length * 2 + 6;
+  let frame = 0;
+  function step() {
+    frame++;
+    const resolved = Math.floor(orig.length * (frame / total));
+    el.textContent = orig.split('').map((ch, i) =>
+      ch === ' ' ? ' ' : i < resolved ? ch : GLYPHS[(Math.random() * GLYPHS.length) | 0]
+    ).join('');
+    if (resolved < orig.length) requestAnimationFrame(step);
+    else { el.textContent = orig; el.dataset.scrambling = '0'; }
+  }
+  step();
+}
+document.querySelectorAll<HTMLElement>('[data-scramble]').forEach(el => {
+  el.addEventListener('mouseenter', () => scrambleHover(el));
+});
+
 /* ── 커서 (마우스 환경에서만 활성화) ── */
 const finePointer = window.matchMedia('(pointer: fine)').matches;
 const dot  = document.getElementById('cursor-dot')!;
@@ -274,16 +309,28 @@ if (globeCanvas && globeCtx) {
   let worldData: any = null;
   let rafId = 0;
 
+  /* 마우스 패럴랙스: 커서 위치에 따라 지구본이 미세하게 기울어짐 */
+  let targetYaw = 0, targetPitch = 0, yawOff = 0, pitchOff = 0;
+  if (finePointer) {
+    window.addEventListener('mousemove', e => {
+      targetYaw   = ((e.clientX / window.innerWidth)  - 0.5) * 8;
+      targetPitch = ((e.clientY / window.innerHeight) - 0.5) * -6;
+    });
+  }
+
   function drawGlobe() {
     const W = cssW, H = cssH;
     globeCtx.clearRect(0, 0, W, H);
+
+    yawOff   += (targetYaw   - yawOff)   * 0.04;
+    pitchOff += (targetPitch - pitchOff) * 0.04;
 
     const scale = Math.min(W, H) * 0.44;
 
     const projection = geoOrthographic()
       .scale(scale)
       .translate([W / 2, H / 2])
-      .rotate([rotX, -20, 0])
+      .rotate([rotX + yawOff, -20 + pitchOff, 0])
       .clipAngle(90);
 
     const pathGen = geoPath(projection, globeCtx);
@@ -354,7 +401,7 @@ if (globeCanvas && globeCtx) {
     globeCtx.fillText('SIG ▮▮▮▮▯', bM + 4, bM + 14);
 
     // ── 도시 마커 ──
-    const globeCenter: [number, number] = [-(rotX % 360), 20];
+    const globeCenter: [number, number] = [-((rotX + yawOff) % 360), 20 - pitchOff];
     const pulse = 0.5 + 0.5 * Math.sin(Date.now() * 0.003);
     CITIES.forEach(({ lat, lon, label }) => {
       if (geoDistance(globeCenter, [lon, lat]) >= Math.PI / 2) return;

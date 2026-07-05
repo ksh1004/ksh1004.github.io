@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { readingTime } from '../utils/readingTime';
 
 const posts = (await getCollection('posts'))
   .filter(p => !p.data.draft)
@@ -127,6 +128,9 @@ const projects = [
               {post.data.category && <span class="badge-muted">{post.data.category}</span>}
               <span style="font-size:11px;letter-spacing:1px;color:var(--muted);white-space:nowrap;">
                 {post.data.date.toLocaleDateString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'})}
+              </span>
+              <span style="font-size:11px;letter-spacing:1px;color:var(--muted);opacity:0.7;white-space:nowrap;">
+                {readingTime(post.body ?? '')}분
               </span>
             </div>
           </a>

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { readingTime } from '../../utils/readingTime';
 
 const posts = (await getCollection('posts'))
   .filter(p => !p.data.draft)
@@ -22,11 +23,17 @@ const SUB_SUB_CATEGORIES: Record<string, string[]> = {
   <section style="background:var(--canvas);padding:72px 40px 0;border-bottom:1px solid var(--hairline);">
     <div style="max-width:1440px;margin:0 auto;">
 
-      <div class="gsap-reveal" style="margin-bottom:40px;">
-        <div class="label-upper" style="margin-bottom:12px;">Archive · {posts.length}편</div>
-        <h1 data-decrypt style="font-size:clamp(2.5rem,7vw,5rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1;letter-spacing:0.3px;">
-          Posts
-        </h1>
+      <div class="gsap-reveal" style="margin-bottom:40px;display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;">
+        <div>
+          <div class="label-upper" style="margin-bottom:12px;">Archive · {posts.length}편</div>
+          <h1 data-decrypt style="font-size:clamp(2.5rem,7vw,5rem);font-weight:700;text-transform:uppercase;color:var(--ink);line-height:1;letter-spacing:0.3px;">
+            Posts
+          </h1>
+        </div>
+        <div class="search-box">
+          <span style="color:var(--green);font-size:11px;">▸</span>
+          <input id="post-search" type="text" placeholder="Search" autocomplete="off" aria-label="게시글 검색" />
+        </div>
       </div>
 
       <!-- Lv.1 메인 카테고리 -->
@@ -68,6 +75,7 @@ const SUB_SUB_CATEGORIES: Record<string, string[]> = {
             data-category={post.data.category ?? '개발'}
             data-subcategory={post.data.subcategory ?? ''}
             data-subsubcategory={post.data.subsubcategory ?? ''}
+            data-search={[post.data.title, post.data.description ?? '', ...(post.data.tags ?? [])].join(' ').toLowerCase()}
             style="display:flex;align-items:baseline;justify-content:space-between;gap:40px;padding:28px 0;border-bottom:1px solid var(--hairline);text-decoration:none;transition:background 0.15s;"
             data-cursor-hover
             onmouseover="this.querySelector('.pt').style.color='var(--ink)';this.style.background='var(--green-glow)'"
@@ -88,13 +96,16 @@ const SUB_SUB_CATEGORIES: Record<string, string[]> = {
               <span style="font-size:11px;letter-spacing:1px;color:var(--muted);white-space:nowrap;">
                 {post.data.date.toLocaleDateString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'})}
               </span>
+              <span style="font-size:11px;letter-spacing:1px;color:var(--muted);opacity:0.7;white-space:nowrap;">
+                {readingTime(post.body ?? '')}분
+              </span>
             </div>
           </a>
         ))}
       </div>
 
       <div id="empty-msg" style="display:none;padding:64px 0;font-size:12px;letter-spacing:1px;color:var(--hairline-strong);">
-        해당 카테고리의 글이 없습니다.
+        조건에 맞는 글이 없습니다.
       </div>
     </div>
   </section>
@@ -215,19 +226,26 @@ function updateURL() {
   history.replaceState(null, '', qs ? `?${qs}` : location.pathname);
 }
 
-/* ── 필터 ── */
+/* ── 필터 (카테고리 + 검색어) ── */
+const searchInput = document.getElementById('post-search') as HTMLInputElement | null;
+
 function filterPosts() {
+  const q = (searchInput?.value ?? '').trim().toLowerCase();
   let visible = 0;
   items.forEach(item => {
     const okCat    = currentCat    === 'all' || item.dataset.category    === currentCat;
     const okSub    = currentSub    === 'all' || item.dataset.subcategory  === currentSub;
     const okSubsub = currentSubsub === 'all' || item.dataset.subsubcategory === currentSubsub;
-    item.style.display = okCat && okSub && okSubsub ? '' : 'none';
-    if (okCat && okSub && okSubsub) visible++;
+    const okQuery  = !q || (item.dataset.search ?? '').includes(q);
+    const show = okCat && okSub && okSubsub && okQuery;
+    item.style.display = show ? '' : 'none';
+    if (show) visible++;
   });
   emptyMsg.style.display = visible === 0 ? 'block' : 'none';
   updateURL();
 }
+
+searchInput?.addEventListener('input', filterPosts);
 
 /* ── Lv.1 탭 이벤트 ── */
 mainTabs.forEach(btn => {

@@ -1,17 +1,54 @@
 ---
 import PostLayout from '../../layouts/PostLayout.astro';
 import { getCollection, render } from 'astro:content';
+import { readingTime } from '../../utils/readingTime';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('posts');
-  return posts.map(post => ({
+  const posts = (await getCollection('posts'))
+    .filter(p => !p.data.draft)
+    .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
+  return posts.map((post, i) => ({
     params: { id: post.id },
-    props: { post },
+    props: {
+      post,
+      prev: i > 0 ? { id: posts[i - 1].id, title: posts[i - 1].data.title } : null,
+      next: i < posts.length - 1 ? { id: posts[i + 1].id, title: posts[i + 1].data.title } : null,
+    },
   }));
 }
 
-const { post } = Astro.props;
-const { Content } = await render(post);
+const { post, prev, next } = Astro.props;
+const { Content, headings } = await render(post);
+
+const all = (await getCollection('posts')).filter(p => !p.data.draft);
+const others = all.filter(p => p.id !== post.id);
+
+/* 관련 글: 하위 카테고리가 겹칠수록 높은 점수 */
+const relScore = (p: any) =>
+  (post.data.subsubcategory && p.data.subsubcategory === post.data.subsubcategory ? 4 : 0) +
+  (post.data.subcategory && p.data.subcategory === post.data.subcategory ? 2 : 0) +
+  (p.data.category === post.data.category ? 1 : 0);
+
+const related = others
+  .map(p => ({ p, s: relScore(p) }))
+  .filter(x => x.s > 0)
+  .sort((a, b) => b.s - a.s || b.p.data.date.valueOf() - a.p.data.date.valueOf())
+  .slice(0, 3)
+  .map(({ p }) => ({
+    id: p.id,
+    title: p.data.title,
+    dateStr: p.data.date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }),
+    badge: p.data.subsubcategory ?? p.data.subcategory ?? p.data.category,
+  }));
+
+/* 시리즈: 같은 series 값의 글을 날짜순으로 */
+const seriesName = post.data.series;
+const seriesPosts = seriesName
+  ? all
+      .filter(p => p.data.series === seriesName)
+      .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf())
+      .map(p => ({ id: p.id, title: p.data.title }))
+  : [];
 ---
 
 <PostLayout
@@ -22,6 +59,14 @@ const { Content } = await render(post);
   category={post.data.category}
   subcategory={post.data.subcategory}
   subsubcategory={post.data.subsubcategory}
+  readingMins={readingTime(post.body ?? '')}
+  headings={headings.filter(h => h.depth >= 2 && h.depth <= 3)}
+  prev={prev}
+  next={next}
+  related={related}
+  seriesName={seriesName}
+  seriesPosts={seriesPosts}
+  currentId={post.id}
 >
   <Content />
 </PostLayout>
