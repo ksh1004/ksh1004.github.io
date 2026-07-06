@@ -40,15 +40,15 @@ const GOATCOUNTER = '';
   <title>{title}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;700&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <!-- 본문: Pretendard Variable (SIL OFL) / 포인트: Spline Sans Mono (SIL OFL) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Spline+Sans+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
 </head>
 
 <body>
   <!-- 배경 지구본 -->
   <canvas id="globe-bg" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:1;pointer-events:none;opacity:0.13;mix-blend-mode:screen;"></canvas>
-
-  <!-- 필름 그레인 -->
-  <div class="grain-overlay" aria-hidden="true"></div>
 
   <div class="cursor-dot" id="cursor-dot"></div>
   <div class="cursor-ring" id="cursor-ring">
@@ -367,39 +367,6 @@ if (globeCanvas && globeCtx) {
       globeCtx.stroke();
     }
 
-    // ── 코너 HUD 브래킷 ──
-    const bSize = Math.min(W, H) * 0.055;
-    const bM    = Math.min(W, H) * 0.035;
-    const corners: [number, number, number, number][] = [
-      [bM, bM, 1, 1], [W-bM, bM, -1, 1],
-      [W-bM, H-bM, -1, -1], [bM, H-bM, 1, -1],
-    ];
-    globeCtx.strokeStyle = 'rgba(78,124,54,0.42)';
-    globeCtx.lineWidth = 1.1;
-    corners.forEach(([x, y, dx, dy]) => {
-      globeCtx.beginPath();
-      globeCtx.moveTo(x + dx * bSize, y);
-      globeCtx.lineTo(x, y);
-      globeCtx.lineTo(x, y + dy * bSize);
-      globeCtx.stroke();
-    });
-
-    // ── 수평 스캔라인 ──
-    const scanY = ((Date.now() * 0.028) % (H + 60)) - 30;
-    const scanGrad = globeCtx.createLinearGradient(0, scanY - 6, 0, scanY + 6);
-    scanGrad.addColorStop(0,   'rgba(78,124,54,0)');
-    scanGrad.addColorStop(0.5, 'rgba(78,124,54,0.1)');
-    scanGrad.addColorStop(1,   'rgba(78,124,54,0)');
-    globeCtx.fillStyle = scanGrad;
-    globeCtx.fillRect(0, scanY - 6, W, 12);
-
-    // ── HUD 데이터 텍스트 ──
-    globeCtx.font = '10px "IBM Plex Mono", monospace';
-    globeCtx.fillStyle = 'rgba(78,124,54,0.28)';
-    globeCtx.fillText('37°33\'N  127°00\'E', bM + 4, H - bM - 6);
-    globeCtx.fillText(`ROT ${(((rotX % 360) + 360) % 360).toFixed(1)}°`, W - bM - 72, H - bM - 6);
-    globeCtx.fillText('SIG ▮▮▮▮▯', bM + 4, bM + 14);
-
     // ── 도시 마커 ──
     const globeCenter: [number, number] = [-((rotX + yawOff) % 360), 20 - pitchOff];
     const pulse = 0.5 + 0.5 * Math.sin(Date.now() * 0.003);
@@ -420,7 +387,7 @@ if (globeCanvas && globeCtx) {
       globeCtx.fillStyle = 'rgba(78,124,54,0.9)';
       globeCtx.fill();
 
-      globeCtx.font = '9px "IBM Plex Mono", monospace';
+      globeCtx.font = '9px "Spline Sans Mono", monospace';
       globeCtx.fillStyle = 'rgba(78,124,54,0.55)';
       globeCtx.fillText(label, px + 4, py + 3);
     });

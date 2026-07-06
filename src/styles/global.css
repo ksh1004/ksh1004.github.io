@@ -22,6 +22,9 @@
   --navy-dim:         #0e1e2e;
 
   --alert:            #7c3228;
+
+  --font-sans: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  --font-mono: 'Spline Sans Mono', ui-monospace, 'Cascadia Code', Consolas, monospace;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -29,7 +32,7 @@
 html {
   background: radial-gradient(ellipse at 50% 38%, #0d1711 0%, #07090a 70%);
   color: var(--ink);
-  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-family: var(--font-sans);
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
   scroll-behavior: smooth;
@@ -37,16 +40,6 @@ html {
 }
 
 body { min-height: 100vh; overflow-x: hidden; }
-
-/* ── 비네트 (관제화면 느낌) ── */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 8;
-  pointer-events: none;
-  background: radial-gradient(ellipse at center, transparent 58%, rgba(0, 0, 0, 0.4) 100%);
-}
 
 /* ── 텍스트 선택 ── */
 ::selection { background: var(--green); color: var(--canvas); }
@@ -103,11 +96,20 @@ a, button { cursor: none; }
 
 /* ── 레이블 ── */
 .label-upper {
+  font-family: var(--font-mono);
   font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 2px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--muted);
+}
+
+/* ── 모노 포인트 요소 ── */
+#clock,
+nav a[data-scramble],
+.spec-cell .spec-label,
+.prose th {
+  font-family: var(--font-mono);
 }
 
 /* ── 버튼 ── */
@@ -116,8 +118,8 @@ a, button { cursor: none; }
   align-items: center;
   padding: 13px 28px;
   font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 2px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
   text-decoration: none;
   border: 1px solid var(--green);
@@ -125,7 +127,7 @@ a, button { cursor: none; }
   color: var(--green);
   border-radius: 0;
   transition: background 0.2s, color 0.2s;
-  font-family: inherit;
+  font-family: var(--font-mono);
 }
 .btn:hover { background: var(--green); color: var(--canvas); }
 
@@ -170,9 +172,10 @@ a, button { cursor: none; }
 
 /* ── 배지 ── */
 .badge-green {
+  font-family: var(--font-mono);
   font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
+  font-weight: 500;
+  letter-spacing: 1px;
   text-transform: uppercase;
   color: var(--green);
   border: 1px solid var(--green-dim);
@@ -180,9 +183,10 @@ a, button { cursor: none; }
   background: var(--green-glow);
 }
 .badge-muted {
+  font-family: var(--font-mono);
   font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
+  font-weight: 500;
+  letter-spacing: 1px;
   text-transform: uppercase;
   color: var(--muted);
   border: 1px solid var(--hairline-strong);
@@ -224,16 +228,18 @@ a, button { cursor: none; }
 .prose a:hover { color: var(--ink); border-color: var(--green); }
 /* 인라인 코드 */
 .prose code {
+  font-family: var(--font-mono);
   background: var(--surface-elevated);
   border: 1px solid var(--hairline-strong);
   padding: 0.15em 0.45em;
-  font-size: 0.875em;
+  font-size: 0.85em;
   color: var(--green);
   border-radius: 0;
 }
 /* 코드 블록 (Shiki 호환) */
 .prose pre,
 .prose pre.astro-code {
+  font-family: var(--font-mono);
   background: var(--surface-card) !important;
   border: 1px solid var(--hairline);
   border-left: 2px solid var(--green-dim);
@@ -277,17 +283,6 @@ a, button { cursor: none; }
 .prose tr:last-child td { border-bottom: none; }
 .prose tbody tr:hover td { background: var(--green-glow); }
 
-/* ── 그레인 오버레이 ── */
-.grain-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9;
-  pointer-events: none;
-  opacity: 0.055;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 200px;
-}
-
 /* ── 검색 박스 ── */
 .search-box {
   display: flex;
@@ -305,10 +300,10 @@ a, button { cursor: none; }
   border: none;
   outline: none;
   color: var(--ink);
-  font-family: inherit;
+  font-family: var(--font-mono);
   font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
+  font-weight: 500;
+  letter-spacing: 1px;
   text-transform: uppercase;
   flex: 1;
   cursor: none;
@@ -329,9 +324,10 @@ a, button { cursor: none; }
 }
 @media (min-width: 1280px) { #toc { display: block; } }
 .toc-label {
+  font-family: var(--font-mono);
   font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 2px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--muted);
   margin-bottom: 14px;
@@ -421,9 +417,10 @@ a, button { cursor: none; }
   gap: 8px;
   flex-shrink: 0;
   padding: 12px 20px;
+  font-family: var(--font-mono);
   font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 2px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--green);
   border-right: 1px solid var(--hairline);
@@ -463,8 +460,8 @@ a, button { cursor: none; }
 }
 .ticker-item:hover { color: var(--ink); }
 .ticker-item::before { content: '▸'; color: var(--green-dim); font-size: 9px; }
-.tick-cat  { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
-.tick-date { font-size: 9px; letter-spacing: 1px; color: var(--muted); }
+.tick-cat  { font-family: var(--font-mono); font-size: 9px; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+.tick-date { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.5px; color: var(--muted); }
 
 /* ── 코드블록 복사 버튼 ── */
 .prose pre { position: relative; }
@@ -472,7 +469,7 @@ a, button { cursor: none; }
   position: absolute;
   top: 8px;
   right: 8px;
-  font-family: inherit;
+  font-family: var(--font-mono);
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 1.5px;
